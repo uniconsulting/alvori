@@ -126,8 +126,14 @@ img {
   overflow: hidden;
 }
 
+.footer-road {
+  overflow: hidden;
+}
+
 .footer-truck {
-  left: -140px;
+  width: 96px;
+  height: 36px;
+  left: -120px;
   top: calc(70% - 36px);
   opacity: 0;
   animation-name: footerTruckDrive;
@@ -152,27 +158,27 @@ img {
 
 @keyframes footerTruckDrive {
   0% {
-    left: -140px;
+    left: -120px;
     opacity: 0;
   }
 
   8% {
-    left: -24px;
+    left: -18px;
     opacity: 1;
   }
 
-  90% {
-    left: calc(100% - 12px);
+  86% {
+    left: calc(100% - 124px);
     opacity: 1;
   }
 
-  96% {
-    left: calc(100% + 36px);
+  94% {
+    left: calc(100% - 96px);
     opacity: 0;
   }
 
   100% {
-    left: calc(100% + 140px);
+    left: calc(100% + 40px);
     opacity: 0;
   }
 }
