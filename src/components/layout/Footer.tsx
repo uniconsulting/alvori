@@ -96,11 +96,11 @@ export function Footer() {
       }
     >
       <div className="bg-[var(--footer-bg)] text-[var(--footer-text)]">
-        <Container className="flex min-h-[500px] flex-col pt-10 pb-6 md:pt-10 md:pb-6">
+        <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
           <Road trucks={assets.trucks} />
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1.12fr_1fr_1.08fr]">
-            <div className="space-y-8">
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-start">
+            <div className="w-full max-w-[430px] justify-self-start space-y-8">
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
                   src={assets.footerLogo}
@@ -118,8 +118,8 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="space-y-8">
-              <h3 className="font-heading text-[17px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
+            <div className="justify-self-center space-y-8">
+              <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
                 инфо-блок
               </h3>
 
@@ -136,20 +136,19 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="w-full max-w-[460px] justify-self-end space-y-8">
               <div className="space-y-5">
                 <ContactRow icon={<Phone size={18} strokeWidth={1.9} />} text={contacts.phoneDisplay} />
                 <ContactRow icon={<Mail size={18} strokeWidth={1.9} />} text={contacts.email} />
                 <ContactRow icon={<MapPin size={18} strokeWidth={1.9} />} text={contacts.address} />
               </div>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <MessengerButton
                   href={contacts.maxHref}
                   label="написать в max"
                   logoSrc={assets.maxLogo}
                 />
-
                 <MessengerButton
                   href={contacts.telegramHref}
                   label="написать в tg"
@@ -163,21 +162,20 @@ export function Footer() {
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
               <div className="h-px flex-1 bg-[var(--footer-line)]" />
 
-              <div className="flex items-center gap-4 whitespace-nowrap text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-muted)]">
-                <div className="flex h-[28px] w-[36px] items-center justify-center">
-                  <AssetImage
-                    src={assets.developerLogo}
-                    alt="Юни"
-                    className="h-[20px] w-auto object-contain"
-                  />
+              <div className="grid items-center gap-12 text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-muted)] md:grid-flow-col md:auto-cols-max">
+                <div className="flex items-center gap-4 whitespace-nowrap">
+                  <div className="flex h-[28px] w-[36px] items-center justify-center">
+                    <AssetImage
+                      src={assets.developerLogo}
+                      alt="Юни"
+                      className="h-[20px] w-auto object-contain"
+                    />
+                  </div>
+                  <span>Сайт разработан командой ЮНИ.ai</span>
                 </div>
 
-                <span>Сайт разработан командой ЮНИ.ai</span>
-              </div>
-
-              <div className="flex flex-col gap-3 text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-muted)] md:ml-auto md:flex-row md:items-center md:gap-12">
-                <span>Telegram: @uni_smb</span>
-                <span>MAX: +7(995)518-69-42</span>
+                <span className="whitespace-nowrap">Telegram: @uni_smb</span>
+                <span className="whitespace-nowrap">MAX: +7(995)518-69-42</span>
               </div>
             </div>
           </div>
@@ -255,7 +253,7 @@ function MessengerButton({
   return (
     <Link
       href={href}
-      className="inline-flex h-[56px] items-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] px-5 text-[var(--footer-button-text)] transition hover:opacity-90"
+      className="inline-flex h-[56px] w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] px-5 text-[var(--footer-button-text)] transition hover:opacity-90"
     >
       <div className="flex h-[28px] w-[28px] items-center justify-center">
         <AssetImage
