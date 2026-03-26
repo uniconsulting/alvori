@@ -40,7 +40,7 @@ export function Header() {
   };
 
   return (
-    <header className="relative z-30 pt-8 md:pt-10 xl:pt-12">
+    <header className="relative z-30 pt-4 md:pt-10 xl:pt-12">
       <Container>
         <div className="hidden items-center justify-between xl:flex">
           <div className="flex items-center">
