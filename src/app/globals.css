@@ -127,9 +127,8 @@ img {
 }
 
 .footer-truck {
-  top: 50%;
-  left: -72px;
-  transform: translateY(-50%);
+  left: -96px;
+  top: calc(70% - 30px);
   opacity: 0;
   animation-name: footerTruckDrive;
   animation-timing-function: linear;
@@ -153,7 +152,7 @@ img {
 
 @keyframes footerTruckDrive {
   0% {
-    left: -72px;
+    left: -96px;
     opacity: 0;
   }
 
@@ -161,12 +160,13 @@ img {
     opacity: 1;
   }
 
-  92% {
+  96% {
+    left: calc(100% + 96px);
     opacity: 1;
   }
 
   100% {
-    left: calc(100% + 72px);
+    left: calc(100% + 96px);
     opacity: 0;
   }
 }
@@ -176,5 +176,6 @@ img {
     animation: none;
     opacity: 1;
     left: 0;
+    top: calc(70% - 30px);
   }
 }
