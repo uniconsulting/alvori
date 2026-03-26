@@ -11,11 +11,6 @@ import { cn } from '@/lib/cn';
 
 type ThemeMode = 'light' | 'dark';
 
-const smoothColor =
-  'transition-[color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]';
-const microLift =
-  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]';
-
 export function Header() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -84,25 +79,16 @@ export function Header() {
                 onClick={handleThemeToggle}
                 aria-label="сменить тему"
                 className={cn(
-                  'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]',
+                  'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
                 )}
               >
                 {theme === 'light' ? (
-                  <Moon
-                    size={20}
-                    strokeWidth={1.8}
-                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-                  />
+                  <Moon size={20} strokeWidth={1.8} className="header-theme-icon" />
                 ) : (
-                  <Sun
-                    size={20}
-                    strokeWidth={1.8}
-                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-                  />
+                  <Sun size={20} strokeWidth={1.8} className="header-theme-icon" />
                 )}
               </button>
 
@@ -111,26 +97,13 @@ export function Header() {
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
                 className={cn(
-                  'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]',
+                  'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
                 )}
               >
-                {menuOpen ? (
-                  <X
-                    size={20}
-                    strokeWidth={1.8}
-                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-                  />
-                ) : (
-                  <Menu
-                    size={20}
-                    strokeWidth={1.8}
-                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-                  />
-                )}
+                {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
               </button>
             </div>
           </div>
@@ -143,10 +116,7 @@ export function Header() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={cn(
-                      'text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] hover:text-[var(--accent-1)]',
-                      smoothColor,
-                    )}
+                    className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
                   >
                     {item.label}
                   </Link>
@@ -156,10 +126,7 @@ export function Header() {
 
                 <a
                   href={contacts.phoneHref}
-                  className={cn(
-                    'text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)] hover:text-[var(--accent-1)]',
-                    smoothColor,
-                  )}
+                  className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
                 >
                   {contacts.phoneDisplay}
                 </a>
@@ -214,10 +181,7 @@ function AnchorNav({ className }: { className?: string }) {
         <div key={item.href} className="flex shrink-0 items-center">
           <Link
             href={item.href}
-            className={cn(
-              'text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] hover:text-[var(--accent-1)]',
-              smoothColor,
-            )}
+            className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
           >
             {item.label}
           </Link>
@@ -235,10 +199,7 @@ function PhoneBlock() {
   return (
     <a
       href={contacts.phoneHref}
-      className={cn(
-        'shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)] hover:text-[var(--accent-1)]',
-        smoothColor,
-      )}
+      className="header-phone-hover shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
     >
       {contacts.phoneDisplay}
     </a>
@@ -279,25 +240,16 @@ function UtilityCluster({
         onClick={onToggleTheme}
         aria-label="смена темы"
         className={cn(
-          'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-          microLift,
+          'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
           theme === 'light'
             ? 'bg-[var(--surface)] text-[var(--text)]'
             : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
         )}
       >
         {theme === 'light' ? (
-          <Moon
-            size={22}
-            strokeWidth={1.8}
-            className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-          />
+          <Moon size={22} strokeWidth={1.8} className="header-theme-icon" />
         ) : (
-          <Sun
-            size={22}
-            strokeWidth={1.8}
-            className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
-          />
+          <Sun size={22} strokeWidth={1.8} className="header-theme-icon" />
         )}
       </button>
     </div>
@@ -322,8 +274,7 @@ function UtilityLinkButton({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-        microLift,
+        'header-utility-button inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
         variant === 'accent'
           ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
           : theme === 'light'
@@ -352,8 +303,7 @@ function CompactAction({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-        microLift,
+        'header-utility-button inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
         variant === 'accent'
           ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
           : 'bg-[var(--surface)] text-[var(--text)]',
