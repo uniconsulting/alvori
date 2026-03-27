@@ -124,6 +124,20 @@ img {
 
 .footer-road {
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
 }
 
 .footer-truck {
@@ -131,7 +145,6 @@ img {
   height: 36px;
   left: -120px;
   top: calc(70% - 36px);
-  opacity: 0;
   animation-name: footerTruckDrive;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -155,36 +168,23 @@ img {
 @keyframes footerTruckDrive {
   0% {
     left: -120px;
-    opacity: 0;
-  }
-
-  8% {
-    left: -18px;
-    opacity: 1;
-  }
-
-  86% {
-    left: calc(100% - 124px);
-    opacity: 1;
-  }
-
-  94% {
-    left: calc(100% - 96px);
-    opacity: 0;
   }
 
   100% {
-    left: calc(100% + 40px);
-    opacity: 0;
+    left: calc(100% + 120px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .footer-road {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
   .footer-truck {
     animation: none;
     left: 0;
     top: calc(70% - 36px);
-    opacity: 1;
   }
 }
 
