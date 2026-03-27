@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
 import { legalLinks } from '@/content/legal';
@@ -51,34 +51,47 @@ export function Footer() {
         accent: '#fab021',
       };
 
-  const assets = useMemo(
-    () => ({
-      footerLogo: isLightTheme
-        ? `${sitePath}/brand/footer/light/logo.svg`
-        : `${sitePath}/brand/footer/dark/logo.svg`,
-      developerLogo: isLightTheme
-        ? `${sitePath}/brand/developer/light/logo.svg`
-        : `${sitePath}/brand/developer/dark/logo.svg`,
-      maxLogo: isLightTheme
-        ? `${sitePath}/brand/messengers/max/light.svg`
-        : `${sitePath}/brand/messengers/max/dark.svg`,
-      telegramLogo: isLightTheme
-        ? `${sitePath}/brand/messengers/telegram/light.svg`
-        : `${sitePath}/brand/messengers/telegram/dark.svg`,
-      trucks: [
-        isLightTheme
-          ? `${sitePath}/brand/trucks/footer/light/truck-1.svg`
-          : `${sitePath}/brand/trucks/footer/dark/truck-1.svg`,
-        isLightTheme
-          ? `${sitePath}/brand/trucks/footer/light/truck-2.svg`
-          : `${sitePath}/brand/trucks/footer/dark/truck-2.svg`,
-        isLightTheme
-          ? `${sitePath}/brand/trucks/footer/light/truck-3.svg`
-          : `${sitePath}/brand/trucks/footer/dark/truck-3.svg`,
-      ],
-    }),
-    [isLightTheme],
-  );
+  const assets = {
+    footerLogo: isLightTheme
+      ? `${sitePath}/brand/footer/light/logo.svg`
+      : `${sitePath}/brand/footer/dark/logo.svg`,
+    footerLogoFallback: isLightTheme
+      ? `${sitePath}/brand/footer/dark/logo.svg`
+      : `${sitePath}/brand/footer/light/logo.svg`,
+
+    developerLogo: isLightTheme
+      ? `${sitePath}/brand/developer/light/logo.svg`
+      : `${sitePath}/brand/developer/dark/logo.svg`,
+    developerLogoFallback: isLightTheme
+      ? `${sitePath}/brand/developer/dark/logo.svg`
+      : `${sitePath}/brand/developer/light/logo.svg`,
+
+    maxLogo: isLightTheme
+      ? `${sitePath}/brand/messengers/max/light.svg`
+      : `${sitePath}/brand/messengers/max/dark.svg`,
+    maxLogoFallback: isLightTheme
+      ? `${sitePath}/brand/messengers/max/dark.svg`
+      : `${sitePath}/brand/messengers/max/light.svg`,
+
+    telegramLogo: isLightTheme
+      ? `${sitePath}/brand/messengers/telegram/light.svg`
+      : `${sitePath}/brand/messengers/telegram/dark.svg`,
+    telegramLogoFallback: isLightTheme
+      ? `${sitePath}/brand/messengers/telegram/dark.svg`
+      : `${sitePath}/brand/messengers/telegram/light.svg`,
+
+    trucks: [
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-1.svg`
+        : `${sitePath}/brand/trucks/footer/dark/truck-1.svg`,
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-2.svg`
+        : `${sitePath}/brand/trucks/footer/dark/truck-2.svg`,
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-3.svg`
+        : `${sitePath}/brand/trucks/footer/dark/truck-3.svg`,
+    ],
+  };
 
   return (
     <footer
@@ -104,6 +117,7 @@ export function Footer() {
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
                   src={assets.footerLogo}
+                  fallbackSrc={assets.footerLogoFallback}
                   alt="Алвори"
                   className="h-full w-full object-contain object-left"
                 />
@@ -118,7 +132,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="justify-self-center space-y-8 lg:-translate-x-12">
+            <div className="justify-self-center space-y-8 lg:-translate-x-16">
               <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
                 инфо-блок
               </h3>
@@ -157,11 +171,14 @@ export function Footer() {
                   href={contacts.maxHref}
                   label="написать в max"
                   logoSrc={assets.maxLogo}
+                  logoFallbackSrc={assets.maxLogoFallback}
                 />
+
                 <MessengerButton
                   href={contacts.telegramHref}
                   label="написать в tg"
                   logoSrc={assets.telegramLogo}
+                  logoFallbackSrc={assets.telegramLogoFallback}
                 />
               </div>
             </div>
@@ -176,6 +193,7 @@ export function Footer() {
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
                     <AssetImage
                       src={assets.developerLogo}
+                      fallbackSrc={assets.developerLogoFallback}
                       alt="Юни"
                       className="h-[20px] w-auto object-contain"
                     />
@@ -237,6 +255,10 @@ function Truck({
 }) {
   const [broken, setBroken] = useState(false);
 
+  useEffect(() => {
+    setBroken(false);
+  }, [src]);
+
   return (
     <div className={cn('pointer-events-none absolute', className)}>
       {!broken ? (
@@ -274,19 +296,22 @@ function MessengerButton({
   href,
   label,
   logoSrc,
+  logoFallbackSrc,
 }: {
   href: string;
   label: string;
   logoSrc: string;
+  logoFallbackSrc?: string;
 }) {
   return (
     <Link
       href={href}
-      className="inline-flex h-[56px] w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] px-5 text-[var(--footer-button-text)] transition hover:opacity-90"
+      className="header-utility-button inline-flex h-[56px] w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] px-5 text-[var(--footer-button-text)]"
     >
       <div className="flex h-[28px] w-[28px] items-center justify-center">
         <AssetImage
           src={logoSrc}
+          fallbackSrc={logoFallbackSrc}
           alt=""
           className="h-[22px] w-auto object-contain"
         />
@@ -301,16 +326,24 @@ function MessengerButton({
 
 function AssetImage({
   src,
+  fallbackSrc,
   alt,
   className,
 }: {
   src: string;
+  fallbackSrc?: string;
   alt: string;
   className?: string;
 }) {
   const [broken, setBroken] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(src);
 
-  if (broken) {
+  useEffect(() => {
+    setBroken(false);
+    setCurrentSrc(src);
+  }, [src]);
+
+  if (broken && !fallbackSrc) {
     return (
       <div
         className={cn(
@@ -323,10 +356,19 @@ function AssetImage({
 
   return (
     <img
-      src={src}
+      key={currentSrc}
+      src={currentSrc}
       alt={alt}
-      onError={() => setBroken(true)}
-      className={className}
+      onError={() => {
+        if (fallbackSrc && currentSrc !== fallbackSrc) {
+          setCurrentSrc(fallbackSrc);
+          setBroken(false);
+          return;
+        }
+
+        setBroken(true);
+      }}
+      className={cn(broken ? 'hidden' : '', className)}
     />
   );
 }
