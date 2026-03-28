@@ -26,13 +26,13 @@ type AtiDigitState = {
 const slides: HeroSlide[] = [
   {
     title: 'успешных перевозок',
-    value: '>10.000',
+    value: '> 10.000',
     ctaLabel: 'оформить заявку',
     href: '/request/',
   },
   {
     title: 'мы на ati.su',
-    value: '728 149',
+    value: '728  149',
     ctaLabel: 'открыть профиль',
     href: 'https://ati.su/',
     external: true,
@@ -502,7 +502,7 @@ function ArrowSquareButton({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] transition hover:opacity-90"
+      className="hero-cta-lift inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)]"
     >
       {children}
     </button>
