@@ -201,25 +201,43 @@ img {
 
 .hero-trailer-hidden {
   opacity: 0;
-  filter: blur(18px);
-  transform: translate3d(-56px, 0, 0);
+  filter: blur(16px);
+  transform: translate3d(-72px, 0, 0);
 }
 
 .hero-trailer-enter {
-  animation: heroTrailerEnter 1200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: heroTrailerEnter 1650ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes heroTrailerEnter {
   0% {
     opacity: 0;
-    filter: blur(18px);
-    transform: translate3d(-56px, 0, 0);
+    filter: blur(16px);
+    transform: translate3d(-72px, 0, 0);
   }
 
-  60% {
-    opacity: 0.78;
-    filter: blur(8px);
+  18% {
+    opacity: 0.24;
+    filter: blur(14px);
+    transform: translate3d(-58px, 0, 0);
+  }
+
+  42% {
+    opacity: 0.58;
+    filter: blur(10px);
+    transform: translate3d(-34px, 0, 0);
+  }
+
+  68% {
+    opacity: 0.82;
+    filter: blur(6px);
     transform: translate3d(-14px, 0, 0);
+  }
+
+  86% {
+    opacity: 0.94;
+    filter: blur(2px);
+    transform: translate3d(-4px, 0, 0);
   }
 
   100% {
@@ -236,7 +254,7 @@ img {
 }
 
 .hero-metrics-enter {
-  animation: heroMetricsEnter 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: heroMetricsEnter 1180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes heroMetricsEnter {
@@ -266,7 +284,7 @@ img {
 }
 
 .hero-card-enter {
-  animation: heroCardEnter 980ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: heroCardEnter 1180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes heroCardEnter {
@@ -292,6 +310,24 @@ img {
     opacity: 0;
     filter: blur(14px);
     transform: translate3d(0, 14px, 0) scale(0.988);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.hero-metric-value-finish {
+  animation: heroMetricValueFinish 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes heroMetricValueFinish {
+  0% {
+    opacity: 0.84;
+    filter: blur(4px);
+    transform: translate3d(0, 2px, 0) scale(0.992);
   }
 
   100% {
@@ -358,4 +394,37 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
     background-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
     color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-ati-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.02em;
+}
+
+.hero-ati-gap {
+  display: inline-block;
+  width: 0.34em;
+}
+
+.hero-ati-digit {
+  display: inline-flex;
+  min-width: 0.56em;
+  justify-content: center;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-ati-digit--spinning {
+  filter: blur(1.6px);
+  transform: translateY(1px) scale(0.985);
+  opacity: 0.88;
+}
+
+.hero-ati-digit--locked {
+  filter: blur(0);
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
