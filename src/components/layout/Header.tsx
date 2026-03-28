@@ -44,12 +44,12 @@ export function Header() {
       <Container>
         <div className="hidden items-center xl:flex">
           <LogoBlock />
-          <OuterDivider className="ml-[41px]" />
-          <AnchorNav className="ml-[41px]" />
-          <OuterDivider className="ml-[41px]" />
-          <PhoneBlock className="ml-[41px]" />
+          <OuterDivider className="ml-[36px]" />
+          <AnchorNav className="ml-[36px]" />
+          <OuterDivider className="ml-[36px]" />
+          <PhoneBlock className="ml-[36px]" />
           <UtilityCluster
-            className="ml-[41px]"
+            className="ml-[36px]"
             theme={theme}
             onToggleTheme={handleThemeToggle}
           />
