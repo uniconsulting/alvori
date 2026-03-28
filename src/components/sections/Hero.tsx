@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
+import { Container } from '@/components/layout/Container';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -82,104 +83,106 @@ export function Hero() {
 
   return (
     <section className="pt-8 md:pt-10 xl:pt-12">
-      <div className="grid gap-5 xl:grid-cols-[840px_500px] xl:items-start xl:justify-between">
-        <div className="relative xl:-ml-[64px]">
-          <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
-            <img
-              src={assets.trailer}
-              alt="Полуприцеп"
-              className="h-full w-full object-contain object-left-top"
-            />
+      <Container>
+        <div className="grid gap-10 xl:grid-cols-[780px_540px] xl:items-start">
+          <div className="relative xl:-ml-[60px]">
+            <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
+              <img
+                src={assets.trailer}
+                alt="Полуприцеп"
+                className="h-full w-full object-contain object-left-top"
+              />
 
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
-                <div className="pointer-events-auto flex flex-col gap-10">
-                  <div className="font-heading text-[30px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[36px]">
-                    {slide.title}
-                  </div>
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
+                  <div className="pointer-events-auto flex flex-col gap-11">
+                    <div className="font-heading text-[24px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[30px]">
+                      {slide.title}
+                    </div>
 
-                  <div
-                    className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    {slide.value}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <HeroActionButton
-                      label={slide.ctaLabel}
-                      href={slide.href}
-                      external={slide.external}
-                    />
-
-                    <ArrowSquareButton
-                      ariaLabel="предыдущая характеристика"
-                      onClick={goPrev}
+                    <div
+                      className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      <ArrowLeft size={24} strokeWidth={2.1} />
-                    </ArrowSquareButton>
+                      {slide.value}
+                    </div>
 
-                    <ArrowSquareButton
-                      ariaLabel="следующая характеристика"
-                      onClick={goNext}
-                    >
-                      <ArrowRight size={24} strokeWidth={2.1} />
-                    </ArrowSquareButton>
+                    <div className="flex items-center gap-3">
+                      <HeroActionButton
+                        label={slide.ctaLabel}
+                        href={slide.href}
+                        external={slide.external}
+                      />
+
+                      <ArrowSquareButton
+                        ariaLabel="предыдущая характеристика"
+                        onClick={goPrev}
+                      >
+                        <ArrowLeft size={24} strokeWidth={2.1} />
+                      </ArrowSquareButton>
+
+                      <ArrowSquareButton
+                        ariaLabel="следующая характеристика"
+                        onClick={goNext}
+                      >
+                        <ArrowRight size={24} strokeWidth={2.1} />
+                      </ArrowSquareButton>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
+            <BentoCard
+              title={
+                <>
+                  единая форма
+                  <br />
+                  запроса и отправки кп
+                </>
+              }
+              href="/request/"
+              imageSrc={assets.request}
+              theme={theme}
+              variant="accent"
+              heightClassName="h-[236px]"
+            />
+
+            <BentoCard
+              title={
+                <>
+                  ознакомиться
+                  <br />
+                  с нашими принципами
+                </>
+              }
+              href="#about"
+              imageSrc={assets.principles}
+              theme={theme}
+              variant="dark"
+              heightClassName="h-[496px]"
+              tall
+            />
+
+            <BentoCard
+              title={
+                <>
+                  сделать расчёт
+                  <br />
+                  вашей грузоперевозки
+                </>
+              }
+              href="#pricing"
+              imageSrc={assets.calc}
+              theme={theme}
+              variant="light"
+              heightClassName="h-[236px]"
+            />
+          </div>
         </div>
-
-        <div className="mt-4 grid w-full max-w-[500px] justify-self-end gap-5 md:grid-cols-[240px_240px] xl:mt-[22px]">
-          <BentoCard
-            title={
-              <>
-                единая форма
-                <br />
-                запроса и отправки кп
-              </>
-            }
-            href="/request/"
-            imageSrc={assets.request}
-            theme={theme}
-            variant="accent"
-            heightClassName="h-[214px]"
-          />
-
-          <BentoCard
-            title={
-              <>
-                ознакомиться
-                <br />
-                с нашими принципами
-              </>
-            }
-            href="#about"
-            imageSrc={assets.principles}
-            theme={theme}
-            variant="dark"
-            heightClassName="h-[448px]"
-            tall
-          />
-
-          <BentoCard
-            title={
-              <>
-                сделать расчёт
-                <br />
-                вашей грузоперевозки
-              </>
-            }
-            href="#pricing"
-            imageSrc={assets.calc}
-            theme={theme}
-            variant="light"
-            heightClassName="h-[214px]"
-          />
-        </div>
-      </div>
+      </Container>
     </section>
   );
 }
@@ -282,7 +285,7 @@ function BentoCard({
 
       <div className="relative flex h-full flex-col justify-end p-5">
         <div className="flex items-end justify-between gap-3">
-          <div className="max-w-[156px] text-[15px] font-semibold leading-[1.12] tracking-[-0.02em]">
+          <div className="max-w-[150px] text-[14px] font-semibold leading-[1.12] tracking-[-0.02em]">
             {title}
           </div>
 
