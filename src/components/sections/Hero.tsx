@@ -159,7 +159,7 @@ timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
     }
 
     if (progress < 1) {
-      setDisplayValue(`>${formatThousands(value)}`);
+      setDisplayValue(`> ${formatThousands(value)}`);
       animationFrameRef.current = requestAnimationFrame(tick);
       return;
     }
@@ -172,7 +172,7 @@ timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
     }, 760);
   };
 
-  setDisplayValue('>0');
+  setDisplayValue('> 0');
   animationFrameRef.current = requestAnimationFrame(tick);
 };
 
