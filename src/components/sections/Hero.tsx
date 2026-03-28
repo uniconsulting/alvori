@@ -456,88 +456,94 @@ function BentoCard({
     });
   };
 
-  return (
-    <div className={cn(!visible && 'hero-card-hidden', visible && 'hero-card-enter', tall && 'md:row-span-2')}>
-      <div className="hero-card-shell h-full" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-        <Link
-          href={href}
+ return (
+  <div
+    className={cn(
+      !visible && 'hero-card-hidden',
+      visible && 'hero-card-enter',
+      heightClassName,
+      tall && 'md:row-span-2',
+    )}
+  >
+    <div
+      className="hero-card-shell h-full"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Link
+        href={href}
+        className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[1.5px]"
+        style={{
+          transform: `perspective(1400px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${tilt.y}px) scale(${tilt.scale})`,
+        }}
+      >
+        <div className="hero-card-border-3d pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
+
+        <div
           className={cn(
-            'hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[1.5px]',
-            heightClassName,
+            'relative h-full overflow-hidden rounded-[30.5px]',
+            variant === 'accent'
+              ? 'bg-[var(--accent-1)]'
+              : variant === 'light'
+                ? 'bg-[var(--surface)]'
+                : 'bg-[var(--accent-2)]',
           )}
-          style={{
-            transform: `perspective(1400px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${tilt.y}px) scale(${tilt.scale})`,
-          }}
         >
-          <div className="hero-card-border-3d pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
+          <img
+            src={imageSrc}
+            alt=""
+            className="hero-card-image-3d absolute inset-0 h-full w-full object-cover object-center"
+            style={{
+              transform: `translate3d(${(glow.x - 50) * -0.12}px, ${(glow.y - 50) * -0.12}px, 18px) scale(1.05)`,
+            }}
+          />
 
           <div
-            className={cn(
-              'relative h-full overflow-hidden rounded-[30.5px]',
-              variant === 'accent'
-                ? 'bg-[var(--accent-1)]'
-                : variant === 'light'
-                  ? 'bg-[var(--surface)]'
-                  : 'bg-[var(--accent-2)]',
-            )}
+            className="hero-card-glow pointer-events-none absolute inset-0"
+            style={{
+              opacity: glow.opacity,
+              background: `radial-gradient(320px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.18), transparent 60%)`,
+            }}
+          />
+
+          <div
+            className="hero-card-content-3d relative flex h-full flex-col justify-end p-5"
+            style={{
+              transform: `translate3d(${(glow.x - 50) * 0.08}px, ${(glow.y - 50) * 0.08}px, 26px)`,
+            }}
           >
-            <img
-              src={imageSrc}
-              alt=""
-              className="hero-card-image-3d absolute inset-0 h-full w-full object-cover object-center"
-              style={{
-                transform: `translate3d(${(glow.x - 50) * -0.12}px, ${(glow.y - 50) * -0.12}px, 18px) scale(1.05)`,
-              }}
-            />
+            <div className="relative">
+              <div
+                className={cn(
+                  'pointer-events-none absolute bottom-[-30px] left-[-22px] right-[-18px] h-[154px] blur-[30px]',
+                  localShadowClass,
+                )}
+              />
 
-            <div
-              className="hero-card-glow pointer-events-none absolute inset-0"
-              style={{
-                opacity: glow.opacity,
-                background: `radial-gradient(320px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.18), transparent 60%)`,
-              }}
-            />
-
-            <div
-              className="hero-card-content-3d relative flex h-full flex-col justify-end p-5"
-              style={{
-                transform: `translate3d(${(glow.x - 50) * 0.08}px, ${(glow.y - 50) * 0.08}px, 26px)`,
-              }}
-            >
-              <div className="relative">
+              <div className="relative flex items-center justify-between gap-2">
                 <div
                   className={cn(
-                    'pointer-events-none absolute bottom-[-30px] left-[-22px] right-[-18px] h-[154px] blur-[30px]',
-                    localShadowClass,
+                    'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                    textClass,
                   )}
-                />
+                >
+                  {title}
+                </div>
 
-                <div className="relative flex items-center justify-between gap-2">
-                  <div
-                    className={cn(
-                      'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
-                      textClass,
-                    )}
-                  >
-                    {title}
-                  </div>
-
-                  <div
-                    className={cn(
-                      'hero-card-arrow inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px]',
-                      buttonClass,
-                    )}
-                    style={{ transform: 'translateZ(32px)' }}
-                  >
-                    <ArrowRight size={19} strokeWidth={2.1} />
-                  </div>
+                <div
+                  className={cn(
+                    'hero-card-arrow inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px]',
+                    buttonClass,
+                  )}
+                  style={{ transform: 'translateZ(32px)' }}
+                >
+                  <ArrowRight size={19} strokeWidth={2.1} />
                 </div>
               </div>
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     </div>
-  );
-}
-
+  </div>
+);
