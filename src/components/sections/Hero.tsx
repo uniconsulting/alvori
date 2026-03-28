@@ -306,19 +306,19 @@ function BentoCard({
               )}
             />
 
-            <div className="relative flex items-center justify-between gap-3">
+            <div className="relative flex items-center justify-between gap-2">
               <div className="max-w-[146px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]">
                 {title}
               </div>
 
-              <div
-                className={cn(
-                  'inline-flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[16px] transition group-hover:translate-x-[2px]',
-                  buttonClass,
-                )}
-              >
-                <ArrowRight size={22} strokeWidth={2.1} />
-              </div>
+<div
+  className={cn(
+    'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition group-hover:translate-x-[2px]',
+    buttonClass,
+  )}
+>
+  <ArrowRight size={19} strokeWidth={2.1} />
+</div>
             </div>
           </div>
         </div>
