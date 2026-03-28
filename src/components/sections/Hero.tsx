@@ -308,19 +308,18 @@ export function Hero() {
     <section className="pt-8 md:pt-10 xl:pt-12">
       <Container>
         <div className="grid gap-10 xl:grid-cols-[780px_540px] xl:items-start">
-          <div
-            className={cn(
-              'relative xl:-ml-[60px]',
-              !trailerReady && 'hero-trailer-hidden',
-              trailerReady && 'hero-trailer-enter',
-            )}
-          >
-            <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
-              <img
-                src={assets.trailer}
-                alt="Полуприцеп"
-                className="h-full w-full object-contain object-left-top"
-              />
+<div className="relative xl:-ml-[60px]">
+  <div
+    className={cn(
+      'hero-trailer-shell relative h-auto w-full xl:h-[550px] xl:w-[840px]',
+      trailerReady && 'hero-trailer-shell--ready',
+    )}
+  >
+    <img
+      src={assets.trailer}
+      alt="Полуприцеп"
+      className="hero-trailer-visual h-full w-full object-contain object-left-top"
+    />
 
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
