@@ -82,7 +82,7 @@ export function Hero() {
 
   return (
     <section className="pt-8 md:pt-10 xl:pt-12">
-      <div className="grid gap-6 xl:grid-cols-[840px_520px] xl:items-start xl:justify-between">
+      <div className="grid gap-5 xl:grid-cols-[840px_500px] xl:items-start xl:justify-between">
         <div className="relative xl:-ml-[64px]">
           <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
             <img
@@ -92,7 +92,7 @@ export function Hero() {
             />
 
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-[40%] top-[17%] w-[390px] max-w-[45%]">
+              <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
                 <div className="pointer-events-auto flex flex-col gap-10">
                   <div className="font-heading text-[30px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[36px]">
                     {slide.title}
@@ -132,7 +132,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="mt-4 grid w-full max-w-[520px] justify-self-end gap-5 md:grid-cols-[250px_250px] xl:mt-[30px]">
+        <div className="mt-4 grid w-full max-w-[500px] justify-self-end gap-5 md:grid-cols-[240px_240px] xl:mt-[22px]">
           <BentoCard
             title={
               <>
@@ -145,7 +145,7 @@ export function Hero() {
             imageSrc={assets.request}
             theme={theme}
             variant="accent"
-            heightClassName="h-[220px]"
+            heightClassName="h-[214px]"
           />
 
           <BentoCard
@@ -160,7 +160,7 @@ export function Hero() {
             imageSrc={assets.principles}
             theme={theme}
             variant="dark"
-            heightClassName="h-[460px]"
+            heightClassName="h-[448px]"
             tall
           />
 
@@ -176,7 +176,7 @@ export function Hero() {
             imageSrc={assets.calc}
             theme={theme}
             variant="light"
-            heightClassName="h-[220px]"
+            heightClassName="h-[214px]"
           />
         </div>
       </div>
@@ -225,7 +225,7 @@ function ArrowSquareButton({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="inline-flex h-[48px] w-[48px] items-center justify-center rounded-[18px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] transition hover:opacity-90"
+      className="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] transition hover:opacity-90"
     >
       {children}
     </button>
@@ -280,14 +280,14 @@ function BentoCard({
 
       <div className={cn('absolute inset-0', overlayClass)} />
 
-      <div className="relative flex h-full flex-col justify-end p-6">
-        <div className="flex items-end justify-between gap-4">
-          <div className="max-w-[176px] text-[16px] font-semibold leading-[1.12] tracking-[-0.02em]">
+      <div className="relative flex h-full flex-col justify-end p-5">
+        <div className="flex items-end justify-between gap-3">
+          <div className="max-w-[156px] text-[15px] font-semibold leading-[1.12] tracking-[-0.02em]">
             {title}
           </div>
 
-          <div className="inline-flex h-[48px] w-[48px] items-center justify-center rounded-[18px] bg-[var(--surface)] text-[var(--text)] transition group-hover:translate-x-[2px]">
-            <ArrowRight size={24} strokeWidth={2.1} />
+          <div className="inline-flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] transition group-hover:translate-x-[2px]">
+            <ArrowRight size={22} strokeWidth={2.1} />
           </div>
         </div>
       </div>
