@@ -136,51 +136,51 @@ export function Hero() {
 
           <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
             <BentoCard
-              title={
-                <>
-                  единая форма
-                  <br />
-                  запроса и отправки кп
-                </>
-              }
-              href="/request/"
-              imageSrc={assets.request}
-              theme={theme}
-              variant="accent"
-              heightClassName="h-[236px]"
-            />
+  title={
+    <>
+      единая форма
+      <br />
+      запроса и отправки кп
+    </>
+  }
+  href="/request/"
+  imageSrc={assets.request}
+  theme={theme}
+  variant="accent"
+  heightClassName="h-[236px]"
+/>
 
-            <BentoCard
-              title={
-                <>
-                  ознакомиться
-                  <br />
-                  с нашими принципами
-                </>
-              }
-              href="#about"
-              imageSrc={assets.principles}
-              theme={theme}
-              variant="dark"
-              heightClassName="h-[496px]"
-              tall
-            />
+<BentoCard
+  title={
+    <>
+      сделать расчёт
+      <br />
+      вашей грузоперевозки
+    </>
+  }
+  href="#pricing"
+  imageSrc={assets.calc}
+  theme={theme}
+  variant="light"
+  heightClassName="h-[236px]"
+/>
 
-            <BentoCard
-              title={
-                <>
-                  сделать расчёт
-                  <br />
-                  вашей грузоперевозки
-                </>
-              }
-              href="#pricing"
-              imageSrc={assets.calc}
-              theme={theme}
-              variant="light"
-              heightClassName="h-[236px]"
-              specialButton
-            />
+<BentoCard
+  title={
+    <>
+      ознакомиться
+      <br />
+      с нашими принципами
+    </>
+  }
+  href="#about"
+  imageSrc={assets.principles}
+  theme={theme}
+  variant="dark"
+  heightClassName="h-[496px]"
+  tall
+  specialButton
+/>
           </div>
         </div>
       </Container>
@@ -256,19 +256,20 @@ function BentoCard({
   specialButton?: boolean;
 }) {
   const localShadowClass =
-    variant === 'light'
-      ? theme === 'light'
-        ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(246,246,246,0.92)_0%,rgba(246,246,246,0.72)_26%,rgba(246,246,246,0.24)_56%,transparent_82%)]'
-        : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.90)_0%,rgba(38,41,46,0.72)_28%,rgba(38,41,46,0.24)_58%,transparent_82%)]'
-      : theme === 'light'
-        ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(255,255,255,0.38)_0%,rgba(255,255,255,0.20)_32%,rgba(255,255,255,0.08)_58%,transparent_82%)]'
-        : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.34)_0%,rgba(38,41,46,0.18)_30%,rgba(38,41,46,0.08)_56%,transparent_82%)]';
+    theme === 'light'
+      ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.84)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.22)_68%,transparent_88%)]'
+      : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.96)_0%,rgba(38,41,46,0.84)_26%,rgba(38,41,46,0.54)_50%,rgba(38,41,46,0.24)_70%,transparent_90%)]';
+
+  const textClass =
+    theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
 
   const buttonClass = specialButton
     ? theme === 'light'
       ? 'bg-[#26292e] text-white'
       : 'bg-white text-black'
-    : 'bg-[var(--surface)] text-[var(--text)]';
+    : theme === 'light'
+      ? 'bg-white text-[#26292e]'
+      : 'bg-[#222429] text-white';
 
   return (
     <Link
@@ -279,16 +280,16 @@ function BentoCard({
         tall && 'md:row-span-2',
       )}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.70)_0%,rgba(255,255,255,0.10)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.10)_74%,rgba(255,255,255,0.68)_100%)] opacity-85" />
+      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
 
       <div
         className={cn(
           'relative h-full overflow-hidden rounded-[30.5px]',
           variant === 'accent'
-            ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
+            ? 'bg-[var(--accent-1)]'
             : variant === 'light'
-              ? 'bg-[var(--surface)] text-[var(--text)]'
-              : 'bg-[var(--accent-2)] text-[var(--accent-2-text)]',
+              ? 'bg-[var(--surface)]'
+              : 'bg-[var(--accent-2)]',
         )}
       >
         <img
@@ -301,24 +302,29 @@ function BentoCard({
           <div className="relative">
             <div
               className={cn(
-                'pointer-events-none absolute bottom-[-28px] left-[-28px] h-[132px] w-[230px] blur-[24px]',
+                'pointer-events-none absolute bottom-[-34px] left-[-34px] h-[148px] w-[250px] blur-[30px]',
                 localShadowClass,
               )}
             />
 
             <div className="relative flex items-center justify-between gap-2">
-              <div className="max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]">
+              <div
+                className={cn(
+                  'max-w-[146px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                  textClass,
+                )}
+              >
                 {title}
               </div>
 
-<div
-  className={cn(
-    'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition group-hover:translate-x-[2px]',
-    buttonClass,
-  )}
->
-  <ArrowRight size={19} strokeWidth={2.1} />
-</div>
+              <div
+                className={cn(
+                  'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition group-hover:translate-x-[2px]',
+                  buttonClass,
+                )}
+              >
+                <ArrowRight size={19} strokeWidth={2.1} />
+              </div>
             </div>
           </div>
         </div>
