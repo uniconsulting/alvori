@@ -1,7 +1,43 @@
-// В этой версии архива шрифты подключены через fallback,
-// чтобы skeleton открывался даже без реальных font-files.
-// После добавления файлов подключить:
-// Garet -> src/fonts/garet/
-// BodyText-FitBold -> src/fonts/body-text-fit/
+import localFont from 'next/font/local';
 
-export const fontVariables = '';
+const garet = localFont({
+  src: [
+    {
+      path: '../fonts/garet/Garet-Book.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/garet/Garet-Heavy.woff2',
+      weight: '800',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-body-text',
+  display: 'swap',
+  preload: true,
+  fallback: ['Arial', 'system-ui', 'sans-serif'],
+  adjustFontFallback: 'Arial',
+});
+
+const bodyTextFit = localFont({
+  src: [
+    {
+      path: '../fonts/body-text-fit/BodyText-FitBold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/body-text-fit/BodyText-FitBold.woff',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-body-text-fit',
+  display: 'swap',
+  preload: true,
+  fallback: ['Arial', 'system-ui', 'sans-serif'],
+  adjustFontFallback: 'Arial',
+});
+
+export const fontVariables = `${garet.variable} ${bodyTextFit.variable}`;
