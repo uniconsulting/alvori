@@ -393,25 +393,76 @@ function BentoCard({
   specialButton?: boolean;
   visible: boolean;
 }) {
-  const [tilt, setTilt] = useState({
+  const currentRef = useRef({
     rotateX: 0,
     rotateY: 0,
     y: 0,
     scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
   });
 
-  const [glow, setGlow] = useState({
-    x: 50,
-    y: 50,
-    opacity: 0,
+  const targetRef = useRef({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
   });
 
-  const localShadowClass =
-    theme === 'light'
-      ? 'bg-[radial-gradient(circle_at_0%_100%,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.84)_24%,rgba(255,255,255,0.54)_52%,rgba(255,255,255,0.22)_74%,transparent_94%)]'
-      : 'bg-[radial-gradient(circle_at_0%_100%,rgba(38,41,46,0.98)_0%,rgba(38,41,46,0.84)_26%,rgba(38,41,46,0.56)_54%,rgba(38,41,46,0.24)_76%,transparent_94%)]';
+  const velocityRef = useRef({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 0,
+    glowX: 0,
+    glowY: 0,
+    glowOpacity: 0,
+  });
 
-  const textClass = theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
+  const frameRef = useRef<number | null>(null);
+
+  const [view, setView] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
+  });
+
+  useEffect(() => {
+    const stiffness = 0.14;
+    const damping = 0.78;
+
+    const step = () => {
+      const current = currentRef.current;
+      const target = targetRef.current;
+      const velocity = velocityRef.current;
+
+      (Object.keys(current) as Array<keyof typeof current>).forEach((key) => {
+        const force = (target[key] - current[key]) * stiffness;
+        velocity[key] = (velocity[key] + force) * damping;
+        current[key] = current[key] + velocity[key];
+      });
+
+      setView({ ...currentRef.current });
+      frameRef.current = requestAnimationFrame(step);
+    };
+
+    frameRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
+  const textClass =
+    theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
 
   const buttonClass = specialButton
     ? theme === 'light'
@@ -420,6 +471,11 @@ function BentoCard({
     : theme === 'light'
       ? 'bg-white text-[#26292e]'
       : 'bg-[#222429] text-white';
+
+  const bottomMaskClass =
+    theme === 'light'
+      ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.42)_38%,rgba(255,255,255,0.74)_62%,rgba(255,255,255,0.94)_100%)]'
+      : 'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.16)_18%,rgba(38,41,46,0.44)_38%,rgba(38,41,46,0.74)_62%,rgba(38,41,46,0.96)_100%)]';
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
@@ -431,33 +487,27 @@ function BentoCard({
     const rotateY = (px - 0.5) * 8;
     const rotateX = (0.5 - py) * 8;
 
-    setTilt({
+    targetRef.current = {
       rotateX,
       rotateY,
       y: -4,
       scale: 1.01,
-    });
-
-    setGlow({
-      x: px * 100,
-      y: py * 100,
-      opacity: 1,
-    });
+      glowX: px * 100,
+      glowY: py * 100,
+      glowOpacity: 1,
+    };
   };
 
   const handleMouseLeave = () => {
-    setTilt({
+    targetRef.current = {
       rotateX: 0,
       rotateY: 0,
       y: 0,
       scale: 1,
-    });
-
-    setGlow({
-      x: 50,
-      y: 50,
-      opacity: 0,
-    });
+      glowX: 50,
+      glowY: 50,
+      glowOpacity: 0,
+    };
   };
 
   return (
@@ -478,7 +528,7 @@ function BentoCard({
           href={href}
           className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[1.5px]"
           style={{
-            transform: `perspective(1400px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${tilt.y}px) scale(${tilt.scale})`,
+            transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
           }}
         >
           <div className="hero-card-border-3d pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
@@ -498,51 +548,44 @@ function BentoCard({
               alt=""
               className="hero-card-image-3d absolute inset-0 h-full w-full object-cover object-center"
               style={{
-                transform: `translate3d(${(glow.x - 50) * -0.12}px, ${(glow.y - 50) * -0.12}px, 18px) scale(1.05)`,
+                transform: `translate3d(${(view.glowX - 50) * -0.12}px, ${(view.glowY - 50) * -0.12}px, 18px) scale(1.05)`,
               }}
             />
 
             <div
               className="hero-card-glow pointer-events-none absolute inset-0"
               style={{
-                opacity: glow.opacity,
-                background: `radial-gradient(320px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.18), transparent 60%)`,
+                opacity: view.glowOpacity,
+                background: `radial-gradient(320px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.18), transparent 60%)`,
               }}
             />
+
+            <div className={cn('pointer-events-none absolute bottom-0 left-0 right-0 h-[132px]', bottomMaskClass)} />
 
             <div
               className="hero-card-content-3d relative flex h-full flex-col justify-end p-5"
               style={{
-                transform: `translate3d(${(glow.x - 50) * 0.08}px, ${(glow.y - 50) * 0.08}px, 26px)`,
+                transform: `translate3d(${(view.glowX - 50) * 0.08}px, ${(view.glowY - 50) * 0.08}px, 26px)`,
               }}
             >
-              <div className="relative">
+              <div className="relative flex items-center justify-between gap-2">
                 <div
                   className={cn(
-                    'pointer-events-none absolute bottom-[-30px] left-[-22px] right-[-18px] h-[154px] blur-[30px]',
-                    localShadowClass,
+                    'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                    textClass,
                   )}
-                />
+                >
+                  {title}
+                </div>
 
-                <div className="relative flex items-center justify-between gap-2">
-                  <div
-                    className={cn(
-                      'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
-                      textClass,
-                    )}
-                  >
-                    {title}
-                  </div>
-
-                  <div
-                    className={cn(
-                      'hero-card-arrow inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px]',
-                      buttonClass,
-                    )}
-                    style={{ transform: 'translateZ(32px)' }}
-                  >
-                    <ArrowRight size={19} strokeWidth={2.1} />
-                  </div>
+                <div
+                  className={cn(
+                    'hero-card-arrow inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px]',
+                    buttonClass,
+                  )}
+                  style={{ transform: 'translateZ(32px)' }}
+                >
+                  <ArrowRight size={19} strokeWidth={2.1} />
                 </div>
               </div>
             </div>
