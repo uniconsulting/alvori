@@ -136,51 +136,51 @@ export function Hero() {
 
           <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
             <BentoCard
-  title={
-    <>
-      единая форма
-      <br />
-      запроса и отправки кп
-    </>
-  }
-  href="/request/"
-  imageSrc={assets.request}
-  theme={theme}
-  variant="accent"
-  heightClassName="h-[236px]"
-/>
+              title={
+                <>
+                  единая форма
+                  <br />
+                  запроса и отправки кп
+                </>
+              }
+              href="/request/"
+              imageSrc={assets.request}
+              theme={theme}
+              variant="accent"
+              heightClassName="h-[236px]"
+            />
 
-<BentoCard
-  title={
-    <>
-      сделать расчёт
-      <br />
-      вашей грузоперевозки
-    </>
-  }
-  href="#pricing"
-  imageSrc={assets.calc}
-  theme={theme}
-  variant="light"
-  heightClassName="h-[236px]"
-/>
+            <BentoCard
+              title={
+                <>
+                  ознакомиться
+                  <br />
+                  с нашими принципами
+                </>
+              }
+              href="#about"
+              imageSrc={assets.principles}
+              theme={theme}
+              variant="dark"
+              heightClassName="h-[496px]"
+              tall
+              specialButton
+            />
 
-<BentoCard
-  title={
-    <>
-      ознакомиться
-      <br />
-      с нашими принципами
-    </>
-  }
-  href="#about"
-  imageSrc={assets.principles}
-  theme={theme}
-  variant="dark"
-  heightClassName="h-[496px]"
-  tall
-  specialButton
-/>
+            <BentoCard
+              title={
+                <>
+                  сделать расчёт
+                  <br />
+                  вашей грузоперевозки
+                </>
+              }
+              href="#pricing"
+              imageSrc={assets.calc}
+              theme={theme}
+              variant="light"
+              heightClassName="h-[236px]"
+            />
           </div>
         </div>
       </Container>
@@ -257,8 +257,8 @@ function BentoCard({
 }) {
   const localShadowClass =
     theme === 'light'
-      ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.84)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.22)_68%,transparent_88%)]'
-      : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.96)_0%,rgba(38,41,46,0.84)_26%,rgba(38,41,46,0.54)_50%,rgba(38,41,46,0.24)_70%,transparent_90%)]';
+      ? 'bg-[radial-gradient(circle_at_0%_100%,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.84)_24%,rgba(255,255,255,0.54)_52%,rgba(255,255,255,0.22)_74%,transparent_94%)]'
+      : 'bg-[radial-gradient(circle_at_0%_100%,rgba(38,41,46,0.98)_0%,rgba(38,41,46,0.84)_26%,rgba(38,41,46,0.56)_54%,rgba(38,41,46,0.24)_76%,transparent_94%)]';
 
   const textClass =
     theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
@@ -302,7 +302,7 @@ function BentoCard({
           <div className="relative">
             <div
               className={cn(
-                'pointer-events-none absolute bottom-[-34px] left-[-34px] h-[148px] w-[250px] blur-[30px]',
+                'pointer-events-none absolute bottom-[-30px] left-[-22px] right-[-18px] h-[154px] blur-[30px]',
                 localShadowClass,
               )}
             />
@@ -310,7 +310,7 @@ function BentoCard({
             <div className="relative flex items-center justify-between gap-2">
               <div
                 className={cn(
-                  'max-w-[146px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                  'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
                   textClass,
                 )}
               >
