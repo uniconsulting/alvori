@@ -1,66 +1,287 @@
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Chip } from '@/components/ui/Chip';
+'use client';
 
-const facts = ['15 европейских сцепок', 'до 20 тонн', 'тенты и рефы', 'b2b', 'перевозки по рф'];
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { sitePath } from '@/lib/site-path';
+import { cn } from '@/lib/cn';
+
+type ThemeMode = 'light' | 'dark';
 
 export function Hero() {
-  return (
-    <section className="pb-6 pt-3 md:pb-8 md:pt-5">
-      <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
-        <Card className="flex flex-col justify-between p-6 md:p-8 xl:p-10">
-          <div className="space-y-5">
-            <div className="inline-flex items-center rounded-[18px] bg-[var(--surface-soft)] px-3 py-2 text-[13px] font-medium lowercase text-[var(--muted)]">
-              грузоперевозки по рф
-            </div>
-            <h1 className="max-w-[780px] font-heading text-[42px] leading-[0.95] tracking-[-0.05em] text-[var(--text)] md:text-[64px] xl:text-[84px]">
-              грузоперевозки по рф для бизнеса
-            </h1>
-            <p className="max-w-[720px] text-[16px] leading-7 text-[var(--muted)] md:text-[18px]">
-              Собственный автопарк и экспедиционное направление для надёжной, управляемой и прозрачной перевозки грузов по ключевым регионам России.
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href="#pricing">рассчитать перевозку</Button>
-              <Button href="/request/" variant="secondary">
-                запросить кп
-              </Button>
-            </div>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {facts.map((fact) => (
-              <Chip key={fact} label={fact} />
-            ))}
-          </div>
-        </Card>
+  const [theme, setTheme] = useState<ThemeMode>('light');
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="min-h-[220px] bg-[var(--accent-1)] text-[var(--accent-1-text)] shadow-none">
-            <div className="space-y-3">
-              <div className="text-[13px] font-medium lowercase opacity-80">собственный автопарк</div>
-              <div className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">15 тягачей и 15 полуприцепов</div>
-              <p className="text-[15px] leading-6 opacity-80">Под регулярные B2B-перевозки, задачи с температурным режимом и форматы с ADR.</p>
+  useEffect(() => {
+    const root = document.documentElement;
+
+    const syncTheme = () => {
+      setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
+    };
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const assets = useMemo(
+    () => ({
+      trailer:
+        theme === 'light'
+          ? `${sitePath}/hero/trailer/light.svg`
+          : `${sitePath}/hero/trailer/dark.svg`,
+      request: `${sitePath}/hero/cards/request.png`,
+      calc: `${sitePath}/hero/cards/calc.png`,
+      principles: `${sitePath}/hero/cards/principles.png`,
+    }),
+    [theme],
+  );
+
+  const cardOverlay =
+    theme === 'light'
+      ? 'bg-[linear-gradient(180deg,rgba(38,41,46,0.00)_0%,rgba(38,41,46,0.16)_100%)]'
+      : 'bg-[linear-gradient(180deg,rgba(246,246,246,0.00)_0%,rgba(246,246,246,0.10)_100%)]';
+
+  return (
+    <section className="pt-8 md:pt-10 xl:pt-12">
+      <div className="grid gap-6 xl:grid-cols-[840px_minmax(0,1fr)] xl:items-start">
+        <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
+          <img
+            src={assets.trailer}
+            alt="Полуприцеп"
+            className="h-full w-full object-contain object-left-top"
+          />
+
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-[28%] top-[14%] flex max-w-[430px] flex-col gap-6">
+              <MetricBlock
+                title="успешных перевозок"
+                value=">10.000"
+                cta={{
+                  label: 'оформить заявку',
+                  href: '/request/',
+                }}
+                primary
+              />
+
+              <MetricInline
+                title="мы на ati.su"
+                value="728 149"
+                cta={{
+                  label: 'открыть профиль',
+                  href: 'https://ati.su/',
+                  external: true,
+                }}
+              />
+
+              <MetricInline
+                title="знаем своё дело"
+                value="на 100%"
+                cta={{
+                  label: 'познакомиться',
+                  href: '#services',
+                }}
+              />
             </div>
-          </Card>
-          <Card className="min-h-[220px]">
-            <div className="space-y-3">
-              <div className="text-[13px] font-medium lowercase text-[var(--muted)]">экспедиционное направление</div>
-              <div className="font-heading text-[28px] leading-[1] tracking-[-0.03em] text-[var(--text)]">гибкий подбор решения под задачу клиента</div>
-            </div>
-          </Card>
-          <Card className="min-h-[180px]">
-            <div className="space-y-3">
-              <div className="text-[13px] font-medium lowercase text-[var(--muted)]">контроль движения 24/7</div>
-              <p className="text-[15px] leading-6 text-[var(--muted)]">Статусы, сопровождение и прозрачная коммуникация по маршруту.</p>
-            </div>
-          </Card>
-          <Card className="min-h-[180px] bg-[var(--surface-soft)] shadow-none">
-            <div className="space-y-3">
-              <div className="text-[13px] font-medium lowercase text-[var(--muted)]">расчёт под задачу</div>
-              <p className="text-[15px] leading-6 text-[var(--muted)]">Стоимость и формат перевозки подбираются под маршрут, груз, тоннаж и условия.</p>
-            </div>
-          </Card>
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-[1fr_1fr] xl:grid-cols-[340px_320px]">
+          <BentoCard
+            title="единая форма запроса и отправки кп"
+            href="/request/"
+            imageSrc={assets.request}
+            overlayClass={cardOverlay}
+            accent
+          />
+
+          <BentoCard
+            title="ознакомиться с нашими принципами"
+            href="#about"
+            imageSrc={assets.principles}
+            overlayClass={cardOverlay}
+            tall
+          />
+
+          <BentoCard
+            title="сделать расчёт вашей грузоперевозки"
+            href="#pricing"
+            imageSrc={assets.calc}
+            overlayClass={cardOverlay}
+            lightCard
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+function MetricBlock({
+  title,
+  value,
+  cta,
+  primary = false,
+}: {
+  title: string;
+  value: string;
+  cta: {
+    label: string;
+    href: string;
+    external?: boolean;
+  };
+  primary?: boolean;
+}) {
+  return (
+    <div className="pointer-events-auto">
+      <div className="space-y-4">
+        <div className="font-heading text-[28px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[34px]">
+          {title}
+        </div>
+
+        <div className="font-heading text-[84px] leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[104px]">
+          {value}
+        </div>
+
+        <HeroActionButton
+          label={cta.label}
+          href={cta.href}
+          external={cta.external}
+          primary={primary}
+        />
+      </div>
+    </div>
+  );
+}
+
+function MetricInline({
+  title,
+  value,
+  cta,
+}: {
+  title: string;
+  value: string;
+  cta: {
+    label: string;
+    href: string;
+    external?: boolean;
+  };
+}) {
+  return (
+    <div className="pointer-events-auto flex items-end justify-between gap-6">
+      <div className="space-y-2">
+        <div className="font-heading text-[22px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[26px]">
+          {title}
+        </div>
+
+        <div className="font-heading text-[46px] leading-[0.95] tracking-[-0.05em] text-[var(--text)] md:text-[56px]">
+          {value}
+        </div>
+      </div>
+
+      <HeroActionButton
+        label={cta.label}
+        href={cta.href}
+        external={cta.external}
+        compact
+      />
+    </div>
+  );
+}
+
+function HeroActionButton({
+  label,
+  href,
+  external = false,
+  primary = false,
+  compact = false,
+}: {
+  label: string;
+  href: string;
+  external?: boolean;
+  primary?: boolean;
+  compact?: boolean;
+}) {
+  const className = cn(
+    'inline-flex items-center justify-center rounded-[20px] font-medium lowercase transition hover:opacity-90',
+    primary
+      ? 'h-[48px] bg-[var(--accent-1)] px-8 text-[17px] text-[var(--accent-1-text)]'
+      : 'h-[40px] bg-[var(--surface)] px-5 text-[15px] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)]',
+    compact && 'h-[40px] px-5 text-[15px]',
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {label}
+    </Link>
+  );
+}
+
+function BentoCard({
+  title,
+  href,
+  imageSrc,
+  overlayClass,
+  accent = false,
+  tall = false,
+  lightCard = false,
+}: {
+  title: string;
+  href: string;
+  imageSrc: string;
+  overlayClass: string;
+  accent?: boolean;
+  tall?: boolean;
+  lightCard?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'group relative overflow-hidden rounded-[32px]',
+        accent
+          ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
+          : lightCard
+            ? 'bg-[var(--surface)] text-[var(--text)]'
+            : 'bg-[var(--accent-2)] text-[var(--accent-2-text)]',
+        tall ? 'md:row-span-2 min-h-[550px]' : 'min-h-[262px]',
+      )}
+    >
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+
+      <div className={cn('absolute inset-0', overlayClass)} />
+
+      <div className="relative flex h-full flex-col justify-end p-6">
+        <div className="flex items-end justify-between gap-4">
+          <div className="max-w-[220px] text-[20px] font-semibold leading-[1.1] tracking-[-0.02em]">
+            {title}
+          </div>
+
+          <div
+            className={cn(
+              'inline-flex h-[56px] w-[56px] items-center justify-center rounded-[20px] transition group-hover:translate-x-[2px]',
+              accent
+                ? 'bg-[var(--surface)] text-[var(--text)]'
+                : 'bg-[var(--surface)] text-[var(--text)]',
+            )}
+          >
+            <ArrowRight size={26} strokeWidth={2} />
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }
