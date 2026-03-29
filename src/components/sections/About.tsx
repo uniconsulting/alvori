@@ -49,9 +49,9 @@ export function About() {
     <div className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-          <div className="flex flex-col gap-10 xl:gap-12">
+          <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
-              <h2 className="pl-[10px] font-heading text-[56px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+              <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 О компании
               </h2>
 
@@ -60,16 +60,16 @@ export function About() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               <p
-                className="max-w-[1180px] text-[31px] font-semibold leading-[1.26] tracking-[-0.028em] text-[var(--text)]"
+                className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
                 «АЛВОРИ» – логистическая компания, работающая в B2B-сегменте по РФ.
               </p>
 
               <p
-                className="max-w-[1060px] text-[28px] font-normal leading-[1.25] tracking-[-0.024em] text-[var(--text-muted)]"
+                className="max-w-[980px] text-[20px] font-normal leading-[1.26] tracking-[-0.02em] text-[var(--text-muted)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
                 Мы сочетаем собственный автопарк и экспедиционное направление,
@@ -81,15 +81,15 @@ export function About() {
             <div className="h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
 
             <div className="grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-5">
                 <Quote
-                  size={76}
+                  size={58}
                   strokeWidth={2.15}
                   className="mt-[2px] shrink-0 text-[var(--accent-1)]"
                 />
 
                 <p
-                  className="max-w-[760px] text-[30px] font-semibold leading-[1.22] tracking-[-0.028em] text-[var(--text)]"
+                  className="max-w-[720px] text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   «Стабильный бизнес – это ответственность,
@@ -100,7 +100,7 @@ export function About() {
 
               <div className="flex justify-end">
                 <p
-                  className="pt-[6px] text-right text-[28px] font-normal leading-[1.2] tracking-[-0.024em] text-[var(--text)]"
+                  className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   — Алик, руководитель АЛВОРИ
@@ -160,7 +160,7 @@ function ProcessFlow() {
   }, [currentIndex]);
 
   return (
-    <div className="pt-4">
+    <div className="pt-2">
       <div className="rounded-[28px] bg-[var(--surface)] px-8 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.04)]">
         <div className="flex items-center justify-between gap-6">
           {PROCESS_STEPS.map((step, index) => {
