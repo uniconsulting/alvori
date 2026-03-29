@@ -84,7 +84,7 @@ export function ScrollStory() {
 
               <Container className="relative h-full">
                 <div
-                  className="absolute right-[20px] top-[0px] w-[540px] md:right-[24px] xl:right-0"
+                  className="absolute right-[20px] top-[0px] w-[540px] md:right-[24px] xl:right-[8px]"
                   style={{
                     transform: `translateX(${transforms.heroRightX})`,
                     filter: `blur(${transforms.heroRightBlur})`,
