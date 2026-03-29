@@ -46,11 +46,12 @@ export function HeroServicesStage() {
   }, []);
 
   const transforms = useMemo(() => {
-    const heroToServices = remap(progress, 0, 0.28);
-    const servicesToAbout = remap(progress, 0.72, 1);
+    const heroToServices = remap(progress, 0, 0.22);
+    const servicesExit = remap(progress, 0.74, 0.9);
+    const aboutEnter = remap(progress, 0.88, 1);
 
-    const servicesHeaderProgress = remap(progress, 0.18, 0.34);
-    const servicesCardsProgress = remap(progress, 0.32, 0.78);
+    const servicesHeaderProgress = remap(progress, 0.14, 0.28);
+    const servicesCardsProgress = remap(progress, 0.26, 0.74);
 
     return {
       heroLeftX: `${-120 * heroToServices}vw`,
@@ -61,23 +62,26 @@ export function HeroServicesStage() {
       heroRightBlur: `${12 * heroToServices}px`,
       heroRightOpacity: 1 - 0.55 * heroToServices,
 
-      servicesOpacity: clamp(heroToServices * 1.12, 0, 1) * (1 - 0.95 * servicesToAbout),
-      servicesY: `${18 - 18 * heroToServices - 72 * servicesToAbout}px`,
-      servicesBlur: `${10 * (1 - heroToServices) + 14 * servicesToAbout}px`,
+      servicesOpacity:
+        clamp(heroToServices * 1.12, 0, 1) *
+        (1 - Math.pow(servicesExit, 1.35)),
+      servicesY: `${18 - 18 * heroToServices - 220 * servicesExit}px`,
+      servicesBlur: `${10 * (1 - heroToServices) + 18 * servicesExit}px`,
 
       servicesHeaderProgress,
       servicesCardsProgress,
+      servicesExit,
 
-      aboutOpacity: clamp(servicesToAbout * 1.18, 0, 1),
-      aboutY: `${40 - 40 * servicesToAbout}px`,
-      aboutBlur: `${14 - 14 * servicesToAbout}px`,
+      aboutOpacity: clamp(aboutEnter * 1.18, 0, 1),
+      aboutY: `${46 - 46 * aboutEnter}px`,
+      aboutBlur: `${14 - 14 * aboutEnter}px`,
     };
   }, [progress]);
 
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 h-[360vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 h-[430vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
@@ -117,13 +121,16 @@ export function HeroServicesStage() {
           <div
             className={cn(
               'absolute inset-x-0 top-[-56px] bottom-[96px] z-20 md:top-[-64px] md:bottom-[104px] xl:top-[-72px] xl:bottom-[112px]',
-              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+              transforms.servicesOpacity > 0.02 && transforms.servicesExit < 0.98
+                ? 'pointer-events-auto'
+                : 'pointer-events-none',
             )}
             style={{
-              opacity: transforms.servicesOpacity,
+              opacity: transforms.servicesExit >= 0.98 ? 0 : transforms.servicesOpacity,
               transform: `translateY(${transforms.servicesY})`,
               filter: `blur(${transforms.servicesBlur})`,
               transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+              visibility: transforms.servicesExit >= 0.98 ? 'hidden' : 'visible',
             }}
           >
             <ServicesSection
