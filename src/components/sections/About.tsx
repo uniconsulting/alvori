@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  Calculator,
-  CheckCheck,
-  CircleDashed,
-  Dot,
-  FileText,
-  Quote,
-  Send,
-  Truck,
-} from 'lucide-react';
+import { Calculator, CheckCheck, Dot, FileText, Quote, Send, Truck } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
@@ -59,7 +50,43 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
+function useTypewriter(text: string, duration = 3200) {
+  const [displayed, setDisplayed] = useState('');
+
+  useEffect(() => {
+    let frame = 0;
+    let isCancelled = false;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      if (isCancelled) return;
+      const progress = Math.min((now - start) / duration, 1);
+      const length = Math.floor(text.length * progress);
+      setDisplayed(text.slice(0, length));
+
+      if (progress < 1) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    setDisplayed('');
+    frame = requestAnimationFrame(tick);
+
+    return () => {
+      isCancelled = true;
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [text, duration]);
+
+  return displayed;
+}
+
 export function About() {
+  const quoteText =
+    '«Стабильный бизнес – это ответственность,\nпредсказуемость и уважение к клиенту»';
+
+  const typedQuote = useTypewriter(quoteText, 3600);
+
   return (
     <div className="h-full">
       <Container>
@@ -93,9 +120,9 @@ export function About() {
               </p>
             </div>
 
-            <div className="mt-3 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
+            <div className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
 
-            <div className="mt-3 grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
+            <div className="mt-6 grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
               <div className="flex items-start gap-5">
                 <Quote
                   size={48}
@@ -104,12 +131,11 @@ export function About() {
                 />
 
                 <p
-                  className="max-w-[720px] text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
+                  className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
-                  «Стабильный бизнес – это ответственность,
-                  <br />
-                  предсказуемость и уважение к клиенту»
+                  {typedQuote}
+                  <span className="about-quote-caret" />
                 </p>
               </div>
 
@@ -123,7 +149,7 @@ export function About() {
               </div>
             </div>
 
-            <div className="pt-8 xl:pt-10">
+            <div className="pt-12 xl:pt-14">
               <ProcessFlowNodes />
             </div>
           </div>
@@ -158,35 +184,41 @@ function AboutBreadcrumb() {
 function ProcessFlowNodes() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [displayedIndex, setDisplayedIndex] = useState(0);
+  const [textVisible, setTextVisible] = useState(true);
 
   const currentIndex = hoveredIndex ?? activeIndex;
-  const ActiveIcon = PROCESS_STEPS[currentIndex].icon;
+  const ActiveIcon = PROCESS_STEPS[displayedIndex].icon;
 
   useEffect(() => {
     if (hoveredIndex !== null) return;
 
     const interval = window.setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % PROCESS_STEPS.length);
-    }, 3200);
+    }, 4300);
 
     return () => window.clearInterval(interval);
   }, [hoveredIndex]);
 
-  const segmentStates = useMemo(() => {
-    return Array.from({ length: PROCESS_STEPS.length - 1 }, (_, index) => ({
-      active: index < currentIndex,
-      current: index === currentIndex,
-    }));
+  useEffect(() => {
+    setTextVisible(false);
+
+    const switchTimer = window.setTimeout(() => {
+      setDisplayedIndex(currentIndex);
+      setTextVisible(true);
+    }, 180);
+
+    return () => window.clearTimeout(switchTimer);
   }, [currentIndex]);
 
   return (
-    <div className="flex flex-col gap-10 xl:gap-12">
+    <div className="flex flex-col gap-12 xl:gap-14">
       <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-x-5">
         {PROCESS_STEPS.map((step, index) => {
           const isActive = index === currentIndex;
           const isPassed = index < currentIndex;
 
-          return (
+          const node = (
             <div key={step.id} className="flex items-center justify-center">
               <button
                 type="button"
@@ -196,7 +228,7 @@ function ProcessFlowNodes() {
               >
                 <span
                   className={cn(
-                    'text-[15px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
+                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
                     isActive
                       ? 'text-[var(--text)]'
                       : isPassed
@@ -210,23 +242,27 @@ function ProcessFlowNodes() {
               </button>
             </div>
           );
-        }).flatMap((node, index) => {
-          if (index === PROCESS_STEPS.length - 1) return [node];
 
-          const state = segmentStates[index];
+          if (index === PROCESS_STEPS.length - 1) return node;
 
           return [
             node,
             <SegmentConnector
-              key={`connector-${PROCESS_STEPS[index].id}`}
-              active={state.active}
+              key={`connector-${step.id}`}
+              active={index < currentIndex}
+              animateNow={index === currentIndex - 1}
             />,
           ];
         })}
       </div>
 
       <div className="w-full rounded-[22px] bg-[var(--surface)] px-6 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-        <div className="flex items-center gap-4">
+        <div
+          className={cn(
+            'flex items-center gap-4 transition-[opacity,transform,filter] duration-300 ease-out',
+            textVisible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[6px] opacity-0 blur-[6px]',
+          )}
+        >
           <ActiveIcon
             size={22}
             strokeWidth={2.05}
@@ -234,10 +270,10 @@ function ProcessFlowNodes() {
           />
 
           <p
-            className="whitespace-nowrap text-[18px] font-normal leading-[1.36] tracking-[-0.016em] text-[var(--text-muted)] transition-all duration-300"
+            className="whitespace-nowrap text-[18px] font-normal leading-[1.36] tracking-[-0.016em] text-[var(--text-muted)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
-            {PROCESS_STEPS[currentIndex].description}
+            {PROCESS_STEPS[displayedIndex].description}
           </p>
         </div>
       </div>
@@ -245,16 +281,24 @@ function ProcessFlowNodes() {
   );
 }
 
-function SegmentConnector({ active }: { active: boolean }) {
+function SegmentConnector({
+  active,
+  animateNow,
+}: {
+  active: boolean;
+  animateNow: boolean;
+}) {
   return (
-    <div className="flex w-[88px] items-center justify-center gap-[6px]">
+    <div className="flex w-[96px] items-center justify-center gap-[6px]">
       {[0, 1, 2, 3].map((item) => (
         <span
           key={item}
           className={cn(
-            'h-[2px] w-[16px] rounded-full transition-colors duration-300',
+            'h-[2px] w-[16px] rounded-full',
             active ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.12)]',
+            animateNow && 'about-segment-activate',
           )}
+          style={animateNow ? ({ animationDelay: `${item * 90}ms` } as React.CSSProperties) : undefined}
         />
       ))}
     </div>
