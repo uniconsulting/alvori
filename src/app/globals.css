@@ -459,3 +459,41 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   transform: translateY(0) scale(1);
   opacity: 1;
 }
+
+.service-adr-border {
+  background:
+    linear-gradient(
+      130deg,
+      rgba(250,176,33,0.55) 0%,
+      rgba(250,176,33,0.95) 18%,
+      rgba(255,205,92,0.78) 34%,
+      rgba(250,176,33,0.92) 52%,
+      rgba(244,158,0,0.82) 74%,
+      rgba(250,176,33,0.58) 100%
+    );
+  background-size: 220% 220%;
+  animation: serviceAdrBorderShift 7s ease-in-out infinite;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 2px;
+}
+
+@keyframes serviceAdrBorderShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
