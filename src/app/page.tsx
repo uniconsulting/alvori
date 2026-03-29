@@ -10,7 +10,7 @@ export default function Home() {
 
       <main>
         <HeroServicesStage />
-        <div className="pb-20 pt-4 md:pb-24 xl:pb-28">
+        <div className="-mt-[56px] pb-20 pt-0 md:-mt-[64px] md:pb-24 xl:-mt-[72px] xl:pb-28">
           <ServicesSection />
         </div>
       </main>
