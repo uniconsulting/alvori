@@ -102,10 +102,10 @@ export function ScrollStory() {
             </div>
           </div>
 
-          {/* SERVICES AREA — отдельная верхняя зона, как на макете */}
+          {/* SERVICES AREA */}
           <div
             className={cn(
-              'absolute inset-x-0 top-[18px] bottom-[96px] z-20 md:top-[20px] md:bottom-[104px] xl:top-[24px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[0px] bottom-[96px] z-20 md:bottom-[104px] xl:bottom-[112px]',
               transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
