@@ -253,38 +253,38 @@ export function GeographyGlobe() {
           </button>
 
           <div className="flex h-[360px] flex-col items-center justify-between py-1">
-            {SCALE_MARKS.map((markIndex) => {
-              const major = isMajorMark(markIndex);
-              const isActive = markIndex === activeMarkIndex;
+{SCALE_MARKS.map((markIndex) => {
+  const major = isMajorMark(markIndex);
+  const isActive = markIndex === activeMarkIndex;
 
-              return (
-                <button
-                  key={markIndex}
-                  type="button"
-                  onClick={() => {
-                    const normalized = 1 - markIndex / 15;
-                    const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
-                    changeZoom(snapped);
-                  }}
-                  className="flex h-[20px] items-center justify-center"
-                  aria-label={`шаг масштаба ${markIndex + 1}`}
-                >
-                  <span
-                    className={`
-                      block rounded-full transition-all duration-300
-                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
-                      ${
-                        isActive
-                          ? 'bg-[var(--accent-1)]'
-                          : major
-                            ? 'bg-[var(--text)] dark:bg-white/72'
-                            : 'bg-[rgba(38,41,46,0.18)] dark:bg-white/18'
-                      }
-                    `}
-                  />
-                </button>
-              );
-            })}
+  return (
+    <button
+      key={markIndex}
+      type="button"
+      onClick={() => {
+        const normalized = 1 - markIndex / 15;
+        const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
+        changeZoom(snapped);
+      }}
+      className="flex h-[20px] items-center justify-center"
+      aria-label={`шаг масштаба ${markIndex + 1}`}
+    >
+      <span
+        className={`
+          block rounded-full transition-all duration-300
+          ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
+          ${
+            isActive
+              ? 'bg-[var(--accent-1)]'
+              : major
+                ? 'bg-[rgba(38,41,46,0.72)] dark:bg-white/72'
+                : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/18'
+          }
+        `}
+      />
+    </button>
+  );
+})}
           </div>
 
           <button
