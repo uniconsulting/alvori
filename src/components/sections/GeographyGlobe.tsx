@@ -1,6 +1,7 @@
 'use client';
 
 import createGlobe from 'cobe';
+import { Minus, Plus } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
@@ -20,12 +21,14 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+const ZOOM_STEPS = [0.86, 0.92, 0.98, 1.04, 1.1, 1.16, 1.22];
+
 export function GeographyGlobe() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const phiRef = useRef(0.35);
-  const thetaRef = useRef(0.28);
-  const scaleRef = useRef(1.02);
+  const thetaRef = useRef(0.24);
+  const scaleRef = useRef(1.04);
 
   const dragStartRef = useRef<{
     x: number;
@@ -36,6 +39,7 @@ export function GeographyGlobe() {
 
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
+  const [zoomIndex, setZoomIndex] = useState(3);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -72,6 +76,10 @@ export function GeographyGlobe() {
     return () => window.clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    scaleRef.current = ZOOM_STEPS[zoomIndex];
+  }, [zoomIndex]);
+
   const activeRoute = GEO_ROUTES[activeRouteIndex];
 
   const cityMap = useMemo(
@@ -83,20 +91,21 @@ export function GeographyGlobe() {
     () =>
       GEO_CITIES.map((city) => ({
         location: city.location,
-        size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.07 : 0.045,
+        size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.082 : 0.05,
         id: city.id,
       })),
     [activeRoute],
   );
 
-  const arcs = useMemo(
-    () =>
-      GEO_ROUTES.map((route, index) => ({
-        from: cityMap.get(route.from)!.location,
-        to: cityMap.get(route.to)!.location,
-        color: index === activeRouteIndex ? rgb('#fab021') : isDark ? rgb('#6f7785') : rgb('#b7bcc7'),
-      })),
-    [activeRouteIndex, cityMap, isDark],
+  const activeArc = useMemo(
+    () => [
+      {
+        from: cityMap.get(activeRoute.from)!.location,
+        to: cityMap.get(activeRoute.to)!.location,
+        color: rgb('#fab021'),
+      },
+    ],
+    [activeRoute, cityMap],
   );
 
   useEffect(() => {
@@ -112,21 +121,21 @@ export function GeographyGlobe() {
       phi: phiRef.current,
       theta: thetaRef.current,
       dark: isDark ? 1 : 0,
-      diffuse: isDark ? 1.25 : 1.6,
-      mapSamples: 22000,
-      mapBrightness: isDark ? 4.6 : 6.6,
-      mapBaseBrightness: isDark ? 0.08 : 0.18,
-      baseColor: isDark ? rgb('#26292e') : rgb('#f8f9fb'),
-      glowColor: isDark ? rgb('#26292e') : rgb('#ffffff'),
-      markerColor: isDark ? rgb('#d6dbe5') : rgb('#5f6673'),
+      diffuse: isDark ? 1.18 : 1.34,
+      mapSamples: 24000,
+      mapBrightness: isDark ? 3.8 : 5.2,
+      mapBaseBrightness: isDark ? 0.02 : 0.02,
+      baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
+      glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
+      markerColor: isDark ? rgb('#dce2ea') : rgb('#55606f'),
       arcColor: rgb('#fab021'),
-      arcWidth: 0.55,
-      arcHeight: 0.11,
-      markerElevation: 0.018,
+      arcWidth: 0.65,
+      arcHeight: 0.1,
+      markerElevation: 0.022,
       scale: scaleRef.current,
-      offset: [0, -8],
+      offset: [0, -10],
       markers,
-      arcs,
+      arcs: activeArc,
     });
 
     const animate = () => {
@@ -139,14 +148,14 @@ export function GeographyGlobe() {
         theta: thetaRef.current,
         scale: scaleRef.current,
         dark: isDark ? 1 : 0,
-        diffuse: isDark ? 1.25 : 1.6,
-        mapBrightness: isDark ? 4.6 : 6.6,
-        mapBaseBrightness: isDark ? 0.08 : 0.18,
-        baseColor: isDark ? rgb('#26292e') : rgb('#f8f9fb'),
-        glowColor: isDark ? rgb('#26292e') : rgb('#ffffff'),
-        markerColor: isDark ? rgb('#d6dbe5') : rgb('#5f6673'),
+        diffuse: isDark ? 1.18 : 1.34,
+        mapBrightness: isDark ? 3.8 : 5.2,
+        mapBaseBrightness: isDark ? 0.02 : 0.02,
+        baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
+        glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
+        markerColor: isDark ? rgb('#dce2ea') : rgb('#55606f'),
         markers,
-        arcs,
+        arcs: activeArc,
       });
 
       frame = requestAnimationFrame(animate);
@@ -158,7 +167,7 @@ export function GeographyGlobe() {
       cancelAnimationFrame(frame);
       globe.destroy();
     };
-  }, [markers, arcs, isDark]);
+  }, [markers, activeArc, isDark]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
@@ -180,7 +189,7 @@ export function GeographyGlobe() {
     const deltaX = clientX - start.x;
     const deltaY = clientY - start.y;
 
-    phiRef.current = start.phi + deltaX / 220;
+    phiRef.current = start.phi - deltaX / 220;
     thetaRef.current = clamp(start.theta - deltaY / 260, -0.55, 0.55);
   };
 
@@ -191,21 +200,28 @@ export function GeographyGlobe() {
     }
   };
 
+  const changeZoom = (nextIndex: number) => {
+    setZoomIndex(clamp(nextIndex, 0, ZOOM_STEPS.length - 1));
+  };
+
   const handleWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
     event.preventDefault();
-    const nextScale = scaleRef.current - event.deltaY * 0.0008;
-    scaleRef.current = clamp(nextScale, 0.88, 1.22);
+    if (event.deltaY > 0) {
+      changeZoom(zoomIndex - 1);
+    } else {
+      changeZoom(zoomIndex + 1);
+    }
   };
 
   const from = cityMap.get(activeRoute.from)!;
   const to = cityMap.get(activeRoute.to)!;
 
   return (
-    <div className="flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[560px] w-full items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-between">
+      <div className="relative flex h-[560px] w-full items-start justify-center">
         <canvas
           ref={canvasRef}
-          className="h-[560px] w-[560px] max-w-full cursor-grab"
+          className="h-[540px] w-[540px] max-w-full cursor-grab"
           style={{ aspectRatio: '1 / 1' }}
           onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
           onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
@@ -224,9 +240,54 @@ export function GeographyGlobe() {
           onTouchEnd={endDrag}
           onWheel={handleWheel}
         />
+
+        <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-3">
+          <button
+            type="button"
+            onClick={() => changeZoom(zoomIndex + 1)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            aria-label="увеличить"
+          >
+            <Plus size={14} />
+          </button>
+
+          <div className="flex h-[360px] flex-col items-center justify-between py-1">
+            {ZOOM_STEPS.map((_, index) => {
+              const isActive = index <= zoomIndex;
+              const isCurrent = index === zoomIndex;
+
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => changeZoom(index)}
+                  className="flex h-[36px] items-center justify-center"
+                  aria-label={`масштаб ${index + 1}`}
+                >
+                  <span
+                    className={`
+                      block rounded-full transition-all duration-300
+                      ${isCurrent ? 'h-[3px] w-[34px]' : 'h-[2px] w-[24px]'}
+                      ${isActive ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/16'}
+                    `}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => changeZoom(zoomIndex - 1)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            aria-label="уменьшить"
+          >
+            <Minus size={14} />
+          </button>
+        </div>
       </div>
 
-      <div className="mt-2 w-full rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 backdrop-blur-md dark:bg-[rgba(38,41,46,0.78)]">
+      <div className="w-full rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 backdrop-blur-md dark:bg-[rgba(38,41,46,0.78)]">
         <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
           активное направление
         </p>
