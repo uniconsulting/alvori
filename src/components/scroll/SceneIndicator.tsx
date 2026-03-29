@@ -39,7 +39,7 @@ export function SceneIndicator({ progress }: SceneIndicatorProps) {
   const activeIndex = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-[36px] z-40">
+    <div className="pointer-events-none">
       <div className="mx-auto flex w-full max-w-[1320px] items-center gap-3 px-5 md:px-6 xl:px-0">
         <span className="h-[4px] min-w-[140px] flex-1 rounded-full bg-white/95" />
 
@@ -74,4 +74,3 @@ function IndicatorLine({
     />
   );
 }
-
