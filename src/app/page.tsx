@@ -8,9 +8,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <Header />
-      <main className="pt-8 md:pt-12">
+
+      <main>
+        <ScrollStory />
+
         <Container>
-          <ScrollStory />
           <SectionPlaceholder title="услуги" description="Заглушка. Здесь позже появятся карточки услуг и логика подачи." />
           <SectionPlaceholder title="расчёт стоимости" description="Заглушка. Блок будет реализован после этапа hero / trust / services." />
           <SectionPlaceholder title="о компании" description="Заглушка. Контент и композиция будут собираться поэтапно." />
@@ -22,6 +24,7 @@ export default function Home() {
           <SectionPlaceholder title="контакты" description="Заглушка. Контактный блок и карта будут реализованы отдельно." />
         </Container>
       </main>
+
       <Footer />
     </div>
   );
