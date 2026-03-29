@@ -142,7 +142,7 @@ export function ScrollStory() {
 
 function ServicesScene() {
   return (
-    <div className="flex h-full items-start pt-[0px]">
+    <div className="relative h-full -translate-y-[96px]">
       <Container>
         <div className="flex flex-col gap-6 xl:gap-7">
           <div className="flex items-start justify-between gap-6">
