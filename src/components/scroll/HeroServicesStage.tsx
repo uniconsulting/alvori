@@ -46,12 +46,12 @@ export function HeroServicesStage() {
   }, []);
 
   const transforms = useMemo(() => {
-    const heroToServices = remap(progress, 0, 0.22);
-    const servicesExit = remap(progress, 0.74, 0.9);
-    const aboutEnter = remap(progress, 0.88, 1);
+    const heroToServices = remap(progress, 0, 0.18);
+    const servicesExit = remap(progress, 0.78, 0.92);
+    const aboutEnter = remap(progress, 0.90, 1);
 
-    const servicesHeaderProgress = remap(progress, 0.14, 0.28);
-    const servicesCardsProgress = remap(progress, 0.26, 0.74);
+    const servicesHeaderProgress = remap(progress, 0.12, 0.24);
+    const servicesCardsProgress = remap(progress, 0.22, 0.80);
 
     return {
       heroLeftX: `${-120 * heroToServices}vw`,
@@ -81,7 +81,7 @@ export function HeroServicesStage() {
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 h-[430vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 h-[520vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
@@ -141,7 +141,7 @@ export function HeroServicesStage() {
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[36px] bottom-[96px] z-30 md:top-[40px] md:bottom-[104px] xl:top-[44px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[-56px] bottom-[96px] z-30 md:top-[-64px] md:bottom-[104px] xl:top-[-72px] xl:bottom-[112px]',
               transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
