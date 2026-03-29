@@ -68,63 +68,60 @@ export function ScrollStory() {
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
-          {/* HERO SCENE */}
-          <div className="absolute inset-0 z-10">
-            {/* левая группа hero */}
-            <div
-              className="absolute left-0 top-[132px] w-[56vw] min-w-[780px] md:top-[148px] xl:top-[164px]"
-              style={{
-                transform: `translateX(${transforms.heroLeftX})`,
-                filter: `blur(${transforms.heroLeftBlur})`,
-                opacity: transforms.heroLeftOpacity,
-                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-              }}
-            >
-              <HeroLeftScene />
-            </div>
-
-            {/* правая группа hero */}
-            <Container className="relative h-full">
+          <div className="absolute inset-x-0 top-[104px] bottom-[104px] md:top-[112px] md:bottom-[112px] xl:top-[120px] xl:bottom-[120px]">
+            <div className="absolute inset-0 z-10">
               <div
-                className="absolute right-0 top-[164px] w-[540px]"
+                className="absolute left-0 top-0 w-[56vw] min-w-[780px]"
                 style={{
-                  transform: `translateX(${transforms.heroRightX})`,
-                  filter: `blur(${transforms.heroRightBlur})`,
-                  opacity: transforms.heroRightOpacity,
+                  transform: `translateX(${transforms.heroLeftX})`,
+                  filter: `blur(${transforms.heroLeftBlur})`,
+                  opacity: transforms.heroLeftOpacity,
                   transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
                 }}
               >
-                <HeroRightScene />
+                <HeroLeftScene />
               </div>
-            </Container>
 
-            <SceneIndicator progress={progress} />
-          </div>
+              <Container className="relative h-full">
+                <div
+                  className="absolute right-0 top-[72px] w-[540px]"
+                  style={{
+                    transform: `translateX(${transforms.heroRightX})`,
+                    filter: `blur(${transforms.heroRightBlur})`,
+                    opacity: transforms.heroRightOpacity,
+                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                  }}
+                >
+                  <HeroRightScene />
+                </div>
+              </Container>
 
-          {/* SERVICES */}
-          <div
-            className="absolute inset-0 z-20"
-            style={{
-              opacity: transforms.servicesOpacity,
-              transform: `translateY(${transforms.servicesY})`,
-              filter: `blur(${transforms.servicesBlur})`,
-              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-            }}
-          >
-            <ServicesScene />
-          </div>
+              <SceneIndicator progress={progress} />
+            </div>
 
-          {/* ABOUT */}
-          <div
-            className="absolute inset-0 z-30"
-            style={{
-              opacity: transforms.aboutOpacity,
-              transform: `translateY(${transforms.aboutY})`,
-              filter: `blur(${transforms.aboutBlur})`,
-              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-            }}
-          >
-            <AboutScene />
+            <div
+              className="absolute inset-0 z-20"
+              style={{
+                opacity: transforms.servicesOpacity,
+                transform: `translateY(${transforms.servicesY})`,
+                filter: `blur(${transforms.servicesBlur})`,
+                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+              }}
+            >
+              <ServicesScene />
+            </div>
+
+            <div
+              className="absolute inset-0 z-30"
+              style={{
+                opacity: transforms.aboutOpacity,
+                transform: `translateY(${transforms.aboutY})`,
+                filter: `blur(${transforms.aboutBlur})`,
+                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+              }}
+            >
+              <AboutScene />
+            </div>
           </div>
         </div>
       </div>
