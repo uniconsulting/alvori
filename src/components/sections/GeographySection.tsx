@@ -70,25 +70,26 @@ export function GeographySection() {
                 </div>
               </div>
 
-<div className="pt-6">
-  <div className="w-full rounded-[18px] bg-[#26292e] px-5 py-4 backdrop-blur-md">
-    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-      активное направление
-    </p>
+              <div className="pt-6">
+                <div className="w-full rounded-[18px] bg-[#26292e] px-5 py-4 backdrop-blur-md">
+                  <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                    активное направление
+                  </p>
 
-    <div className="mt-2 flex items-center gap-3">
-      <Route
-        size={18}
-        strokeWidth={2.05}
-        className="shrink-0 text-[var(--accent-1)]"
-      />
+                  <div className="mt-2 flex items-center gap-3">
+                    <Route
+                      size={18}
+                      strokeWidth={2.05}
+                      className="shrink-0 text-[var(--accent-1)]"
+                    />
 
-      <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
-        {from.label} — {to.label}
-      </p>
-    </div>
-  </div>
-</div>
+                    <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
+                      {from.label} — {to.label}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <GeographyGlobe />
           </div>
