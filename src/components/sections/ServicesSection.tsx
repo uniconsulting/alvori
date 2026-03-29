@@ -12,7 +12,7 @@ export function ServicesSection({ className }: ServicesSectionProps) {
   return (
     <section className={cn('w-full', className)}>
       <Container>
-        <div className="flex flex-col gap-6 xl:gap-7">
+        <div className="flex flex-col gap-10 xl:gap-12">
           <div className="flex items-start justify-between gap-6">
             <h2 className="font-heading text-[64px] leading-[0.92] tracking-[-0.05em] text-[var(--text)]">
               Услуги
