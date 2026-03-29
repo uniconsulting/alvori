@@ -579,3 +579,21 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     box-shadow: 0 0 0 1px rgba(250, 176, 33, 0.1);
   }
 }
+
+.geography-globe-label {
+  position: absolute;
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+  margin-bottom: 8px;
+  padding: 0.28rem 0.55rem;
+  border-radius: 10px;
+  background: rgba(38, 41, 46, 0.82);
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+}
