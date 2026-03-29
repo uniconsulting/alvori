@@ -38,7 +38,7 @@ export function GeographySection() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between gap-6">
                   <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
-                    <span className="mr-[0.022em] inline-block">Г</span>еография
+                    <span className="mr-[0.014em] inline-block">Г</span>еография
                   </h2>
 
                   <div>
@@ -46,9 +46,9 @@ export function GeographySection() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-5">
+                <div className="mt-1 flex flex-col gap-5">
                   <p
-                    className="max-w-[660px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
+                    className="max-w-[660px] text-[20px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
                     Работаем по ключевым направлениям
@@ -64,7 +64,7 @@ export function GeographySection() {
                     <DistrictPill
                       key={district}
                       label={district}
-                      delayMs={index * 260}
+                      delayMs={index * 520}
                     />
                   ))}
                 </div>
