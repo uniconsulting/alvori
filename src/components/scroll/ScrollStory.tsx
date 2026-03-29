@@ -43,21 +43,21 @@ export function ScrollStory() {
     const stage2 = clamp((progress - 0.5) / 0.5, 0, 1);
 
     return {
-      heroLeftX: `${-220 * stage1}px`,
-      heroLeftBlur: `${10 * stage1}px`,
-      heroLeftOpacity: 1 - 0.35 * stage1,
+      heroLeftX: `${-100 * stage1}vw`,
+      heroLeftBlur: `${12 * stage1}px`,
+      heroLeftOpacity: 1 - 0.5 * stage1,
 
-      heroRightX: `${220 * stage1}px`,
-      heroRightBlur: `${10 * stage1}px`,
-      heroRightOpacity: 1 - 0.35 * stage1,
+      heroRightX: `${100 * stage1}vw`,
+      heroRightBlur: `${12 * stage1}px`,
+      heroRightOpacity: 1 - 0.5 * stage1,
 
       servicesOpacity: clamp(stage1 * 1.15, 0, 1),
-      servicesY: `${24 - 24 * stage1}px`,
-      servicesBlur: `${12 - 12 * stage1}px`,
+      servicesY: `${28 - 28 * stage1}px`,
+      servicesBlur: `${14 - 14 * stage1}px`,
 
       aboutOpacity: clamp(stage2 * 1.15, 0, 1),
-      aboutY: `${24 - 24 * stage2}px`,
-      aboutBlur: `${12 - 12 * stage2}px`,
+      aboutY: `${28 - 28 * stage2}px`,
+      aboutBlur: `${14 - 14 * stage2}px`,
     };
   }, [progress]);
 
@@ -68,13 +68,11 @@ export function ScrollStory() {
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
-          {/* HERO */}
           <div className="absolute inset-0 z-10">
-            {/* Левая часть — full bleed от левого края экрана */}
             <div
-              className="absolute inset-y-0 left-0 w-[56vw] min-w-[780px]"
+              className="absolute left-0 top-[54%] w-[56vw] min-w-[780px] -translate-y-1/2"
               style={{
-                transform: `translateX(${transforms.heroLeftX})`,
+                transform: `translateY(-50%) translateX(${transforms.heroLeftX})`,
                 filter: `blur(${transforms.heroLeftBlur})`,
                 opacity: transforms.heroLeftOpacity,
                 transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
@@ -83,10 +81,9 @@ export function ScrollStory() {
               <HeroLeftScene />
             </div>
 
-            {/* Правая часть — внутри обычного контейнера страницы */}
             <Container className="relative h-full">
               <div
-                className="absolute right-0 top-1/2 w-[540px] -translate-y-1/2"
+                className="absolute right-0 top-[54%] w-[540px] -translate-y-1/2"
                 style={{
                   transform: `translateY(-50%) translateX(${transforms.heroRightX})`,
                   filter: `blur(${transforms.heroRightBlur})`,
@@ -99,7 +96,6 @@ export function ScrollStory() {
             </Container>
           </div>
 
-          {/* SERVICES */}
           <div
             className="absolute inset-0 z-20"
             style={{
@@ -112,7 +108,6 @@ export function ScrollStory() {
             <ServicesScene />
           </div>
 
-          {/* ABOUT */}
           <div
             className="absolute inset-0 z-30"
             style={{
