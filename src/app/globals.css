@@ -561,3 +561,21 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   transform: translateY(10px);
   filter: blur(8px);
 }
+
+.geography-pill {
+  border: 1px solid rgba(38, 41, 46, 0.08);
+  animation: geographyPillBorder 7s ease-in-out infinite;
+}
+
+@keyframes geographyPillBorder {
+  0%,
+  100% {
+    border-color: rgba(38, 41, 46, 0.08);
+    box-shadow: 0 0 0 rgba(250, 176, 33, 0);
+  }
+
+  50% {
+    border-color: rgba(250, 176, 33, 0.42);
+    box-shadow: 0 0 0 1px rgba(250, 176, 33, 0.08);
+  }
+}
