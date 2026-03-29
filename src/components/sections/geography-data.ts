@@ -27,3 +27,4 @@ export const GEO_ROUTES: GeoRoute[] = [
   { id: 'kazan-ekaterinburg', from: 'kazan', to: 'ekaterinburg' },
   { id: 'samara-moscow', from: 'samara', to: 'moscow' },
 ];
+
