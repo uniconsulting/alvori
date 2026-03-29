@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Hero } from '@/components/sections/Hero';
+import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
+import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
 
 function clamp(value: number, min = 0, max = 1) {
@@ -63,12 +64,7 @@ export function ScrollStory() {
     <section ref={rootRef} className="relative h-[300vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
-          <div
-            className="absolute inset-0 z-10"
-            style={{
-              opacity: 1,
-            }}
-          >
+          <div className="absolute inset-0 z-10">
             <div
               className="absolute inset-y-0 left-0 right-1/2"
               style={{
@@ -78,7 +74,7 @@ export function ScrollStory() {
                 transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
               }}
             >
-              <HeroSplitProxy side="left" />
+              <HeroLeftScene />
             </div>
 
             <div
@@ -90,7 +86,7 @@ export function ScrollStory() {
                 transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
               }}
             >
-              <HeroSplitProxy side="right" />
+              <HeroRightScene />
             </div>
           </div>
 
@@ -122,22 +118,6 @@ export function ScrollStory() {
         </div>
       </div>
     </section>
-  );
-}
-
-function HeroSplitProxy({ side }: { side: 'left' | 'right' }) {
-  return (
-    <div className="h-full w-[200%] overflow-hidden">
-      <div
-        className={
-          side === 'left'
-            ? 'h-full w-full'
-            : 'h-full w-full -translate-x-1/2'
-        }
-      >
-        <Hero />
-      </div>
-    </div>
   );
 }
 
