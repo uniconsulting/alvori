@@ -156,7 +156,12 @@ function ServiceCard({
 }) {
   const inner = (
     <div className="relative h-[262px] overflow-hidden rounded-[26px] bg-[var(--surface)]">
-      <div className="pointer-events-none absolute inset-0 rounded-[26px] border border-white/50" />
+      <div
+  className={cn(
+    'pointer-events-none absolute inset-0 rounded-[26px]',
+    isAdr ? 'border border-transparent' : 'border border-white/50',
+  )}
+/>
 
       <div className="relative flex h-full flex-col px-8 py-8">
         <div className="flex items-start justify-between gap-4">
