@@ -1,5 +1,6 @@
 'use client';
 
+import createGlobe from 'cobe';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
