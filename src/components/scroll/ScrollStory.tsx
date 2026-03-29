@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Container } from '@/components/layout/Container';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
@@ -61,12 +62,17 @@ export function ScrollStory() {
   }, [progress]);
 
   return (
-    <section ref={rootRef} className="relative h-[300vh]">
+    <section
+      ref={rootRef}
+      className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
+    >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
+          {/* HERO */}
           <div className="absolute inset-0 z-10">
+            {/* Левая часть — full bleed от левого края экрана */}
             <div
-              className="absolute inset-y-0 left-0 right-1/2"
+              className="absolute inset-y-0 left-0 w-[56vw] min-w-[780px]"
               style={{
                 transform: `translateX(${transforms.heroLeftX})`,
                 filter: `blur(${transforms.heroLeftBlur})`,
@@ -77,19 +83,23 @@ export function ScrollStory() {
               <HeroLeftScene />
             </div>
 
-            <div
-              className="absolute inset-y-0 left-1/2 right-0"
-              style={{
-                transform: `translateX(${transforms.heroRightX})`,
-                filter: `blur(${transforms.heroRightBlur})`,
-                opacity: transforms.heroRightOpacity,
-                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-              }}
-            >
-              <HeroRightScene />
-            </div>
+            {/* Правая часть — внутри обычного контейнера страницы */}
+            <Container className="relative h-full">
+              <div
+                className="absolute right-0 top-1/2 w-[540px] -translate-y-1/2"
+                style={{
+                  transform: `translateY(-50%) translateX(${transforms.heroRightX})`,
+                  filter: `blur(${transforms.heroRightBlur})`,
+                  opacity: transforms.heroRightOpacity,
+                  transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                }}
+              >
+                <HeroRightScene />
+              </div>
+            </Container>
           </div>
 
+          {/* SERVICES */}
           <div
             className="absolute inset-0 z-20"
             style={{
@@ -102,6 +112,7 @@ export function ScrollStory() {
             <ServicesScene />
           </div>
 
+          {/* ABOUT */}
           <div
             className="absolute inset-0 z-30"
             style={{
@@ -123,29 +134,80 @@ export function ScrollStory() {
 
 function ServicesScene() {
   return (
-    <div className="flex h-full items-center justify-center px-4">
-      <div className="w-full max-w-[1320px] rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)]">
-        <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
-          услуги
+    <div className="flex h-full items-center">
+      <Container>
+        <div className="w-full rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)] md:p-10 xl:p-12">
+          <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
+            услуги
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <ServiceCard
+              title="межтерминальные перевозки"
+              text="работа между терминалами, складами и распределительными узлами."
+            />
+            <ServiceCard
+              title="междугородние перевозки"
+              text="регулярные b2b-перевозки по ключевым направлениям по рф."
+            />
+            <ServiceCard
+              title="проектные перевозки"
+              text="перевозки под нестандартные задачи и согласованные маршруты."
+            />
+            <ServiceCard
+              title="опасные грузы (adr)"
+              text="перевозки adr-грузов с соблюдением требований и регламентов."
+            />
+            <ServiceCard
+              title="экспедиционное направление"
+              text="подбор и сопровождение перевозки под конкретную логистическую задачу."
+            />
+            <ServiceCard
+              title="сопровождение сделки"
+              text="расчёт, согласование, перевозка и закрывающие документы."
+            />
+          </div>
         </div>
-        <div className="mt-6 text-[18px] leading-[1.35] text-[var(--muted)]">
-          здесь будет сцена секции «Услуги»
-        </div>
-      </div>
+      </Container>
     </div>
   );
 }
 
 function AboutScene() {
   return (
-    <div className="flex h-full items-center justify-center px-4">
-      <div className="w-full max-w-[1320px] rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)]">
-        <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
-          о компании
+    <div className="flex h-full items-center">
+      <Container>
+        <div className="w-full rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)] md:p-10 xl:p-12">
+          <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
+            о компании
+          </div>
+
+          <div className="mt-6 max-w-[920px] text-[18px] leading-[1.4] text-[var(--muted)]">
+            алвори — логистический партнёр для b2b-клиентов по рф. работаем в формате
+            собственного автопарка и экспедиционного направления, выстраивая понятный,
+            прозрачный и управляемый цикл взаимодействия: заявка, расчёт, согласование,
+            перевозка, документы.
+          </div>
         </div>
-        <div className="mt-6 text-[18px] leading-[1.35] text-[var(--muted)]">
-          здесь будет сцена секции «О компании»
-        </div>
+      </Container>
+    </div>
+  );
+}
+
+function ServiceCard({
+  title,
+  text,
+}: {
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-[28px] bg-[var(--bg)] p-5 md:p-6">
+      <div className="font-heading text-[22px] leading-[1.02] tracking-[-0.02em] text-[var(--text)]">
+        {title}
+      </div>
+      <div className="mt-4 text-[16px] leading-[1.35] text-[var(--muted)]">
+        {text}
       </div>
     </div>
   );
