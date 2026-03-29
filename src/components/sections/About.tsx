@@ -185,7 +185,7 @@ function ProcessFlowNodes() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [displayedIndex, setDisplayedIndex] = useState(0);
-  const [textVisible, setTextVisible] = useState(true);
+  const [textPhase, setTextPhase] = useState<'visible' | 'hiding' | 'showing'>('visible');
 
   const currentIndex = hoveredIndex ?? activeIndex;
   const ActiveIcon = PROCESS_STEPS[displayedIndex].icon;
@@ -195,24 +195,33 @@ function ProcessFlowNodes() {
 
     const interval = window.setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % PROCESS_STEPS.length);
-    }, 4300);
+    }, 6200);
 
     return () => window.clearInterval(interval);
   }, [hoveredIndex]);
 
   useEffect(() => {
-    setTextVisible(false);
+    if (currentIndex === displayedIndex) return;
 
-    const switchTimer = window.setTimeout(() => {
+    setTextPhase('hiding');
+
+    const hideTimer = window.setTimeout(() => {
       setDisplayedIndex(currentIndex);
-      setTextVisible(true);
-    }, 180);
+      setTextPhase('showing');
+    }, 260);
 
-    return () => window.clearTimeout(switchTimer);
-  }, [currentIndex]);
+    const showTimer = window.setTimeout(() => {
+      setTextPhase('visible');
+    }, 620);
+
+    return () => {
+      window.clearTimeout(hideTimer);
+      window.clearTimeout(showTimer);
+    };
+  }, [currentIndex, displayedIndex]);
 
   return (
-    <div className="flex flex-col gap-12 xl:gap-14">
+    <div className="flex flex-col gap-16 xl:gap-[72px]">
       <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-x-5">
         {PROCESS_STEPS.map((step, index) => {
           const isActive = index === currentIndex;
@@ -259,8 +268,10 @@ function ProcessFlowNodes() {
       <div className="w-full rounded-[22px] bg-[var(--surface)] px-6 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
         <div
           className={cn(
-            'flex items-center gap-4 transition-[opacity,transform,filter] duration-300 ease-out',
-            textVisible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[6px] opacity-0 blur-[6px]',
+            'flex items-center gap-4 transition-[opacity,transform,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform',
+            textPhase === 'visible' && 'translate-y-0 opacity-100 blur-0',
+            textPhase === 'hiding' && 'translate-y-[10px] opacity-0 blur-[10px]',
+            textPhase === 'showing' && 'translate-y-[4px] opacity-100 blur-[3px]',
           )}
         >
           <ActiveIcon
