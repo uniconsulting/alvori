@@ -219,7 +219,12 @@ function CardCTA({
   darkButton: boolean;
 }) {
   return (
-    <div className="flex h-[56px] items-center justify-between rounded-[14px] bg-[var(--bg)] px-5">
+    <div
+      className={cn(
+        'flex h-[56px] items-center justify-between rounded-[14px] px-5',
+        darkButton ? 'bg-[#31353b]' : 'bg-[var(--bg)]',
+      )}
+    >
       <span
         className={cn(
           'text-[15px] font-semibold lowercase leading-none tracking-[-0.02em]',
@@ -232,8 +237,8 @@ function CardCTA({
 
       <div
         className={cn(
-          'inline-flex h-[40px] w-[58px] shrink-0 items-center justify-center rounded-[10px]',
-          darkButton ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
+          'ml-auto inline-flex h-[40px] w-[58px] shrink-0 items-center justify-center rounded-[10px]',
+          darkButton ? 'bg-[#26292e] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
         <ArrowRight size={20} strokeWidth={2.1} />
