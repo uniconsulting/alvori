@@ -5,12 +5,16 @@ import { cn } from '@/lib/cn';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { ServicesSection } from '@/components/sections/ServicesSection';
-import { About } from '@/components/sections/About';
+import { AboutSection } from '@/components/sections/About';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
 import { Container } from '@/components/layout/Container';
 
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
+}
+
+function remap(value: number, inStart: number, inEnd: number) {
+  return clamp((value - inStart) / (inEnd - inStart), 0, 1);
 }
 
 export function HeroServicesStage() {
@@ -42,8 +46,12 @@ export function HeroServicesStage() {
   }, []);
 
   const transforms = useMemo(() => {
-    const heroToServices = clamp(progress / 0.35, 0, 1);
-    const servicesToAbout = clamp((progress - 0.68) / 0.32, 0, 1);
+    const heroToServices = remap(progress, 0, 0.28);
+    const servicesHold = remap(progress, 0.28, 0.72);
+    const servicesToAbout = remap(progress, 0.72, 1);
+
+    const servicesHeaderProgress = remap(progress, 0.20, 0.36);
+    const servicesCardsProgress = remap(progress, 0.30, 0.58);
 
     return {
       heroLeftX: `${-120 * heroToServices}vw`,
@@ -54,24 +62,28 @@ export function HeroServicesStage() {
       heroRightBlur: `${12 * heroToServices}px`,
       heroRightOpacity: 1 - 0.55 * heroToServices,
 
-      servicesOpacity: clamp(heroToServices * 1.15, 0, 1),
-      servicesY: `${18 - 18 * heroToServices}px`,
-      servicesBlur: `${10 - 10 * heroToServices}px`,
+      servicesOpacity: clamp(heroToServices * 1.12, 0, 1) * (1 - 0.22 * servicesToAbout),
+      servicesY: `${18 - 18 * heroToServices - 24 * servicesToAbout}px`,
+      servicesBlur: `${10 * (1 - heroToServices) + 8 * servicesToAbout}px`,
+
+      servicesHeaderProgress,
+      servicesCardsProgress,
 
       aboutOpacity: clamp(servicesToAbout * 1.15, 0, 1),
-      aboutY: `${24 - 24 * servicesToAbout}px`,
+      aboutY: `${32 - 32 * servicesToAbout}px`,
       aboutBlur: `${12 - 12 * servicesToAbout}px`,
+
+      servicesHold,
     };
   }, [progress]);
 
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 h-[360vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
-          {/* HERO — отдельный clipping-контейнер */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
               <div className="pointer-events-none absolute inset-0 z-10">
@@ -105,7 +117,6 @@ export function HeroServicesStage() {
             </div>
           </div>
 
-          {/* SERVICES — больше не режется сверху */}
           <div
             className={cn(
               'absolute inset-x-0 top-[-56px] bottom-[96px] z-20 md:top-[-64px] md:bottom-[104px] xl:top-[-72px] xl:bottom-[112px]',
@@ -118,10 +129,12 @@ export function HeroServicesStage() {
               transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
             }}
           >
-            <ServicesSection />
+            <ServicesSection
+              headerProgress={transforms.servicesHeaderProgress}
+              cardsProgress={transforms.servicesCardsProgress}
+            />
           </div>
 
-          {/* ABOUT — тоже вне clipping Hero */}
           <div
             className={cn(
               'absolute inset-x-0 top-[36px] bottom-[96px] z-30 md:top-[40px] md:bottom-[104px] xl:top-[44px] xl:bottom-[112px]',
@@ -134,10 +147,9 @@ export function HeroServicesStage() {
               transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
             }}
           >
-            <About />
+            <AboutSection />
           </div>
 
-          {/* PROGRESS */}
           <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
             <SceneIndicator progress={progress} />
           </div>
