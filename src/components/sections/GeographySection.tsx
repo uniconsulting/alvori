@@ -9,7 +9,7 @@ export function GeographySection() {
     <div className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-          <div className="grid grid-cols-[0.95fr_1.05fr] items-center gap-10 xl:gap-14">
+          <div className="grid grid-cols-[0.95fr_1.05fr] items-start gap-10 xl:gap-14">
             <div className="flex flex-col gap-8">
               <div className="flex items-center justify-between gap-6">
                 <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
