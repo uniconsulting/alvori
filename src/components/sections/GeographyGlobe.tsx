@@ -16,11 +16,24 @@ function rgb(hex: string): [number, number, number] {
   return [r, g, b];
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
 export function GeographyGlobe() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const pointerInteracting = useRef<number | null>(null);
-  const pointerInteractionMovement = useRef(0);
-  const phiRef = useRef(0);
+
+  const phiRef = useRef(0.35);
+  const thetaRef = useRef(0.28);
+  const scaleRef = useRef(1.02);
+
+  const dragStartRef = useRef<{
+    x: number;
+    y: number;
+    phi: number;
+    theta: number;
+  } | null>(null);
+
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
 
@@ -28,8 +41,7 @@ export function GeographyGlobe() {
     const root = document.documentElement;
 
     const updateTheme = () => {
-      const cls = root.classList;
-      const darkByClass = cls.contains('dark');
+      const darkByClass = root.classList.contains('dark');
       const darkByAttr =
         root.getAttribute('data-theme') === 'dark' ||
         document.body.getAttribute('data-theme') === 'dark';
@@ -72,6 +84,7 @@ export function GeographyGlobe() {
       GEO_CITIES.map((city) => ({
         location: city.location,
         size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.07 : 0.045,
+        id: city.id,
       })),
     [activeRoute],
   );
@@ -91,47 +104,47 @@ export function GeographyGlobe() {
     if (!canvas) return;
 
     let frame = 0;
-    let width = 720;
-    const dpr = 2;
 
     const globe = createGlobe(canvas, {
-      devicePixelRatio: dpr,
-      width: width * dpr,
-      height: width * dpr,
+      devicePixelRatio: 2,
+      width: 720 * 2,
+      height: 720 * 2,
       phi: phiRef.current,
-      theta: 0.32,
+      theta: thetaRef.current,
       dark: isDark ? 1 : 0,
-      diffuse: isDark ? 1.35 : 1.9,
-      mapSamples: 20000,
-      mapBrightness: isDark ? 4.8 : 8,
-      mapBaseBrightness: isDark ? 0.08 : 0.35,
-      baseColor: isDark ? rgb('#26292e') : rgb('#f4f5f7'),
+      diffuse: isDark ? 1.25 : 1.6,
+      mapSamples: 22000,
+      mapBrightness: isDark ? 4.6 : 6.6,
+      mapBaseBrightness: isDark ? 0.08 : 0.18,
+      baseColor: isDark ? rgb('#26292e') : rgb('#f8f9fb'),
       glowColor: isDark ? rgb('#26292e') : rgb('#ffffff'),
-      markerColor: isDark ? rgb('#d3d8e2') : rgb('#5f6673'),
+      markerColor: isDark ? rgb('#d6dbe5') : rgb('#5f6673'),
       arcColor: rgb('#fab021'),
-      arcWidth: 0.6,
-      arcHeight: 0.16,
-      markerElevation: 0.02,
-      scale: 0.96,
-      offset: [0, 0],
+      arcWidth: 0.55,
+      arcHeight: 0.11,
+      markerElevation: 0.018,
+      scale: scaleRef.current,
+      offset: [0, -8],
       markers,
       arcs,
     });
 
     const animate = () => {
-      if (pointerInteracting.current === null) {
+      if (!dragStartRef.current) {
         phiRef.current += 0.0022;
       }
 
       globe.update({
         phi: phiRef.current,
+        theta: thetaRef.current,
+        scale: scaleRef.current,
         dark: isDark ? 1 : 0,
-        diffuse: isDark ? 1.35 : 1.9,
-        mapBrightness: isDark ? 4.8 : 8,
-        mapBaseBrightness: isDark ? 0.08 : 0.35,
-        baseColor: isDark ? rgb('#26292e') : rgb('#f4f5f7'),
+        diffuse: isDark ? 1.25 : 1.6,
+        mapBrightness: isDark ? 4.6 : 6.6,
+        mapBaseBrightness: isDark ? 0.08 : 0.18,
+        baseColor: isDark ? rgb('#26292e') : rgb('#f8f9fb'),
         glowColor: isDark ? rgb('#26292e') : rgb('#ffffff'),
-        markerColor: isDark ? rgb('#d3d8e2') : rgb('#5f6673'),
+        markerColor: isDark ? rgb('#d6dbe5') : rgb('#5f6673'),
         markers,
         arcs,
       });
@@ -147,74 +160,73 @@ export function GeographyGlobe() {
     };
   }, [markers, arcs, isDark]);
 
-  const handlePointerDown = (value: number) => {
-    pointerInteracting.current = value - pointerInteractionMovement.current;
+  const startDrag = (clientX: number, clientY: number) => {
+    dragStartRef.current = {
+      x: clientX,
+      y: clientY,
+      phi: phiRef.current,
+      theta: thetaRef.current,
+    };
+
     if (canvasRef.current) {
       canvasRef.current.style.cursor = 'grabbing';
     }
   };
 
-  const handlePointerUp = () => {
-    pointerInteracting.current = null;
+  const moveDrag = (clientX: number, clientY: number) => {
+    const start = dragStartRef.current;
+    if (!start) return;
+
+    const deltaX = clientX - start.x;
+    const deltaY = clientY - start.y;
+
+    phiRef.current = start.phi + deltaX / 220;
+    thetaRef.current = clamp(start.theta - deltaY / 260, -0.55, 0.55);
+  };
+
+  const endDrag = () => {
+    dragStartRef.current = null;
     if (canvasRef.current) {
       canvasRef.current.style.cursor = 'grab';
     }
   };
 
-  const handlePointerOut = () => {
-    pointerInteracting.current = null;
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = 'grab';
-    }
-  };
-
-  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    handlePointerDown(event.clientX);
-  };
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (pointerInteracting.current !== null) {
-      const delta = event.clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      phiRef.current = delta / 200;
-    }
-  };
-
-  const handleTouchStart = (event: React.TouchEvent<HTMLCanvasElement>) => {
-    if (event.touches[0]) {
-      handlePointerDown(event.touches[0].clientX);
-    }
-  };
-
-  const handleTouchMove = (event: React.TouchEvent<HTMLCanvasElement>) => {
-    if (pointerInteracting.current !== null && event.touches[0]) {
-      const delta = event.touches[0].clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      phiRef.current = delta / 200;
-    }
+  const handleWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
+    const nextScale = scaleRef.current - event.deltaY * 0.0008;
+    scaleRef.current = clamp(nextScale, 0.88, 1.22);
   };
 
   const from = cityMap.get(activeRoute.from)!;
   const to = cityMap.get(activeRoute.to)!;
 
   return (
-    <div className="relative flex min-h-[560px] items-center justify-center overflow-hidden rounded-[32px] bg-[var(--surface)] shadow-[0_16px_40px_rgba(38,41,46,0.06)]">
+    <div className="flex h-full flex-col items-center justify-start">
       <div className="relative flex h-[560px] w-full items-center justify-center">
         <canvas
           ref={canvasRef}
           className="h-[560px] w-[560px] max-w-full cursor-grab"
           style={{ aspectRatio: '1 / 1' }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handlePointerUp}
-          onMouseLeave={handlePointerOut}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handlePointerUp}
+          onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
+          onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
+          onTouchStart={(event) => {
+            if (event.touches[0]) {
+              startDrag(event.touches[0].clientX, event.touches[0].clientY);
+            }
+          }}
+          onTouchMove={(event) => {
+            if (event.touches[0]) {
+              moveDrag(event.touches[0].clientX, event.touches[0].clientY);
+            }
+          }}
+          onTouchEnd={endDrag}
+          onWheel={handleWheel}
         />
       </div>
 
-      <div className="absolute bottom-6 left-6 right-6 rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 backdrop-blur-md dark:bg-[rgba(38,41,46,0.78)]">
+      <div className="mt-2 w-full rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 backdrop-blur-md dark:bg-[rgba(38,41,46,0.78)]">
         <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
           активное направление
         </p>
