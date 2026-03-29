@@ -105,7 +105,7 @@ export function ScrollStory() {
           {/* SERVICES AREA */}
           <div
             className={cn(
-              'absolute inset-x-0 top-[0px] bottom-[96px] z-20 md:bottom-[104px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[-32px] bottom-[96px] z-20 md:top-[-36px] md:bottom-[104px] xl:top-[-40px] xl:bottom-[112px]',
               transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
