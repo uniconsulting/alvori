@@ -1,6 +1,6 @@
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { Hero } from '@/components/sections/Hero';
+import { ScrollStory } from '@/components/scroll/ScrollStory';
 import { Container } from '@/components/layout/Container';
 import { SectionPlaceholder } from '@/components/sections/SectionPlaceholder';
 
@@ -8,9 +8,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <Header />
-      <Hero />
       <main className="pt-8 md:pt-12">
         <Container>
+          <ScrollStory />
           <SectionPlaceholder title="услуги" description="Заглушка. Здесь позже появятся карточки услуг и логика подачи." />
           <SectionPlaceholder title="расчёт стоимости" description="Заглушка. Блок будет реализован после этапа hero / trust / services." />
           <SectionPlaceholder title="о компании" description="Заглушка. Контент и композиция будут собираться поэтапно." />
