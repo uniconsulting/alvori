@@ -146,7 +146,7 @@ function ServiceCard({
       </div>
 
       <div
-        className="mt-[22px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
+        className="mt-[30px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {description}
@@ -190,13 +190,13 @@ function ServiceTallCard({
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.14)_28%,rgba(38,41,46,0.46)_62%,rgba(38,41,46,0.90)_100%)]" />
 
       <div className="relative flex h-full flex-col px-8 py-8">
-        <div className="mt-auto">
+        <div className="mt-auto pb-[36px]">
           <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.025em] text-white">
             {title}
           </h3>
 
           <div
-            className="mt-[22px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-white/88"
+            className="mt-[30px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-white/88"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
