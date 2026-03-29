@@ -18,9 +18,6 @@ type TiltView = {
   rotateY: number;
   y: number;
   scale: number;
-  glowX: number;
-  glowY: number;
-  glowOpacity: number;
 };
 
 export function ServicesSection() {
@@ -161,21 +158,10 @@ function ServiceCard({
     <div className="relative h-[262px] overflow-hidden rounded-[26px] bg-[var(--surface)]">
       <div className="pointer-events-none absolute inset-0 rounded-[26px] border border-white/50" />
 
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className={cn(
-            'absolute inset-x-0 bottom-0 h-[116px]',
-            isAdr
-              ? 'bg-[linear-gradient(180deg,rgba(250,176,33,0)_0%,rgba(250,176,33,0.04)_36%,rgba(250,176,33,0.10)_100%)]'
-              : 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.30)_100%)]',
-          )}
-        />
-      </div>
-
       <div className="relative flex h-full flex-col px-8 py-8">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-[10px]">
-            <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--accent-1)]" />
+            <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
 
             <h3 className="font-heading text-[19px] leading-[1.08] tracking-[-0.025em] text-[var(--text)]">
               {title}
@@ -204,11 +190,11 @@ function ServiceCard({
   );
 
   return (
-    <TiltCardShell isAdr={isAdr}>
+    <TiltCardShell>
       {isAdr ? (
         <div className="relative rounded-[28px] p-[2px]">
           <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[28px]" />
-          {inner}
+          <div className="relative rounded-[26px] bg-[var(--surface)]">{inner}</div>
         </div>
       ) : (
         <div className="rounded-[28px]">{inner}</div>
@@ -243,7 +229,7 @@ function ServiceTallCard({
         <div className="relative flex h-full flex-col px-8 pt-8 pb-[30px]">
           <div className="mt-auto">
             <div className="flex items-start gap-[10px]">
-              <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--accent-1)]" />
+              <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
 
               <h3 className="font-heading text-[19px] leading-[1.08] tracking-[-0.025em] text-white">
                 {title}
@@ -270,20 +256,15 @@ function ServiceTallCard({
 function TiltCardShell({
   children,
   className,
-  isAdr = false,
 }: {
   children: React.ReactNode;
   className?: string;
-  isAdr?: boolean;
 }) {
   const currentRef = useRef<TiltView>({
     rotateX: 0,
     rotateY: 0,
     y: 0,
     scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
   });
 
   const targetRef = useRef<TiltView>({
@@ -291,9 +272,6 @@ function TiltCardShell({
     rotateY: 0,
     y: 0,
     scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
   });
 
   const velocityRef = useRef<TiltView>({
@@ -301,9 +279,6 @@ function TiltCardShell({
     rotateY: 0,
     y: 0,
     scale: 0,
-    glowX: 0,
-    glowY: 0,
-    glowOpacity: 0,
   });
 
   const frameRef = useRef<number | null>(null);
@@ -313,9 +288,6 @@ function TiltCardShell({
     rotateY: 0,
     y: 0,
     scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
   });
 
   useEffect(() => {
@@ -352,13 +324,10 @@ function TiltCardShell({
     const py = (event.clientY - rect.top) / rect.height;
 
     targetRef.current = {
-      rotateX: (0.5 - py) * 7,
-      rotateY: (px - 0.5) * 7,
-      y: -4,
-      scale: 1.01,
-      glowX: px * 100,
-      glowY: py * 100,
-      glowOpacity: 1,
+      rotateX: (0.5 - py) * 6,
+      rotateY: (px - 0.5) * 6,
+      y: -2,
+      scale: 1.006,
     };
   };
 
@@ -368,9 +337,6 @@ function TiltCardShell({
       rotateY: 0,
       y: 0,
       scale: 1,
-      glowX: 50,
-      glowY: 50,
-      glowOpacity: 0,
     };
   };
 
@@ -381,26 +347,10 @@ function TiltCardShell({
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="relative transition-shadow duration-300 ease-out"
         style={{
           transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
-          boxShadow:
-            view.glowOpacity > 0
-              ? isAdr
-                ? '0 22px 42px rgba(250,176,33,0.12)'
-                : '0 22px 42px rgba(38,41,46,0.12)'
-              : '0 0 0 rgba(0,0,0,0)',
         }}
       >
-        <div
-          className="pointer-events-none absolute inset-0 rounded-[28px]"
-          style={{
-            opacity: view.glowOpacity,
-            background: isAdr
-              ? `radial-gradient(320px circle at ${view.glowX}% ${view.glowY}%, rgba(250,176,33,0.14), transparent 60%)`
-              : `radial-gradient(320px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.16), transparent 60%)`,
-          }}
-        />
         {children}
       </div>
     </div>
