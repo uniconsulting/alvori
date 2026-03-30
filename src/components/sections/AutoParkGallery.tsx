@@ -17,7 +17,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     src: `${sitePath}/autopark/gallery-1.webp`,
     alt: 'Тягач в парке',
     className:
-      'left-[92px] top-[92px] h-[286px] w-[428px] rotate-[-3deg]',
+      'left-[64px] top-[92px] h-[286px] w-[428px] rotate-[-3deg]',
     baseZ: 30,
   },
   {
@@ -25,7 +25,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     src: `${sitePath}/autopark/gallery-2.webp`,
     alt: 'Грузовой состав сверху справа',
     className:
-      'left-[286px] top-[20px] h-[188px] w-[282px] rotate-[8deg]',
+      'left-[258px] top-[20px] h-[188px] w-[282px] rotate-[8deg]',
     baseZ: 20,
   },
   {
@@ -33,7 +33,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     src: `${sitePath}/autopark/gallery-3.webp`,
     alt: 'Полуприцеп снизу слева',
     className:
-      'left-[24px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
+      'left-[0px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
     baseZ: 10,
   },
   {
@@ -41,18 +41,17 @@ const GALLERY_ITEMS: GalleryItem[] = [
     src: `${sitePath}/autopark/gallery-4.webp`,
     alt: 'Логистика и парк на заднем плане',
     className:
-      'left-[336px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
+      'left-[308px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
     baseZ: 0,
   },
 ];
 
 export function AutoParkGallery() {
   const [activeId, setActiveId] = useState<string | null>(null);
-
   const items = useMemo(() => GALLERY_ITEMS, []);
 
   return (
-    <div className="relative h-[504px] overflow-visible">
+    <div className="relative h-[504px] overflow-x-clip overflow-y-visible">
       {items.map((item) => {
         const isActive = activeId === item.id;
         const isDimmed = activeId !== null && activeId !== item.id;
@@ -102,12 +101,16 @@ function GalleryCard({
       style={{
         zIndex: isActive ? 80 : baseZ,
         transition:
-          'transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms cubic-bezier(0.22, 1, 0.36, 1), filter 260ms cubic-bezier(0.22, 1, 0.36, 1)',
+          'transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms cubic-bezier(0.22, 1, 0.36, 1), filter 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms cubic-bezier(0.22, 1, 0.36, 1)',
         transform: isActive
           ? 'translateY(-8px) rotate(0deg) scale(1.035)'
           : undefined,
-        opacity: isDimmed ? 0.92 : 1,
-        filter: isDimmed ? 'saturate(0.94) brightness(0.96)' : 'none',
+        opacity: isDimmed ? 0.9 : 1,
+        filter: isActive
+          ? 'none'
+          : isDimmed
+            ? 'blur(1.2px) saturate(0.92) brightness(0.95)'
+            : 'blur(0.6px)',
         boxShadow: isActive
           ? '0 26px 56px rgba(38,41,46,0.22)'
           : '0 18px 44px rgba(38,41,46,0.14)',
@@ -121,8 +124,12 @@ function GalleryCard({
       />
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.06)_0%,rgba(38,41,46,0.14)_52%,rgba(38,41,46,0.30)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 rounded-[26px] border border-white/18" />
-      <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]" />
+      <div
+        className={`pointer-events-none absolute inset-0 rounded-[26px] ${
+          isActive ? 'border border-white/30' : 'border border-white/22'
+        }`}
+      />
+      <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]" />
     </div>
   );
 }
