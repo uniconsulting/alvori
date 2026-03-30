@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { HeroServicesStage } from '@/components/scroll/HeroServicesStage';
 import { GeographySection } from '@/components/sections/GeographySection';
 import { WhyChooseUsSection } from '@/components/sections/WhyChooseUsSection';
+import { AutoParkSection } from '@/components/sections/AutoParkSection';
 
 export default function Home() {
   return (
@@ -16,8 +17,12 @@ export default function Home() {
           <GeographySection />
         </section>
 
-        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-28 xl:pt-12">
+        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-24 xl:pt-10">
           <WhyChooseUsSection />
+        </section>
+
+        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-24 xl:pt-10">
+          <AutoParkSection />
         </section>
       </main>
 
