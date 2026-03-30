@@ -66,7 +66,6 @@ export function WhyChooseUsSection() {
                   </>
                 }
                 imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
-                soft
               />
 
               <WhyCardCompactImage
@@ -80,7 +79,6 @@ export function WhyChooseUsSection() {
                   </>
                 }
                 imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
-                soft
               />
 
               <WhyCardMediumImage
@@ -164,7 +162,7 @@ function WhyCardTallImage({
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.12)_0%,rgba(38,41,46,0.24)_34%,rgba(38,41,46,0.68)_74%,rgba(38,41,46,0.94)_100%)]" />
+        <CardImageMask />
         <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
 
         <div className="relative flex h-full flex-col justify-end px-8 py-8">
@@ -176,7 +174,7 @@ function WhyCardTallImage({
           </div>
 
           <div
-            className="mt-7 text-[15px] font-normal leading-[1.3] tracking-[-0.014em] text-white/84"
+            className="mt-7 text-[15px] font-normal leading-[1.3] tracking-[-0.014em] text-white/88"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -187,12 +185,7 @@ function WhyCardTallImage({
       {showArrow ? (
         <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
           <svg width="28" height="86" viewBox="0 0 28 86" fill="none" aria-hidden="true">
-            <path
-              d="M14 0V62"
-              stroke="currentColor"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
+            <path d="M14 0V62" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
             <path
               d="M6 54L14 62L22 54"
               stroke="currentColor"
@@ -212,44 +205,33 @@ function WhyCardCompactImage({
   title,
   description,
   imageSrc,
-  soft = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   imageSrc: string;
-  soft?: boolean;
 }) {
   return (
-    <div
-      className={`relative min-h-[116px] overflow-hidden rounded-[28px] px-6 py-6 ${
-        soft ? 'bg-[var(--surface-soft)]' : 'bg-[var(--surface)]'
-      }`}
-    >
+    <div className="relative min-h-[116px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
       <img
         src={imageSrc}
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
-      <div
-        className={`absolute inset-0 ${
-          soft
-            ? 'bg-[linear-gradient(180deg,rgba(245,245,247,0.34)_0%,rgba(245,245,247,0.56)_34%,rgba(245,245,247,0.90)_100%)]'
-            : 'bg-[linear-gradient(180deg,rgba(245,245,247,0.20)_0%,rgba(245,245,247,0.46)_34%,rgba(245,245,247,0.92)_100%)]'
-        }`}
-      />
+      <CardImageMask compact />
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
       <div className="relative flex h-full flex-col justify-end">
         <div className="flex items-start gap-[10px]">
-          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-[var(--text)]">
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
             {title}
           </h3>
         </div>
 
         <div
-          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
@@ -278,23 +260,36 @@ function WhyCardMediumImage({
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,245,247,0.18)_0%,rgba(245,245,247,0.40)_34%,rgba(245,245,247,0.92)_100%)]" />
+      <CardImageMask />
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
       <div className="relative flex h-full flex-col justify-end">
         <div className="flex items-start gap-[10px]">
-          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-[var(--text)]">
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
             {title}
           </h3>
         </div>
 
         <div
-          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
         </div>
       </div>
     </div>
+  );
+}
+
+function CardImageMask({ compact = false }: { compact?: boolean }) {
+  return (
+    <div
+      className={`absolute inset-0 ${
+        compact
+          ? 'bg-[radial-gradient(120%_90%_at_50%_88%,rgba(38,41,46,0.78)_0%,rgba(38,41,46,0.62)_28%,rgba(38,41,46,0.34)_55%,rgba(38,41,46,0.14)_78%,rgba(38,41,46,0.04)_100%),linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.18)_38%,rgba(38,41,46,0.52)_100%)]'
+          : 'bg-[radial-gradient(125%_95%_at_50%_88%,rgba(38,41,46,0.82)_0%,rgba(38,41,46,0.66)_26%,rgba(38,41,46,0.40)_52%,rgba(38,41,46,0.18)_76%,rgba(38,41,46,0.06)_100%),linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.22)_36%,rgba(38,41,46,0.56)_100%)]'
+      }`}
+    />
   );
 }
