@@ -176,7 +176,7 @@ function WhyCardTallImage({
           </div>
 
           <div
-            className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
+            className="mt-7 text-[15px] font-normal leading-[1.3] tracking-[-0.014em] text-white/84"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -186,9 +186,15 @@ function WhyCardTallImage({
 
       {showArrow ? (
         <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
-          <svg width="34" height="88" viewBox="0 0 34 88" fill="none" aria-hidden="true">
+          <svg width="28" height="86" viewBox="0 0 28 86" fill="none" aria-hidden="true">
             <path
-              d="M17 0V66M17 66L4 79M17 66L30 79"
+              d="M14 0V62"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M6 54L14 62L22 54"
               stroke="currentColor"
               strokeWidth="5"
               strokeLinecap="round"
