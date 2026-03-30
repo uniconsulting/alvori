@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ArrowDown,
   Clock3,
   Dot,
   FileText,
@@ -49,9 +48,11 @@ export function WhyChooseUsSection() {
                     <br />
                     позволяют держать качество
                     <br />
-                    исполнение под контролем и обеспечивать
+                    исполнения под контролем
                     <br />
-                    предсказуемость работы
+                    и обеспечивать
+                    <br />
+                    предсказуемость работы.
                   </>
                 }
                 imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
@@ -93,7 +94,9 @@ export function WhyChooseUsSection() {
                   <>
                     Собираем маршрут
                     <br />
-                    и формат работы под задачу.
+                    и формат работы под задачу,
+                    <br />
+                    сопровождая индивидуальным подходом.
                   </>
                 }
                 imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
@@ -157,7 +160,7 @@ function WhyCardTallImage({
   showArrow?: boolean;
 }) {
   return (
-    <div className="relative row-span-2 min-h-[596px]">
+    <div className="relative row-span-2 min-h-[540px]">
       <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e] shadow-[0_18px_44px_rgba(38,41,46,0.12)]">
         <img
           src={imageSrc}
@@ -186,8 +189,10 @@ function WhyCardTallImage({
       </div>
 
       {showArrow ? (
-        <div className="pointer-events-none absolute bottom-[-26px] left-1/2 -translate-x-1/2 text-[var(--accent-1)]">
-          <ArrowDown size={24} strokeWidth={2.2} />
+        <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
+          <svg width="42" height="34" viewBox="0 0 42 34" fill="none" aria-hidden="true">
+            <path d="M21 34L0 0H42L21 34Z" fill="currentColor" />
+          </svg>
         </div>
       ) : null}
     </div>
@@ -209,7 +214,7 @@ function WhyCardCompactImage({
 }) {
   return (
     <div
-      className={`relative min-h-[132px] overflow-hidden rounded-[28px] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)] ${
+      className={`relative min-h-[116px] overflow-hidden rounded-[28px] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)] ${
         soft ? 'bg-[var(--surface-soft)]' : 'bg-[var(--surface)]'
       }`}
     >
@@ -258,7 +263,7 @@ function WhyCardMediumImage({
   imageSrc: string;
 }) {
   return (
-    <div className="relative min-h-[224px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.05)]">
+    <div className="relative min-h-[204px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.05)]">
       <img
         src={imageSrc}
         alt=""
