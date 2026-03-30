@@ -104,8 +104,8 @@ function AutoParkBreadcrumb() {
 
 function CountCard({ value }: { value: string }) {
   return (
-    <div className="flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
-      <span className="relative top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
+    <div className="autopark-frame-hover flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
+      <span className="autopark-count-premium relative left-[-1px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
         {value}
       </span>
     </div>
@@ -123,8 +123,8 @@ function TitleCard({
     <div
       className={
         dark
-          ? 'flex h-[var(--top-h)] items-center justify-center rounded-[24px] bg-[#26292e] px-6'
-          : 'flex h-[var(--top-h)] items-center justify-center rounded-[24px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-6'
+          ? 'autopark-frame-hover flex h-[var(--top-h)] items-center justify-center rounded-[24px] bg-[#26292e] px-6'
+          : 'autopark-frame-hover flex h-[var(--top-h)] items-center justify-center rounded-[24px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-6'
       }
     >
       <span
@@ -148,7 +148,7 @@ function InfoCard({
   points: string[];
 }) {
   return (
-    <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5">
+    <div className="autopark-frame-hover rounded-[24px] bg-[var(--surface)] px-5 py-5">
       <div className="flex flex-wrap gap-3">
         {brands.map((brand) => (
           <BrandPill key={brand} label={brand} />
@@ -172,7 +172,7 @@ function InfoCard({
 
 function BrandPill({ label }: { label: string }) {
   return (
-    <div className="inline-flex h-[40px] items-center rounded-[12px] bg-[var(--bg)] px-4">
+    <div className="autopark-pill-hover inline-flex h-[40px] items-center rounded-[12px] bg-[var(--bg)] px-4">
       <span
         className="text-[15px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
