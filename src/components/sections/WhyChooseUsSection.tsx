@@ -53,7 +53,9 @@ export function WhyChooseUsSection() {
             <div
               className={cn(
                 'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-                isActive ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[18px] opacity-0 blur-[10px]',
+                isActive
+                  ? 'translate-y-0 opacity-100 blur-0'
+                  : 'translate-y-[18px] opacity-0 blur-[10px]',
               )}
             >
               <div className="flex items-center justify-between gap-6">
@@ -78,8 +80,12 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[1fr_1fr_1fr] grid-rows-[118px_206px] gap-5">
-              <RevealCard isActive={isActive} delayMs={140} className="row-span-2 h-[344px]">
+            <div className="grid grid-cols-[1fr_1fr_1fr] grid-rows-[116px_204px] gap-5">
+              <RevealCard
+                isActive={isActive}
+                delayMs={140}
+                className="row-span-2 h-[540px] self-start"
+              >
                 <WhyCardTallImage
                   icon={Truck}
                   title="Собственный автопарк"
@@ -97,7 +103,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={240} className="h-[118px]">
+              <RevealCard isActive={isActive} delayMs={240} className="h-[116px] self-start">
                 <WhyCardCompactImage
                   icon={Clock3}
                   title="Контроль сроков"
@@ -112,7 +118,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={340} className="h-[118px]">
+              <RevealCard isActive={isActive} delayMs={340} className="h-[116px] self-start">
                 <WhyCardCompactImage
                   icon={FileText}
                   title="Документы"
@@ -127,7 +133,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={440} className="h-[206px]">
+              <RevealCard isActive={isActive} delayMs={440} className="h-[204px] self-start">
                 <WhyCardMediumImage
                   icon={SlidersHorizontal}
                   title="Под задачу клиента"
@@ -144,7 +150,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={540} className="h-[206px]">
+              <RevealCard isActive={isActive} delayMs={540} className="h-[204px] self-start">
                 <WhyCardMediumImage
                   icon={ShieldCheck}
                   title="Прозрачные условия"
@@ -203,7 +209,9 @@ function RevealCard({
     <div
       className={cn(
         'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-        isActive ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[22px] opacity-0 blur-[12px]',
+        isActive
+          ? 'translate-y-0 opacity-100 blur-0'
+          : 'translate-y-[22px] opacity-0 blur-[12px]',
         className,
       )}
       style={{ transitionDelay: `${delayMs}ms` }}
