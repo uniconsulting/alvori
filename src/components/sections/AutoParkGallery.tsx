@@ -16,32 +16,28 @@ const GALLERY_ITEMS: GalleryItem[] = [
     id: 'main',
     src: `${sitePath}/autopark/gallery-1.webp`,
     alt: 'Тягач в парке',
-    className:
-      'left-[64px] top-[92px] h-[286px] w-[428px] rotate-[-3deg]',
+    className: 'left-[64px] top-[92px] h-[286px] w-[428px] rotate-[-3deg]',
     baseZ: 30,
   },
   {
     id: 'top',
     src: `${sitePath}/autopark/gallery-2.webp`,
     alt: 'Грузовой состав сверху справа',
-    className:
-      'left-[258px] top-[20px] h-[188px] w-[282px] rotate-[8deg]',
+    className: 'left-[258px] top-[20px] h-[188px] w-[282px] rotate-[8deg]',
     baseZ: 20,
   },
   {
     id: 'bottom',
     src: `${sitePath}/autopark/gallery-3.webp`,
     alt: 'Полуприцеп снизу слева',
-    className:
-      'left-[0px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
+    className: 'left-[0px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
     baseZ: 10,
   },
   {
     id: 'back',
     src: `${sitePath}/autopark/gallery-4.webp`,
     alt: 'Логистика и парк на заднем плане',
-    className:
-      'left-[308px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
+    className: 'left-[308px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
     baseZ: 0,
   },
 ];
@@ -51,7 +47,7 @@ export function AutoParkGallery() {
   const items = useMemo(() => GALLERY_ITEMS, []);
 
   return (
-    <div className="relative h-[504px] overflow-x-clip overflow-y-visible">
+    <div className="relative z-[40] h-[504px] overflow-visible">
       {items.map((item) => {
         const isActive = activeId === item.id;
         const isDimmed = activeId !== null && activeId !== item.id;
