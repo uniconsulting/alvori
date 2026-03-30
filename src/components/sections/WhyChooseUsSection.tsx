@@ -8,7 +8,7 @@ import {
   SlidersHorizontal,
   Truck,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { sitePath } from '@/lib/site-path';
 
@@ -19,9 +19,13 @@ type TiltView = {
   scale: number;
 };
 
+function cn(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
+
 export function WhyChooseUsSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -30,12 +34,11 @@ export function WhyChooseUsSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
+          setIsActive(true);
         }
       },
       {
-        threshold: 0.18,
+        threshold: 0.16,
         rootMargin: '120px 0px 120px 0px',
       },
     );
@@ -50,11 +53,12 @@ export function WhyChooseUsSection() {
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div
-              className={`transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isVisible
+              className={cn(
+                'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                isActive
                   ? 'translate-y-0 opacity-100 blur-0'
-                  : 'translate-y-4 opacity-0 blur-[10px]'
-              }`}
+                  : 'translate-y-[18px] opacity-0 blur-[10px]',
+              )}
             >
               <div className="flex items-center justify-between gap-6">
                 <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
@@ -78,104 +82,88 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[1fr_2fr] gap-5">
-              <RevealCard isVisible={isVisible} delayMs={120}>
-                <TiltCardShell className="h-full">
-                  <WhyCardTallImage
-                    icon={Truck}
-                    title="Собственный автопарк"
-                    description={
-                      <>
-                        позволяет держать качество
-                        <br />
-                        исполнения под контролем и обеспечивать
-                        <br />
-                        предсказуемость работы
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
-                    showArrow
-                  />
-                </TiltCardShell>
+            <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
+              <RevealCard isActive={isActive} delayMs={140} className="row-span-2">
+                <WhyCardTallImage
+                  icon={Truck}
+                  title="Собственный автопарк"
+                  description={
+                    <>
+                      позволяет держать качество
+                      <br />
+                      исполнения под контролем и обеспечивать
+                      <br />
+                      предсказуемость работы
+                    </>
+                  }
+                  imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
+                  showArrow
+                />
               </RevealCard>
 
-              <div className="grid grid-rows-[116px_204px] gap-5">
-                <div className="grid grid-cols-2 gap-5">
-                  <RevealCard isVisible={isVisible} delayMs={220}>
-                    <TiltCardShell>
-                      <WhyCardCompactImage
-                        icon={Clock3}
-                        title="Контроль сроков"
-                        description={
-                          <>
-                            Следим за движением
-                            <br />
-                            и соблюдением сроков.
-                          </>
-                        }
-                        imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
-                      />
-                    </TiltCardShell>
-                  </RevealCard>
+              <RevealCard isActive={isActive} delayMs={240}>
+                <WhyCardCompactImage
+                  icon={Clock3}
+                  title="Контроль сроков"
+                  description={
+                    <>
+                      Следим за движением
+                      <br />
+                      и соблюдением сроков.
+                    </>
+                  }
+                  imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
+                />
+              </RevealCard>
 
-                  <RevealCard isVisible={isVisible} delayMs={320}>
-                    <TiltCardShell>
-                      <WhyCardCompactImage
-                        icon={FileText}
-                        title="Документы"
-                        description={
-                          <>
-                            Закрывающий контур
-                            <br />
-                            и комплект документов.
-                          </>
-                        }
-                        imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
-                      />
-                    </TiltCardShell>
-                  </RevealCard>
-                </div>
+              <RevealCard isActive={isActive} delayMs={340}>
+                <WhyCardCompactImage
+                  icon={FileText}
+                  title="Документы"
+                  description={
+                    <>
+                      Закрывающий контур
+                      <br />
+                      и комплект документов.
+                    </>
+                  }
+                  imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
+                />
+              </RevealCard>
 
-                <div className="grid grid-cols-2 gap-5">
-                  <RevealCard isVisible={isVisible} delayMs={420}>
-                    <TiltCardShell>
-                      <WhyCardMediumImage
-                        icon={SlidersHorizontal}
-                        title="Под задачу клиента"
-                        description={
-                          <>
-                            Собираем маршрут
-                            <br />
-                            и формат работы под задачу,
-                            <br />
-                            сопровождая индивидуальным подходом.
-                          </>
-                        }
-                        imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
-                      />
-                    </TiltCardShell>
-                  </RevealCard>
+              <RevealCard isActive={isActive} delayMs={440}>
+                <WhyCardMediumImage
+                  icon={SlidersHorizontal}
+                  title="Под задачу клиента"
+                  description={
+                    <>
+                      Собираем маршрут
+                      <br />
+                      и формат работы под задачу,
+                      <br />
+                      сопровождая индивидуальным подходом.
+                    </>
+                  }
+                  imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
+                />
+              </RevealCard>
 
-                  <RevealCard isVisible={isVisible} delayMs={520}>
-                    <TiltCardShell>
-                      <WhyCardMediumImage
-                        icon={ShieldCheck}
-                        title="Прозрачные условия"
-                        description={
-                          <>
-                            Понятная логика взаимодействия,
-                            <br />
-                            согласованные условия
-                            <br />
-                            и без лишней сложности.
-                          </>
-                        }
-                        imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
-                      />
-                    </TiltCardShell>
-                  </RevealCard>
-                </div>
-              </div>
+              <RevealCard isActive={isActive} delayMs={540}>
+                <WhyCardMediumImage
+                  icon={ShieldCheck}
+                  title="Прозрачные условия"
+                  description={
+                    <>
+                      Понятная логика взаимодействия,
+                      <br />
+                      согласованные условия
+                      <br />
+                      и без лишней сложности.
+                    </>
+                  }
+                  imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
+                />
+              </RevealCard>
             </div>
           </div>
         </div>
@@ -184,37 +172,59 @@ export function WhyChooseUsSection() {
   );
 }
 
+function WhyChooseUsBreadcrumb() {
+  return (
+    <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+      <span
+        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        главная
+      </span>
+
+      <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
+
+      <span
+        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        почему выбирают нас
+      </span>
+    </div>
+  );
+}
+
 function RevealCard({
   children,
-  isVisible,
+  isActive,
   delayMs,
-  className = '',
+  className,
 }: {
   children: React.ReactNode;
-  isVisible: boolean;
+  isActive: boolean;
   delayMs: number;
   className?: string;
 }) {
   return (
     <div
-      className={`${className} transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        isVisible
+      className={cn(
+        'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+        isActive
           ? 'translate-y-0 opacity-100 blur-0'
-          : 'translate-y-5 opacity-0 blur-[12px]'
-      }`}
+          : 'translate-y-[22px] opacity-0 blur-[12px]',
+        className,
+      )}
       style={{ transitionDelay: `${delayMs}ms` }}
     >
-      {children}
+      <TiltCardShell>{children}</TiltCardShell>
     </div>
   );
 }
 
 function TiltCardShell({
   children,
-  className,
 }: {
   children: React.ReactNode;
-  className?: string;
 }) {
   const currentRef = useRef<TiltView>({
     rotateX: 0,
@@ -238,7 +248,6 @@ function TiltCardShell({
   });
 
   const frameRef = useRef<number | null>(null);
-
   const [view, setView] = useState<TiltView>({
     rotateX: 0,
     rotateY: 0,
@@ -261,7 +270,7 @@ function TiltCardShell({
         current[key] = current[key] + velocity[key];
       });
 
-      setView({ ...currentRef.current });
+      setView({ ...current });
       frameRef.current = requestAnimationFrame(step);
     };
 
@@ -280,8 +289,8 @@ function TiltCardShell({
     const py = (event.clientY - rect.top) / rect.height;
 
     targetRef.current = {
-      rotateX: (0.5 - py) * 5.5,
-      rotateY: (px - 0.5) * 5.5,
+      rotateX: (0.5 - py) * 5.2,
+      rotateY: (px - 0.5) * 5.2,
       y: -2,
       scale: 1.006,
     };
@@ -298,39 +307,18 @@ function TiltCardShell({
 
   return (
     <div
-      className={`relative [perspective:1400px] ${className ?? ''}`}
+      className="relative h-full [perspective:1400px]"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <div
+        className="h-full will-change-transform"
         style={{
           transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
         }}
       >
         {children}
       </div>
-    </div>
-  );
-}
-
-function WhyChooseUsBreadcrumb() {
-  return (
-    <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <span
-        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        главная
-      </span>
-
-      <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
-
-      <span
-        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        почему выбирают нас
-      </span>
     </div>
   );
 }
@@ -480,11 +468,12 @@ function WhyCardMediumImage({
 function CardImageMask({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className={`absolute inset-0 ${
+      className={cn(
+        'absolute inset-0',
         compact
           ? 'bg-[radial-gradient(120%_90%_at_50%_88%,rgba(38,41,46,0.78)_0%,rgba(38,41,46,0.62)_28%,rgba(38,41,46,0.34)_55%,rgba(38,41,46,0.14)_78%,rgba(38,41,46,0.04)_100%),linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.18)_38%,rgba(38,41,46,0.52)_100%)]'
-          : 'bg-[radial-gradient(125%_95%_at_50%_88%,rgba(38,41,46,0.82)_0%,rgba(38,41,46,0.66)_26%,rgba(38,41,46,0.40)_52%,rgba(38,41,46,0.18)_76%,rgba(38,41,46,0.06)_100%),linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.22)_36%,rgba(38,41,46,0.56)_100%)]'
-      }`}
+          : 'bg-[radial-gradient(125%_95%_at_50%_88%,rgba(38,41,46,0.82)_0%,rgba(38,41,46,0.66)_26%,rgba(38,41,46,0.40)_52%,rgba(38,41,46,0.18)_76%,rgba(38,41,46,0.06)_100%),linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.22)_36%,rgba(38,41,46,0.56)_100%)]',
+      )}
     />
   );
 }
