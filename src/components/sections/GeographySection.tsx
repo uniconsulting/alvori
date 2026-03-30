@@ -109,18 +109,18 @@ export function GeographySection() {
 
 <div className="pt-12">
   <div className="flex items-stretch gap-5">
-    <Link
-      href="/calculator"
-      className="group inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-white shadow-[0_12px_28px_rgba(250,176,33,0.24)] transition-[transform,box-shadow,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:shadow-[0_18px_34px_rgba(250,176,33,0.30)] hover:brightness-[1.02]"
-    >
-      <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
-      <span
-        className="text-[18px] font-semibold tracking-[-0.02em]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        Открыть калькулятор
-      </span>
-    </Link>
+<Link
+  href="/calculator"
+  className="header-utility-button inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-white"
+>
+  <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
+  <span
+    className="text-[18px] font-semibold tracking-[-0.02em]"
+    style={{ fontFamily: 'var(--font-body-text)' }}
+  >
+    Открыть калькулятор
+  </span>
+</Link>
 
     <div className="inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
       <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
