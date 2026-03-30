@@ -78,8 +78,8 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid auto-rows-[minmax(132px,auto)] grid-cols-[1fr_1fr_1fr] gap-5">
-              <RevealCard isVisible={isVisible} delayMs={120} className="row-span-2">
+            <div className="grid grid-cols-[1fr_2fr] gap-5">
+              <RevealCard isVisible={isVisible} delayMs={120}>
                 <TiltCardShell className="h-full">
                   <WhyCardTallImage
                     icon={Truck}
@@ -99,77 +99,83 @@ export function WhyChooseUsSection() {
                 </TiltCardShell>
               </RevealCard>
 
-              <RevealCard isVisible={isVisible} delayMs={220}>
-                <TiltCardShell>
-                  <WhyCardCompactImage
-                    icon={Clock3}
-                    title="Контроль сроков"
-                    description={
-                      <>
-                        Следим за движением
-                        <br />
-                        и соблюдением сроков.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
-                  />
-                </TiltCardShell>
-              </RevealCard>
+              <div className="grid grid-rows-[132px_224px] gap-5">
+                <div className="grid grid-cols-2 gap-5">
+                  <RevealCard isVisible={isVisible} delayMs={220}>
+                    <TiltCardShell>
+                      <WhyCardCompactImage
+                        icon={Clock3}
+                        title="Контроль сроков"
+                        description={
+                          <>
+                            Следим за движением
+                            <br />
+                            и соблюдением сроков.
+                          </>
+                        }
+                        imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
+                      />
+                    </TiltCardShell>
+                  </RevealCard>
 
-              <RevealCard isVisible={isVisible} delayMs={320}>
-                <TiltCardShell>
-                  <WhyCardCompactImage
-                    icon={FileText}
-                    title="Документы"
-                    description={
-                      <>
-                        Закрывающий контур
-                        <br />
-                        и комплект документов.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
-                  />
-                </TiltCardShell>
-              </RevealCard>
+                  <RevealCard isVisible={isVisible} delayMs={320}>
+                    <TiltCardShell>
+                      <WhyCardCompactImage
+                        icon={FileText}
+                        title="Документы"
+                        description={
+                          <>
+                            Закрывающий контур
+                            <br />
+                            и комплект документов.
+                          </>
+                        }
+                        imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
+                      />
+                    </TiltCardShell>
+                  </RevealCard>
+                </div>
 
-              <RevealCard isVisible={isVisible} delayMs={420}>
-                <TiltCardShell>
-                  <WhyCardMediumImage
-                    icon={SlidersHorizontal}
-                    title="Под задачу клиента"
-                    description={
-                      <>
-                        Собираем маршрут
-                        <br />
-                        и формат работы под задачу,
-                        <br />
-                        сопровождая индивидуальным подходом.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
-                  />
-                </TiltCardShell>
-              </RevealCard>
+                <div className="grid grid-cols-2 gap-5">
+                  <RevealCard isVisible={isVisible} delayMs={420}>
+                    <TiltCardShell>
+                      <WhyCardMediumImage
+                        icon={SlidersHorizontal}
+                        title="Под задачу клиента"
+                        description={
+                          <>
+                            Собираем маршрут
+                            <br />
+                            и формат работы под задачу,
+                            <br />
+                            сопровождая индивидуальным подходом.
+                          </>
+                        }
+                        imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
+                      />
+                    </TiltCardShell>
+                  </RevealCard>
 
-              <RevealCard isVisible={isVisible} delayMs={520}>
-                <TiltCardShell>
-                  <WhyCardMediumImage
-                    icon={ShieldCheck}
-                    title="Прозрачные условия"
-                    description={
-                      <>
-                        Понятная логика взаимодействия,
-                        <br />
-                        согласованные условия
-                        <br />
-                        и без лишней сложности.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
-                  />
-                </TiltCardShell>
-              </RevealCard>
+                  <RevealCard isVisible={isVisible} delayMs={520}>
+                    <TiltCardShell>
+                      <WhyCardMediumImage
+                        icon={ShieldCheck}
+                        title="Прозрачные условия"
+                        description={
+                          <>
+                            Понятная логика взаимодействия,
+                            <br />
+                            согласованные условия
+                            <br />
+                            и без лишней сложности.
+                          </>
+                        }
+                        imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
+                      />
+                    </TiltCardShell>
+                  </RevealCard>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -299,7 +305,6 @@ function TiltCardShell({
       <div
         style={{
           transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
-          transition: 'box-shadow 220ms ease',
         }}
       >
         {children}
