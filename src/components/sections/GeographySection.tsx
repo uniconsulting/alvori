@@ -1,6 +1,7 @@
 'use client';
 
-import { Dot, Route } from 'lucide-react';
+import Link from 'next/link';
+import { Calculator, Dot, Route } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
@@ -95,7 +96,7 @@ export function GeographySection() {
                   </p>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3">
+                <div className="mt-8 flex flex-col gap-3">
                   {DISTRICTS.map((district, index) => (
                     <DistrictPill
                       key={district}
@@ -106,37 +107,54 @@ export function GeographySection() {
                 </div>
               </div>
 
-              <div className="pt-10">
-                <div className="w-full rounded-[18px] bg-[#26292e] px-5 py-4 backdrop-blur-md">
-                  <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                    активное направление
-                  </p>
+              <div className="pt-12">
+                <div className="flex items-stretch gap-5">
+                  <Link
+                    href="/calculator"
+                    className="group inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-white shadow-[0_12px_28px_rgba(250,176,33,0.24)] transition-[transform,box-shadow,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:shadow-[0_18px_34px_rgba(250,176,33,0.30)] hover:brightness-[1.02]"
+                  >
+                    <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
+                    <span
+                      className="text-[18px] font-semibold tracking-[-0.02em]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      Открыть калькулятор
+                    </span>
+                  </Link>
 
-                  <div className="mt-2 flex items-center gap-3">
-                    <Route
-                      size={18}
-                      strokeWidth={2.05}
-                      className="shrink-0 text-[var(--accent-1)]"
-                    />
-
-                    <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
-                      {from.label} — {to.label}
+                  <div className="inline-flex min-w-[306px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
+                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                      активное направление
                     </p>
+
+                    <div className="mt-2 flex items-center gap-3">
+                      <Route
+                        size={18}
+                        strokeWidth={2.05}
+                        className="shrink-0 text-[var(--accent-1)]"
+                      />
+
+                      <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
+                        {from.label} — {to.label}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {shouldMountGlobe ? (
-              <GeographyGlobe
-                activeRouteIndex={activeRouteIndex}
-                isActive={isGlobeActive}
-              />
-            ) : (
-              <div className="flex h-full min-h-[560px] items-start justify-center">
-                <div className="h-[540px] w-[540px] max-w-full rounded-full bg-[var(--surface)]/60" />
-              </div>
-            )}
+            <div className="pt-5">
+              {shouldMountGlobe ? (
+                <GeographyGlobe
+                  activeRouteIndex={activeRouteIndex}
+                  isActive={isGlobeActive}
+                />
+              ) : (
+                <div className="flex h-full min-h-[560px] items-start justify-center">
+                  <div className="h-[540px] w-[540px] max-w-full rounded-full bg-[var(--surface)]/60" />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </Container>
@@ -187,4 +205,3 @@ function DistrictPill({
     </div>
   );
 }
-
