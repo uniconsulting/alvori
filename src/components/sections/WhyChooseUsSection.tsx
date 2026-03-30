@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ArrowDown,
   Clock3,
   Dot,
   FileText,
@@ -44,17 +45,20 @@ export function WhyChooseUsSection() {
                 title="Собственный автопарк"
                 description={
                   <>
-                    Собственные единицы транспорта позволяют
+                    Собственные единицы транспорта
                     <br />
-                    держать качество исполнения под контролем
+                    позволяют держать качество
                     <br />
-                    и обеспечивать предсказуемость работы.
+                    исполнение под контролем и обеспечивать
+                    <br />
+                    предсказуемость работы
                   </>
                 }
                 imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
+                showArrow
               />
 
-              <WhyCardCompact
+              <WhyCardCompactImage
                 icon={Clock3}
                 title="Контроль сроков"
                 description={
@@ -64,9 +68,11 @@ export function WhyChooseUsSection() {
                     и соблюдением сроков.
                   </>
                 }
+                imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
+                soft
               />
 
-              <WhyCardCompact
+              <WhyCardCompactImage
                 icon={FileText}
                 title="Документы"
                 description={
@@ -76,9 +82,11 @@ export function WhyChooseUsSection() {
                     и комплект документов.
                   </>
                 }
+                imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
+                soft
               />
 
-              <WhyCardMedium
+              <WhyCardMediumImage
                 icon={SlidersHorizontal}
                 title="Под задачу клиента"
                 description={
@@ -88,9 +96,10 @@ export function WhyChooseUsSection() {
                     и формат работы под задачу.
                   </>
                 }
+                imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
               />
 
-              <WhyCardMedium
+              <WhyCardMediumImage
                 icon={ShieldCheck}
                 title="Прозрачные условия"
                 description={
@@ -102,6 +111,7 @@ export function WhyChooseUsSection() {
                     и без лишней сложности.
                   </>
                 }
+                imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
               />
             </div>
           </div>
@@ -138,25 +148,27 @@ function WhyCardTallImage({
   title,
   description,
   imageSrc,
+  showArrow = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   imageSrc: string;
+  showArrow?: boolean;
 }) {
   return (
-    <div className="relative row-span-2 min-h-[596px] overflow-hidden rounded-[32px] bg-[#26292e] shadow-[0_18px_44px_rgba(38,41,46,0.12)]">
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
+    <div className="relative row-span-2 min-h-[596px]">
+      <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e] shadow-[0_18px_44px_rgba(38,41,46,0.12)]">
+        <img
+          src={imageSrc}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.18)_0%,rgba(38,41,46,0.34)_34%,rgba(38,41,46,0.72)_76%,rgba(38,41,46,0.94)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.12)_0%,rgba(38,41,46,0.24)_34%,rgba(38,41,46,0.68)_74%,rgba(38,41,46,0.94)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
 
-      <div className="relative flex h-full flex-col px-8 py-8">
-        <div className="mt-auto">
+        <div className="relative flex h-full flex-col justify-end px-8 py-8">
           <div className="flex items-start gap-[10px]">
             <Icon size={20} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
             <h3 className="font-heading text-[24px] leading-[1.06] tracking-[-0.028em] text-white">
@@ -172,61 +184,103 @@ function WhyCardTallImage({
           </div>
         </div>
       </div>
+
+      {showArrow ? (
+        <div className="pointer-events-none absolute bottom-[-26px] left-1/2 -translate-x-1/2 text-[var(--accent-1)]">
+          <ArrowDown size={24} strokeWidth={2.2} />
+        </div>
+      ) : null}
     </div>
   );
 }
 
-function WhyCardCompact({
+function WhyCardCompactImage({
   icon: Icon,
   title,
   description,
+  imageSrc,
+  soft = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
+  imageSrc: string;
+  soft?: boolean;
 }) {
   return (
-    <div className="flex min-h-[132px] flex-col rounded-[28px] bg-[var(--surface)] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)]">
-      <div className="flex items-start gap-[10px]">
-        <Icon size={17} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-        <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.02em] text-[var(--text)]">
-          {title}
-        </h3>
-      </div>
+    <div
+      className={`relative min-h-[132px] overflow-hidden rounded-[28px] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)] ${
+        soft ? 'bg-[var(--surface-soft)]' : 'bg-[var(--surface)]'
+      }`}
+    >
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
 
       <div
-        className="mt-5 text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        {description}
+        className={`absolute inset-0 ${
+          soft
+            ? 'bg-[linear-gradient(180deg,rgba(245,245,247,0.34)_0%,rgba(245,245,247,0.56)_34%,rgba(245,245,247,0.90)_100%)]'
+            : 'bg-[linear-gradient(180deg,rgba(245,245,247,0.20)_0%,rgba(245,245,247,0.46)_34%,rgba(245,245,247,0.92)_100%)]'
+        }`}
+      />
+
+      <div className="relative flex h-full flex-col justify-end">
+        <div className="flex items-start gap-[10px]">
+          <Icon size={17} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
+          <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.02em] text-[var(--text)]">
+            {title}
+          </h3>
+        </div>
+
+        <div
+          className="mt-5 text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          {description}
+        </div>
       </div>
     </div>
   );
 }
 
-function WhyCardMedium({
+function WhyCardMediumImage({
   icon: Icon,
   title,
   description,
+  imageSrc,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
+  imageSrc: string;
 }) {
   return (
-    <div className="flex min-h-[224px] flex-col rounded-[28px] bg-[var(--surface)] px-7 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.05)]">
-      <div className="flex items-start gap-[10px]">
-        <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-        <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-[var(--text)]">
-          {title}
-        </h3>
-      </div>
+    <div className="relative min-h-[224px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.05)]">
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
 
-      <div
-        className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        {description}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,245,247,0.18)_0%,rgba(245,245,247,0.40)_34%,rgba(245,245,247,0.92)_100%)]" />
+
+      <div className="relative flex h-full flex-col justify-end">
+        <div className="flex items-start gap-[10px]">
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-[var(--text)]">
+            {title}
+          </h3>
+        </div>
+
+        <div
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          {description}
+        </div>
       </div>
     </div>
   );
