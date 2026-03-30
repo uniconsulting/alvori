@@ -87,7 +87,7 @@ export function AutoParkSection() {
               <div className="flex flex-col gap-5">
                 <div className="flex items-start gap-5">
                   <RevealBlock isActive={isActive} delayMs={140}>
-                    <CountCard value="15" />
+                    <CountCard value={15} isActive={isActive} />
                   </RevealBlock>
 
                   <RevealBlock isActive={isActive} delayMs={240} className="w-[var(--truck-title-w)] shrink-0">
@@ -178,11 +178,52 @@ function AutoParkBreadcrumb() {
   );
 }
 
-function CountCard({ value }: { value: string }) {
+function CountCard({
+  value,
+  isActive,
+}: {
+  value: number;
+  isActive: boolean;
+}) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    if (!isActive || hasAnimatedRef.current) return;
+
+    hasAnimatedRef.current = true;
+
+    const duration = 1400;
+    const start = performance.now();
+
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    let frameId = 0;
+
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutCubic(progress);
+      const nextValue = Math.round(value * eased);
+
+      setDisplayValue(nextValue);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      } else {
+        setDisplayValue(value);
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [isActive, value]);
+
   return (
     <div className="autopark-frame-hover flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
-      <span className="autopark-count-premium relative left-[-2px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
-        {value}
+      <span className="autopark-count-finish relative left-[-2px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white tabular-nums">
+        {displayValue}
       </span>
     </div>
   );
