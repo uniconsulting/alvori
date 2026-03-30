@@ -80,7 +80,7 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[1fr_1fr_1fr] grid-rows-[156px_364px] gap-5"
+            <div className="grid grid-cols-[1fr_1fr_1fr] grid-rows-[156px_364px] gap-5">
               <RevealCard
                 isActive={isActive}
                 delayMs={140}
