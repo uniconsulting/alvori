@@ -30,10 +30,11 @@ export function GeographyGlobe({
   activeRouteIndex: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(0.35);
-  const thetaRef = useRef(0.24);
-  const scaleRef = useRef(1.02);
+  const phiRef = useRef(0.9);
+  const thetaRef = useRef(0.18);
+  const scaleRef = useRef(1.14);
 
   const dragStartRef = useRef<{
     x: number;
@@ -43,7 +44,7 @@ export function GeographyGlobe({
   } | null>(null);
 
   const [isDark, setIsDark] = useState(false);
-  const [zoomIndex, setZoomIndex] = useState(4);
+  const [zoomIndex, setZoomIndex] = useState(6);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -109,6 +110,17 @@ export function GeographyGlobe({
     [activeRoute, cityMap],
   );
 
+  const markersRef = useRef(markers);
+  const arcsRef = useRef(activeArc);
+
+  useEffect(() => {
+    markersRef.current = markers;
+  }, [markers]);
+
+  useEffect(() => {
+    arcsRef.current = activeArc;
+  }, [activeArc]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -125,7 +137,7 @@ export function GeographyGlobe({
       diffuse: isDark ? 1.18 : 1.34,
       mapSamples: 24000,
       mapBrightness: isDark ? 3.4 : 4.8,
-      mapBaseBrightness: isDark ? 0.0 : 0.0,
+      mapBaseBrightness: 0.0,
       baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
       glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
       markerColor: rgb('#ffffff'),
@@ -135,13 +147,15 @@ export function GeographyGlobe({
       markerElevation: 0.04,
       scale: scaleRef.current,
       offset: [0, -10],
-      markers,
-      arcs: activeArc,
+      markers: markersRef.current,
+      arcs: arcsRef.current,
     });
+
+    globeRef.current = globe;
 
     const animate = () => {
       if (!dragStartRef.current) {
-        phiRef.current += 0.0022;
+        phiRef.current += 0.0014;
       }
 
       globe.update({
@@ -151,12 +165,12 @@ export function GeographyGlobe({
         dark: isDark ? 1 : 0,
         diffuse: isDark ? 1.18 : 1.34,
         mapBrightness: isDark ? 3.4 : 4.8,
-        mapBaseBrightness: isDark ? 0.0 : 0.0,
+        mapBaseBrightness: 0.0,
         baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
         glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
         markerColor: rgb('#ffffff'),
-        markers,
-        arcs: activeArc,
+        markers: markersRef.current,
+        arcs: arcsRef.current,
       });
 
       frame = requestAnimationFrame(animate);
@@ -167,8 +181,9 @@ export function GeographyGlobe({
     return () => {
       cancelAnimationFrame(frame);
       globe.destroy();
+      globeRef.current = null;
     };
-  }, [markers, activeArc, isDark]);
+  }, [isDark]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
