@@ -33,7 +33,7 @@ export function AutoParkSection() {
               '--top-h': '78px',
               '--section-gap': '20px',
               '--truck-title-w': '314px',
-              '--trailer-title-w': '318px',
+              '--trailer-title-w': '320px',
             } as React.CSSProperties
           }
         >
