@@ -131,8 +131,8 @@ export function GeographyGlobe({
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: 2,
-      width: 720 * 2,
-      height: 720 * 2,
+      width: 820 * 2,
+      height: 820 * 2,
       phi: phiRef.current,
       theta: thetaRef.current,
       dark: isDark ? 1 : 0,
@@ -148,7 +148,7 @@ export function GeographyGlobe({
       arcHeight: 0.14,
       markerElevation: 0.04,
       scale: scaleRef.current,
-      offset: [0, -18],
+      offset: [0, -12],
       markers: markersRef.current,
       arcs: arcsRef.current,
     });
@@ -207,7 +207,7 @@ export function GeographyGlobe({
     const deltaX = clientX - start.x;
     const deltaY = clientY - start.y;
 
-    phiRef.current = start.phi - deltaX / 220;
+    phiRef.current = start.phi + deltaX / 220;
     thetaRef.current = clamp(start.theta + deltaY / 260, -0.55, 0.55);
   };
 
@@ -226,11 +226,11 @@ export function GeographyGlobe({
   const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
   return (
-    <div className="flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[560px] w-full items-start justify-center">
+    <div className="relative z-30 flex h-full w-full flex-col items-center justify-start">
+      <div className="relative flex h-[640px] w-[680px] max-w-none items-start justify-center">
         <canvas
           ref={canvasRef}
-          className="h-[540px] w-[540px] max-w-full -translate-x-14 cursor-grab xl:-translate-x-20"
+          className="h-[620px] w-[620px] max-w-none cursor-grab"
           style={{ aspectRatio: '1 / 1' }}
           onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
           onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
@@ -278,7 +278,7 @@ export function GeographyGlobe({
           <div className="flex h-[360px] flex-col items-center justify-between py-1">
             {SCALE_MARKS.map((markIndex) => {
               const major = isMajorMark(markIndex);
-              const isActive = markIndex === activeMarkIndex;
+              const isMarkActive = markIndex === activeMarkIndex;
 
               return (
                 <button
@@ -297,7 +297,7 @@ export function GeographyGlobe({
                       block rounded-full transition-all duration-300
                       ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
                       ${
-                        isActive
+                        isMarkActive
                           ? 'bg-[var(--accent-1)]'
                           : major
                             ? isDark
