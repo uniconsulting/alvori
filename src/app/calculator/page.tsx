@@ -255,29 +255,22 @@ export default function CalculatorPage() {
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <PageHeader />
 
-              <div className="mt-8">
-                <ControlBar
-                  mode={mode}
-                  onModeChange={setMode}
-                  onOpenFilters={() => setFiltersOpen(true)}
-                  fromCity={fromCity}
-                  toCity={toCity}
-                  onChangeFrom={setFromCity}
-                  onChangeTo={setToCity}
-                  bodyType={bodyType}
-                  onChangeBody={(value) => setBodyType(value as BodyType)}
-                  extraPoints={extraPoints}
-                  onChangePoints={setExtraPoints}
-                />
-              </div>
-
-              <div className="mt-4">
-                <RouteMetaLine
-                  from={fromCityObj?.label ?? '—'}
-                  to={toCityObj?.label ?? '—'}
-                  distance={distanceKm}
-                />
-              </div>
+<div className="mt-8">
+  <ControlBar
+    onOpenFilters={() => setFiltersOpen(true)}
+    fromCity={fromCity}
+    toCity={toCity}
+    onChangeFrom={setFromCity}
+    onChangeTo={setToCity}
+    bodyType={bodyType}
+    onChangeBody={(value) => setBodyType(value as BodyType)}
+    extraPoints={extraPoints}
+    onChangePoints={setExtraPoints}
+    routeFrom={fromCityObj?.label ?? '—'}
+    routeTo={toCityObj?.label ?? '—'}
+    routeDistance={distanceKm}
+  />
+</div>
             </div>
           </Container>
         </section>
@@ -308,27 +301,28 @@ export default function CalculatorPage() {
           </Container>
         </section>
 
-        <FiltersDrawer
-          open={filtersOpen}
-          onClose={() => setFiltersOpen(false)}
-          mode={mode}
-          weightTons={weightTons}
-          setWeightTons={setWeightTons}
-          volumeM3={volumeM3}
-          setVolumeM3={setVolumeM3}
-          pallets={pallets}
-          setPallets={setPallets}
-          urgency={urgency}
-          setUrgency={setUrgency}
-          tempMode={tempMode}
-          setTempMode={setTempMode}
-          loadingType={loadingType}
-          setLoadingType={setLoadingType}
-          insurance={insurance}
-          setInsurance={setInsurance}
-          comment={comment}
-          setComment={setComment}
-        />
+<FiltersDrawer
+  open={filtersOpen}
+  onClose={() => setFiltersOpen(false)}
+  mode={mode}
+  setMode={setMode}
+  weightTons={weightTons}
+  setWeightTons={setWeightTons}
+  volumeM3={volumeM3}
+  setVolumeM3={setVolumeM3}
+  pallets={pallets}
+  setPallets={setPallets}
+  urgency={urgency}
+  setUrgency={setUrgency}
+  tempMode={tempMode}
+  setTempMode={setTempMode}
+  loadingType={loadingType}
+  setLoadingType={setLoadingType}
+  insurance={insurance}
+  setInsurance={setInsurance}
+  comment={comment}
+  setComment={setComment}
+/>
       </main>
 
       <Footer />
@@ -386,8 +380,6 @@ function PageHeader() {
 }
 
 function ControlBar({
-  mode,
-  onModeChange,
   onOpenFilters,
   fromCity,
   toCity,
@@ -397,9 +389,10 @@ function ControlBar({
   onChangeBody,
   extraPoints,
   onChangePoints,
+  routeFrom,
+  routeTo,
+  routeDistance,
 }: {
-  mode: CalcMode;
-  onModeChange: (mode: CalcMode) => void;
   onOpenFilters: () => void;
   fromCity: string;
   toCity: string;
@@ -409,6 +402,9 @@ function ControlBar({
   onChangeBody: (value: string) => void;
   extraPoints: number;
   onChangePoints: (value: number) => void;
+  routeFrom: string;
+  routeTo: string;
+  routeDistance: number;
 }) {
   return (
     <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
@@ -418,13 +414,17 @@ function ControlBar({
           Параметры перевозки
         </h2>
 
-        <div className="ml-auto grid max-w-[390px] grid-cols-2 gap-3">
-          <button type="button" onClick={() => onModeChange('quick')} className={modeButtonClass(mode === 'quick')}>
-            быстрый расчёт
-          </button>
-          <button type="button" onClick={() => onModeChange('advanced')} className={modeButtonClass(mode === 'advanced')}>
-            точный расчёт
-          </button>
+        <div
+          className="ml-auto text-right text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          Маршрут:{' '}
+          <span className="text-[var(--text)]">
+            {routeFrom} → {routeTo}
+          </span>{' '}
+          <span className="text-[var(--text)]">
+            ~ {routeDistance ? formatDistance(routeDistance) : '—'} км
+          </span>
         </div>
       </div>
 
@@ -447,7 +447,10 @@ function ControlBar({
           label="тип кузова"
           value={bodyType}
           onChange={onChangeBody}
-          options={Object.entries(BODY_CONFIG).map(([value, cfg]) => ({ value, label: cfg.label }))}
+          options={Object.entries(BODY_CONFIG).map(([value, cfg]) => ({
+            value,
+            label: cfg.label,
+          }))}
         />
 
         <PointsSegment
@@ -666,25 +669,6 @@ function PointsSegment({
   );
 }
 
-function RouteMetaLine({
-  from,
-  to,
-  distance,
-}: {
-  from: string;
-  to: string;
-  distance: number;
-}) {
-  return (
-    <div className="inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <span className="text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]">
-        Маршрут: <span className="text-[var(--text)]">{from} → {to}</span>{' '}
-        <span className="text-[var(--text)]">~ {distance ? formatDistance(distance) : '—'} км</span>
-      </span>
-    </div>
-  );
-}
-
 function ResultPanel({
   center,
   min,
@@ -865,6 +849,7 @@ function FiltersDrawer(props: {
   open: boolean;
   onClose: () => void;
   mode: CalcMode;
+  setMode: (v: CalcMode) => void;
   weightTons: number;
   setWeightTons: (v: number) => void;
   volumeM3: number;
@@ -883,15 +868,26 @@ function FiltersDrawer(props: {
   setComment: (v: string) => void;
 }) {
   const {
-    open, onClose, mode,
-    weightTons, setWeightTons,
-    volumeM3, setVolumeM3,
-    pallets, setPallets,
-    urgency, setUrgency,
-    tempMode, setTempMode,
-    loadingType, setLoadingType,
-    insurance, setInsurance,
-    comment, setComment,
+    open,
+    onClose,
+    mode,
+    setMode,
+    weightTons,
+    setWeightTons,
+    volumeM3,
+    setVolumeM3,
+    pallets,
+    setPallets,
+    urgency,
+    setUrgency,
+    tempMode,
+    setTempMode,
+    loadingType,
+    setLoadingType,
+    insurance,
+    setInsurance,
+    comment,
+    setComment,
   } = props;
 
   return (
@@ -922,6 +918,23 @@ function FiltersDrawer(props: {
           </button>
         </div>
 
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => setMode('quick')}
+            className={modeButtonClass(mode === 'quick')}
+          >
+            быстрый расчёт
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('advanced')}
+            className={modeButtonClass(mode === 'advanced')}
+          >
+            точный расчёт
+          </button>
+        </div>
+
         <div className="mt-8 space-y-6">
           <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
@@ -943,13 +956,19 @@ function FiltersDrawer(props: {
                 label="Срочность"
                 value={urgency}
                 onChange={(v) => setUrgency(v as UrgencyType)}
-                options={Object.entries(URGENCY_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
+                options={Object.entries(URGENCY_CONFIG).map(([value, item]) => ({
+                  value,
+                  label: item.label,
+                }))}
               />
               <DrawerSelect
                 label="Температурный режим"
                 value={tempMode}
                 onChange={(v) => setTempMode(v as TempMode)}
-                options={Object.entries(TEMP_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
+                options={Object.entries(TEMP_CONFIG).map(([value, item]) => ({
+                  value,
+                  label: item.label,
+                }))}
               />
               {mode === 'advanced' && (
                 <>
@@ -957,13 +976,19 @@ function FiltersDrawer(props: {
                     label="Тип загрузки"
                     value={loadingType}
                     onChange={(v) => setLoadingType(v as LoadingType)}
-                    options={Object.entries(LOADING_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
+                    options={Object.entries(LOADING_CONFIG).map(([value, item]) => ({
+                      value,
+                      label: item.label,
+                    }))}
                   />
                   <DrawerSelect
                     label="Страхование"
                     value={insurance}
                     onChange={(v) => setInsurance(v as InsuranceType)}
-                    options={Object.entries(INSURANCE_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
+                    options={Object.entries(INSURANCE_CONFIG).map(([value, item]) => ({
+                      value,
+                      label: item.label,
+                    }))}
                   />
                 </>
               )}
