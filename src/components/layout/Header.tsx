@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { Calculator, FileText, Menu, Moon, Sun, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ThemeLogo } from '@/components/ui/ThemeLogo';
 import { contacts } from '@/content/contacts';
-import { homeNavigation } from '@/config/anchors';
+import { homeAnchorIds, homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
 
@@ -34,6 +34,9 @@ function scrollToHeroScene(scene: 'services' | 'about') {
 export function Header() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -49,6 +52,56 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const scrollDelta = currentY - lastScrollYRef.current;
+      const isScrollingUp = scrollDelta < -2;
+
+      const heroStage = document.getElementById('hero-services-stage');
+      const geographySection = document.getElementById(homeAnchorIds.geography);
+
+      const anchorY = currentY + 140;
+
+      if (!heroStage || !geographySection) {
+        setIsVisible(true);
+        lastScrollYRef.current = currentY;
+        return;
+      }
+
+      const heroTop = heroStage.offsetTop;
+      const heroBottom = heroTop + heroStage.offsetHeight;
+
+      const geographyTop = geographySection.offsetTop;
+      const geographyBottom = geographyTop + geographySection.offsetHeight;
+
+      let nextVisible = true;
+
+      if (anchorY >= heroTop && anchorY < heroBottom) {
+        nextVisible = false;
+      } else if (anchorY >= geographyTop && anchorY < geographyBottom) {
+        nextVisible = isScrollingUp;
+      } else if (anchorY >= geographyBottom) {
+        nextVisible = !isScrollingUp;
+      } else {
+        nextVisible = true;
+      }
+
+      setIsVisible(nextVisible);
+      lastScrollYRef.current = currentY;
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
+
   const handleThemeToggle = () => {
     const root = document.documentElement;
     const current: ThemeMode = root.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -60,131 +113,138 @@ export function Header() {
   };
 
   return (
-    <header className="relative z-30 pt-4 md:pt-6 xl:pt-10">
-      <Container>
-        <div className="hidden items-center xl:flex">
-          <LogoBlock />
-          <OuterDivider className="ml-[36px]" />
-          <AnchorNav className="ml-[36px]" />
-          <OuterDivider className="ml-[36px]" />
-          <PhoneBlock className="ml-[36px]" />
-          <UtilityCluster
-            className="ml-[36px]"
-            theme={theme}
-            onToggleTheme={handleThemeToggle}
-          />
-        </div>
-
-        <div className="xl:hidden">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="block h-[48px] w-[184px]">
-              <ThemeLogo
-                placement="header"
-                className="h-full w-full object-contain object-left"
-              />
-            </Link>
-
-            <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
-              <CompactAction
-                href={ctaRoutes.headerCalculator}
-                variant="accent"
-                ariaLabel="калькулятор"
-                forceIconDark
-              >
-                <Calculator size={20} strokeWidth={1.8} />
-              </CompactAction>
-
-              <button
-                type="button"
-                onClick={handleThemeToggle}
-                aria-label="сменить тему"
-                className={cn(
-                  'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                  theme === 'light'
-                    ? 'bg-[var(--surface)] text-[var(--text)]'
-                    : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
-                )}
-              >
-                {theme === 'light' ? (
-                  <Moon size={20} strokeWidth={1.8} className="header-theme-icon" />
-                ) : (
-                  <Sun size={20} strokeWidth={1.8} className="header-theme-icon" />
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMenuOpen((prev) => !prev)}
-                aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
-                className={cn(
-                  'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                  theme === 'light'
-                    ? 'bg-[var(--surface)] text-[var(--text)]'
-                    : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
-                )}
-              >
-                {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
-              </button>
-            </div>
+    <div
+      className={cn(
+        'header-shell',
+        isVisible ? 'header-shell--visible' : 'header-shell--hidden',
+      )}
+    >
+      <header className="relative z-30 pt-4 md:pt-6 xl:pt-10">
+        <Container>
+          <div className="hidden items-center xl:flex">
+            <LogoBlock />
+            <OuterDivider className="ml-[36px]" />
+            <AnchorNav className="ml-[36px]" />
+            <OuterDivider className="ml-[36px]" />
+            <PhoneBlock className="ml-[36px]" />
+            <UtilityCluster
+              className="ml-[36px]"
+              theme={theme}
+              onToggleTheme={handleThemeToggle}
+            />
           </div>
 
-          {menuOpen ? (
-            <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
-              <div className="flex flex-col gap-4">
-                {homeNavigation.map((item) => {
-                  const isServices = item.href === '#services';
-                  const isAbout = item.href === '#about';
+          <div className="xl:hidden">
+            <div className="flex items-center justify-between">
+              <Link href="/" className="block h-[48px] w-[184px]">
+                <ThemeLogo
+                  placement="header"
+                  className="h-full w-full object-contain object-left"
+                />
+              </Link>
 
-                  if (isServices || isAbout) {
-                    return (
-                      <button
-                        key={item.href}
-                        type="button"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          scrollToHeroScene(isServices ? 'services' : 'about');
-                        }}
-                        className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
-                      >
-                        {item.label}
-                      </button>
-                    );
-                  }
-
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-
-                <div className="h-[2px] w-full rounded-full bg-[var(--bg)]" />
-
-                <a
-                  href={contacts.phoneHref}
-                  className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
-                >
-                  {contacts.phoneDisplay}
-                </a>
-
-                <Link
+              <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
+                <CompactAction
                   href={ctaRoutes.headerCalculator}
-                  onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
+                  variant="accent"
+                  ariaLabel="калькулятор"
+                  forceIconDark
                 >
-                  рассчитать стоимость
-                </Link>
+                  <Calculator size={20} strokeWidth={1.8} />
+                </CompactAction>
+
+                <button
+                  type="button"
+                  onClick={handleThemeToggle}
+                  aria-label="сменить тему"
+                  className={cn(
+                    'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                    theme === 'light'
+                      ? 'bg-[var(--surface)] text-[var(--text)]'
+                      : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
+                  )}
+                >
+                  {theme === 'light' ? (
+                    <Moon size={20} strokeWidth={1.8} className="header-theme-icon" />
+                  ) : (
+                    <Sun size={20} strokeWidth={1.8} className="header-theme-icon" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                  aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
+                  className={cn(
+                    'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                    theme === 'light'
+                      ? 'bg-[var(--surface)] text-[var(--text)]'
+                      : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
+                  )}
+                >
+                  {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
+                </button>
               </div>
             </div>
-          ) : null}
-        </div>
-      </Container>
-    </header>
+
+            {menuOpen ? (
+              <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
+                <div className="flex flex-col gap-4">
+                  {homeNavigation.map((item) => {
+                    const isServices = item.href === '#services';
+                    const isAbout = item.href === '#about';
+
+                    if (isServices || isAbout) {
+                      return (
+                        <button
+                          key={item.href}
+                          type="button"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            scrollToHeroScene(isServices ? 'services' : 'about');
+                          }}
+                          className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+
+                  <div className="h-[2px] w-full rounded-full bg-[var(--bg)]" />
+
+                  <a
+                    href={contacts.phoneHref}
+                    className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
+                  >
+                    {contacts.phoneDisplay}
+                  </a>
+
+                  <Link
+                    href={ctaRoutes.headerCalculator}
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
+                  >
+                    рассчитать стоимость
+                  </Link>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </Container>
+      </header>
+    </div>
   );
 }
 
