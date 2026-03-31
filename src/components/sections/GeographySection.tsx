@@ -144,12 +144,18 @@ export function GeographySection() {
     </div>
   </div>
 
-  <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center">
-    <div className="pointer-events-auto relative -ml-8 xl:-ml-10">
-      <GeographyGlobe
-        activeRouteIndex={activeRouteIndex}
-        isActive={isGlobeActive}
-      />
+  <div className="absolute inset-0 z-20 flex items-start justify-center">
+    <div className="relative -ml-8 xl:-ml-10">
+      {shouldMountGlobe ? (
+        <GeographyGlobe
+          activeRouteIndex={activeRouteIndex}
+          isActive={isGlobeActive}
+        />
+      ) : (
+        <div className="flex h-full min-h-[560px] items-start justify-center">
+          <div className="h-[620px] w-[620px] max-w-none rounded-full bg-[var(--surface)]/60" />
+        </div>
+      )}
     </div>
   </div>
 
