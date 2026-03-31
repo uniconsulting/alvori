@@ -1,19 +1,29 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   FileText,
   SendHorizonal,
   Calculator,
   CircleAlert,
+  ChevronDown,
 } from 'lucide-react';
 import { Container } from '@/components/layout/Container';
+import { RUSSIA_CITIES, type RussiaCity } from '@/content/cities';
 
 export default function RequestPageClient() {
-  const searchParams = useSearchParams();
+  const searchParams = new URLSearchParams(
+    typeof window !== 'undefined' ? window.location.search : ''
+  );
+
+  const getCityValueByLabel = (label: string) => {
+    const found = RUSSIA_CITIES.find(
+      (city) => city.label.toLowerCase() === label.trim().toLowerCase()
+    );
+    return found?.value ?? '';
+  };
 
   const initialData = {
     from: searchParams.get('from') ?? '',
@@ -39,6 +49,18 @@ export default function RequestPageClient() {
   const [cargoType, setCargoType] = useState('');
   const [details, setDetails] = useState(initialData.comment);
 
+  const [fromCity, setFromCity] = useState(getCityValueByLabel(initialData.from));
+  const [toCity, setToCity] = useState(getCityValueByLabel(initialData.to));
+
+  const fromCityObj = useMemo(
+    () => RUSSIA_CITIES.find((city) => city.value === fromCity),
+    [fromCity]
+  );
+  const toCityObj = useMemo(
+    () => RUSSIA_CITIES.find((city) => city.value === toCity),
+    [toCity]
+  );
+
   return (
     <>
       <section className="pb-6 pt-8 md:pb-8 md:pt-10 xl:pb-8 xl:pt-12">
@@ -55,7 +77,7 @@ export default function RequestPageClient() {
                   className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-[#ffffff] shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
-                  <ArrowLeft size={15} className="mr-2" />
+                  <ArrowLeft size={15} className="mr-2 text-[#ffffff]" />
                   вернуться
                 </Link>
 
@@ -141,11 +163,21 @@ export default function RequestPageClient() {
                   </Field>
 
                   <Field label="Город отправления">
-                    <input defaultValue={initialData.from} className={inputClass} />
+                    <CitySelect
+                      value={fromCity}
+                      onChange={setFromCity}
+                      cities={RUSSIA_CITIES}
+                      placeholder="Выберите город"
+                    />
                   </Field>
 
                   <Field label="Город назначения">
-                    <input defaultValue={initialData.to} className={inputClass} />
+                    <CitySelect
+                      value={toCity}
+                      onChange={setToCity}
+                      cities={RUSSIA_CITIES}
+                      placeholder="Выберите город"
+                    />
                   </Field>
 
                   <Field label="Расстояние, км">
@@ -242,10 +274,16 @@ export default function RequestPageClient() {
                 </p>
 
                 <div className="mt-7 flex flex-col gap-3">
-                  <PreviewRow label="Маршрут" value={`${initialData.from || '—'} → ${initialData.to || '—'}`} />
+                  <PreviewRow
+                    label="Маршрут"
+                    value={`${fromCityObj?.label || initialData.from || '—'} → ${toCityObj?.label || initialData.to || '—'}`}
+                  />
                   <PreviewRow label="Расстояние" value={initialData.distance || '—'} />
                   <PreviewRow label="Кузов" value={initialData.body || '—'} />
-                  <PreviewRow label="Вес / объём" value={`${initialData.weight || '—'} т / ${initialData.volume || '—'} м³`} />
+                  <PreviewRow
+                    label="Вес / объём"
+                    value={`${initialData.weight || '—'} т / ${initialData.volume || '—'} м³`}
+                  />
                   <PreviewRow label="Паллеты" value={initialData.pallets || '—'} />
                   <PreviewRow label="Доп. точки" value={initialData.points || '—'} />
                   <PreviewRow label="Срочность" value={initialData.urgency || '—'} />
@@ -336,4 +374,99 @@ function PreviewRow({
 }
 
 const inputClass =
-  'h-[56px] w-full rounded-[12px] border border-[rgba(38,41,46,0.12)] bg-[rgba(255,255,255,0.96)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(250,176,33,0.26)] focus:border-[rgba(250,176,33,0.38)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+  'h-[56px] w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(250,176,33,0.26)] focus:border-[rgba(250,176,33,0.38)] focus:bg-[var(--surface-strong)] focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+
+function CitySelect({
+  value,
+  onChange,
+  cities,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  cities: RussiaCity[];
+  placeholder: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const selected = cities.find((city) => city.value === value);
+
+  const filtered = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return cities.slice(0, 12);
+    return cities
+      .filter((city) => city.label.toLowerCase().includes(normalized))
+      .slice(0, 12);
+  }, [cities, query]);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(event.target as Node)) {
+        setOpen(false);
+        setQuery('');
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow] duration-200 hover:border-[rgba(250,176,33,0.26)]"
+      >
+        <span>{selected?.label ?? placeholder}</span>
+        <ChevronDown
+          size={16}
+          strokeWidth={2}
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open ? (
+        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_18px_34px_rgba(38,41,46,0.08)]">
+          <div className="border-b border-[var(--border)] p-3">
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск города"
+              className="h-[44px] w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 text-[14px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)]"
+            />
+          </div>
+
+          <div className="max-h-[280px] overflow-y-auto py-1">
+            {filtered.length > 0 ? (
+              filtered.map((city) => (
+                <button
+                  key={city.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(city.value);
+                    setOpen(false);
+                    setQuery('');
+                  }}
+                  className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--surface-strong)] ${
+                    city.value === value ? 'bg-[var(--surface-strong)] font-semibold' : ''
+                  }`}
+                >
+                  {city.label}
+                </button>
+              ))
+            ) : (
+              <div className="px-4 py-4 text-[14px] text-[var(--text-muted)]">
+                Ничего не найдено
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
