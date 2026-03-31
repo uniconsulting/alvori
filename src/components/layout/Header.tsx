@@ -77,12 +77,12 @@ export function Header() {
 
         <div className="xl:hidden">
           <div className="flex items-center justify-between">
-            <div className="h-[48px] w-[184px]">
+            <Link href="/" className="block h-[48px] w-[184px]">
               <ThemeLogo
                 placement="header"
                 className="h-full w-full object-contain object-left"
               />
-            </div>
+            </Link>
 
             <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
               <CompactAction
@@ -190,12 +190,12 @@ export function Header() {
 
 function LogoBlock() {
   return (
-    <div className="h-[60px] w-[230px] shrink-0">
+    <Link href="/" className="block h-[60px] w-[230px] shrink-0">
       <ThemeLogo
         placement="header"
         className="h-full w-full object-contain object-left"
       />
-    </div>
+    </Link>
   );
 }
 
