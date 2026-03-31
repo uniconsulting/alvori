@@ -127,225 +127,245 @@ export default function RequestPageClient() {
               Выберите нужный сценарий: запросить коммерческое предложение
               <br />
               или отправить своё КП. Основные параметры можно заполнить сразу,
-              <br />а дополнительные — открыть в расширенной панели
+              <br />
+              а дополнительные — открыть в расширенной панели
             </p>
           </div>
         </Container>
       </section>
 
-<section className="pb-8 pt-0 md:pb-10 xl:pb-10">
-  <Container>
-    <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-      <div className="mb-5 grid max-w-[430px] grid-cols-2 gap-3">
-        <button
-          type="button"
-          onClick={() => setMode('request')}
-          className={modeButtonClass(mode === 'request')}
-        >
-          запросить КП
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode('send')}
-          className={modeButtonClass(mode === 'send')}
-        >
-          отправить КП
-        </button>
-      </div>
-
-      <div className="rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
-        <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
-          <div className="flex h-full flex-col">
-            <div className="flex items-center gap-3">
-              <SendHorizonal size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-              <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                {mode === 'request' ? 'Форма запроса КП' : 'Форма отправки КП'}
-              </h2>
+      <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
+        <Container>
+          <div className="px-[10px] md:px-[14px] xl:px-[16px]">
+            <div className="mb-5 grid max-w-[430px] grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setMode('request')}
+                className={modeButtonClass(mode === 'request')}
+              >
+                запросить КП
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode('send')}
+                className={modeButtonClass(mode === 'send')}
+              >
+                отправить КП
+              </button>
             </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-3">
-              <FieldDark label="Компания">
-                <input
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Название компании"
-                  className={darkInputClass}
-                />
-              </FieldDark>
+            <div className="rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
+              <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
+                <div className="flex h-full flex-col">
+                  <div className="flex items-center gap-3">
+                    <SendHorizonal
+                      size={19}
+                      strokeWidth={2}
+                      className="text-[var(--accent-1)]"
+                    />
+                    <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
+                      {mode === 'request' ? 'Форма запроса КП' : 'Форма отправки КП'}
+                    </h2>
+                  </div>
 
-              <FieldDark label="Контактное лицо">
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Ваше имя"
-                  className={darkInputClass}
-                />
-              </FieldDark>
+                  <div className="mt-8 grid grid-cols-2 gap-3">
+                    <FieldDark label="Компания">
+                      <input
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        placeholder="Название компании"
+                        className={darkInputClass}
+                      />
+                    </FieldDark>
 
-              <FieldDark label="Телефон / Telegram">
-                <input
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder="+7 (...) ... или @telegram"
-                  className={darkInputClass}
-                />
-              </FieldDark>
+                    <FieldDark label="Контактное лицо">
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Ваше имя"
+                        className={darkInputClass}
+                      />
+                    </FieldDark>
 
-              <FieldDark label="Тип груза">
-                <input
-                  value={cargoType}
-                  onChange={(e) => setCargoType(e.target.value)}
-                  placeholder="Например, оборудование"
-                  className={darkInputClass}
-                />
-              </FieldDark>
-            </div>
+                    <FieldDark label="Телефон / Telegram">
+                      <input
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        placeholder="+7 (...) ... или @telegram"
+                        className={darkInputClass}
+                      />
+                    </FieldDark>
 
-            <div className="mt-4">
-              <FieldDark label="Комментарий">
-                <textarea
-                  rows={4}
-                  value={shortComment}
-                  onChange={(e) => setShortComment(e.target.value)}
-                  placeholder={
-                    mode === 'request'
-                      ? 'Кратко опишите задачу и ожидания по запросу'
-                      : 'Кратко опишите, что вы направляете в качестве коммерческого предложения'
-                  }
-                  className={`${darkInputClass} min-h-[118px] resize-none py-4`}
-                />
-              </FieldDark>
+                    <FieldDark label="Тип груза">
+                      <input
+                        value={cargoType}
+                        onChange={(e) => setCargoType(e.target.value)}
+                        placeholder="Например, оборудование"
+                        className={darkInputClass}
+                      />
+                    </FieldDark>
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldDark label="Комментарий">
+                      <textarea
+                        rows={4}
+                        value={shortComment}
+                        onChange={(e) => setShortComment(e.target.value)}
+                        placeholder={
+                          mode === 'request'
+                            ? 'Кратко опишите задачу и ожидания по запросу'
+                            : 'Кратко опишите, что вы направляете в качестве коммерческого предложения'
+                        }
+                        className={`${darkInputClass} min-h-[118px] resize-none py-4`}
+                      />
+                    </FieldDark>
+                  </div>
+                </div>
+
+                <div className="flex h-full flex-col rounded-[24px] bg-white/6 px-5 py-5">
+                  {mode === 'request' ? (
+                    <div className="flex h-full flex-col">
+                      <div className="flex items-center gap-2">
+                        <CircleAlert
+                          size={16}
+                          strokeWidth={2}
+                          className="text-[var(--accent-1)]"
+                        />
+                        <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                          Что дальше
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex flex-col gap-3 text-[15px] text-white/78">
+                        <Bullet text="Выберите сценарий: запросить или отправить КП" />
+                        <Bullet text="Заполните основные контактные данные и комментарий" />
+                        <Bullet text="Отправьте запрос для получения обратной связи" />
+                      </div>
+
+                      <div className="mt-auto flex flex-col gap-3 pt-4">
+                        <button
+                          type="button"
+                          className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                        >
+                          отправить запрос
+                        </button>
+
+                        <Link
+                          href="/calculator"
+                          className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                        >
+                          вернуться к калькулятору
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-full flex-col">
+                      <div className="group flex flex-1 flex-col">
+                        <div className="flex items-center gap-2">
+                          <Paperclip
+                            size={16}
+                            strokeWidth={2}
+                            className="text-[var(--accent-1)]"
+                          />
+                          <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                            Вложения
+                          </p>
+                        </div>
+
+                        <label className="relative mt-4 flex min-h-[212px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
+                          <input
+                            type="file"
+                            multiple
+                            className="hidden"
+                            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                            onChange={(e) => handleFileSelect(e.target.files)}
+                          />
+
+                          {files.length === 0 ? (
+                            <div className="flex h-full flex-col items-center justify-center text-center">
+                              <Upload
+                                size={22}
+                                strokeWidth={2}
+                                className="text-[var(--accent-1)]"
+                              />
+                              <span className="mt-3 text-[15px] font-semibold">
+                                Загрузить файлы
+                              </span>
+                              <span className="mt-2 text-[13px] text-white/58">
+                                PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
+                              </span>
+
+                              <div className="pointer-events-none absolute inset-x-5 bottom-5 rounded-[14px] bg-white/10 px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 transition duration-300 group-hover:text-white/72 group-hover:opacity-100">
+                                Прикрепите до 5 файлов с коммерческим предложением в допустимых форматах.
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex h-full flex-col">
+                              <div className="mb-3 flex items-center justify-between">
+                                <span className="text-[13px] font-semibold text-white/72">
+                                  Загруженные файлы
+                                </span>
+                                <span className="text-[12px] text-white/52">
+                                  {files.length}/5
+                                </span>
+                              </div>
+
+                              <div className="flex-1 space-y-2 overflow-y-auto pr-1">
+                                {files.map((file, index) => (
+                                  <div
+                                    key={`${file.name}-${index}`}
+                                    className="flex items-center justify-between rounded-[14px] bg-white/8 px-4 py-3"
+                                  >
+                                    <span className="truncate pr-3 text-[14px] text-white/84">
+                                      {file.name}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        removeFile(index);
+                                      }}
+                                      className="ml-2 inline-flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white"
+                                    >
+                                      <X size={14} />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="mt-3 rounded-[12px] bg-white/8 px-4 py-3 text-[12px] leading-[1.35] text-white/60">
+                                Нажмите в область, чтобы добавить ещё файлы.
+                              </div>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+
+                      <div className="mt-4 flex flex-col gap-3">
+                        <button
+                          type="button"
+                          className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                        >
+                          отправить КП
+                        </button>
+
+                        <Link
+                          href="/calculator"
+                          className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                        >
+                          вернуться к калькулятору
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-
-<div className="flex h-full flex-col rounded-[24px] bg-white/6 px-5 py-5">
-  {mode === 'request' ? (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2">
-        <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
-        <p className="text-[15px] font-semibold tracking-[-0.016em]">
-          Что дальше
-        </p>
-      </div>
-
-      <div className="mt-4 flex flex-col gap-3 text-[15px] text-white/78">
-        <Bullet text="Выберите сценарий: запросить или отправить КП" />
-        <Bullet text="Заполните основные контактные данные и комментарий" />
-        <Bullet text="Отправьте запрос для получения обратной связи" />
-      </div>
-
-      <div className="mt-auto flex flex-col gap-3 pt-4">
-        <button
-          type="button"
-          className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-        >
-          отправить запрос
-        </button>
-
-        <Link
-          href="/calculator"
-          className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-        >
-          вернуться к калькулятору
-        </Link>
-      </div>
-    </div>
-  ) : (
-    <div className="flex h-full flex-col">
-      <div className="group flex flex-1 flex-col">
-        <div className="flex items-center gap-2">
-          <Paperclip size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
-          <p className="text-[15px] font-semibold tracking-[-0.016em]">
-            Вложения
-          </p>
-        </div>
-
-        <label className="relative mt-4 flex min-h-[212px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
-          <input
-            type="file"
-            multiple
-            className="hidden"
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-            onChange={(e) => handleFileSelect(e.target.files)}
-          />
-
-          {files.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center text-center">
-              <Upload size={22} strokeWidth={2} className="text-[var(--accent-1)]" />
-              <span className="mt-3 text-[15px] font-semibold">
-                Загрузить файлы
-              </span>
-              <span className="mt-2 text-[13px] text-white/58">
-                PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
-              </span>
-
-              <div className="pointer-events-none absolute inset-x-5 bottom-5 rounded-[14px] bg-white/10 px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 transition duration-300 group-hover:text-white/72 group-hover:opacity-100">
-                Прикрепите до 5 файлов с коммерческим предложением в допустимых форматах.
-              </div>
-            </div>
-          ) : (
-            <div className="flex h-full flex-col">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-[13px] font-semibold text-white/72">
-                  Загруженные файлы
-                </span>
-                <span className="text-[12px] text-white/52">
-                  {files.length}/5
-                </span>
-              </div>
-
-              <div className="flex-1 space-y-2 overflow-y-auto pr-1">
-                {files.map((file, index) => (
-                  <div
-                    key={`${file.name}-${index}`}
-                    className="flex items-center justify-between rounded-[14px] bg-white/8 px-4 py-3"
-                  >
-                    <span className="truncate pr-3 text-[14px] text-white/84">
-                      {file.name}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        removeFile(index);
-                      }}
-                      className="ml-2 inline-flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 rounded-[12px] bg-white/8 px-4 py-3 text-[12px] leading-[1.35] text-white/60">
-                Нажмите в область, чтобы добавить ещё файлы.
-              </div>
-            </div>
-          )}
-        </label>
-      </div>
-
-      <div className="mt-4 flex flex-col gap-3">
-        <button
-          type="button"
-          className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-        >
-          отправить КП
-        </button>
-
-        <Link
-          href="/calculator"
-          className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-        >
-          вернуться к калькулятору
-        </Link>
-      </div>
-    </div>
-  )}
-    </div>
-  </Container>
-</section>
+        </Container>
+      </section>
 
       <section className="pb-12 pt-0 md:pb-14 xl:pb-16">
         <Container>
