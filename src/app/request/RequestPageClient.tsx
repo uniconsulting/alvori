@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
   FileText,
@@ -11,29 +12,27 @@ import {
 } from 'lucide-react';
 import { Container } from '@/components/layout/Container';
 
-export type RequestInitialData = {
-  from: string;
-  to: string;
-  distance: string;
-  body: string;
-  weight: string;
-  volume: string;
-  pallets: string;
-  points: string;
-  urgency: string;
-  temp: string;
-  loading: string;
-  insurance: string;
-  date: string;
-  result: string;
-  comment: string;
-};
+export default function RequestPageClient() {
+  const searchParams = useSearchParams();
 
-export default function RequestPageClient({
-  initialData,
-}: {
-  initialData: RequestInitialData;
-}) {
+  const initialData = {
+    from: searchParams.get('from') ?? '',
+    to: searchParams.get('to') ?? '',
+    distance: searchParams.get('distance') ?? '',
+    body: searchParams.get('body') ?? '',
+    weight: searchParams.get('weight') ?? '',
+    volume: searchParams.get('volume') ?? '',
+    pallets: searchParams.get('pallets') ?? '',
+    points: searchParams.get('points') ?? '',
+    urgency: searchParams.get('urgency') ?? '',
+    temp: searchParams.get('temp') ?? '',
+    loading: searchParams.get('loading') ?? '',
+    insurance: searchParams.get('insurance') ?? '',
+    date: searchParams.get('date') ?? '',
+    result: searchParams.get('result') ?? '',
+    comment: searchParams.get('comment') ?? '',
+  };
+
   const [company, setCompany] = useState('');
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
@@ -243,16 +242,10 @@ export default function RequestPageClient({
                 </p>
 
                 <div className="mt-7 flex flex-col gap-3">
-                  <PreviewRow
-                    label="Маршрут"
-                    value={`${initialData.from || '—'} → ${initialData.to || '—'}`}
-                  />
+                  <PreviewRow label="Маршрут" value={`${initialData.from || '—'} → ${initialData.to || '—'}`} />
                   <PreviewRow label="Расстояние" value={initialData.distance || '—'} />
                   <PreviewRow label="Кузов" value={initialData.body || '—'} />
-                  <PreviewRow
-                    label="Вес / объём"
-                    value={`${initialData.weight || '—'} т / ${initialData.volume || '—'} м³`}
-                  />
+                  <PreviewRow label="Вес / объём" value={`${initialData.weight || '—'} т / ${initialData.volume || '—'} м³`} />
                   <PreviewRow label="Паллеты" value={initialData.pallets || '—'} />
                   <PreviewRow label="Доп. точки" value={initialData.points || '—'} />
                   <PreviewRow label="Срочность" value={initialData.urgency || '—'} />
