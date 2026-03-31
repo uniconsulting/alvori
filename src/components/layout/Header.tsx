@@ -34,9 +34,9 @@ function scrollToHeroScene(scene: 'services' | 'about') {
 export function Header() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
 
-  const lastScrollYRef = useRef(0);
+  const lastYRef = useRef(0);
+  const hiddenRef = useRef(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -52,71 +52,94 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
-useEffect(() => {
-  const handleScroll = () => {
-    const currentY = window.scrollY;
-    const delta = currentY - lastScrollYRef.current;
+  useEffect(() => {
+    const html = document.documentElement;
 
-    const isScrollingUp = delta < -2;
-    const isScrollingDown = delta > 2;
+    const setHidden = (next: boolean) => {
+      if (hiddenRef.current === next) return;
+      hiddenRef.current = next;
+      html.dataset.headerHidden = next ? '1' : '0';
+    };
 
-    const heroStage = document.getElementById('hero-services-stage');
-    const whyChooseUs = document.getElementById('why-choose-us');
+    let raf = 0;
 
-    if (!heroStage || !whyChooseUs) {
-      setIsVisible(true);
-      lastScrollYRef.current = currentY;
-      return;
-    }
+    const decide = () => {
+      raf = 0;
 
-    // До первого реального скролла header всегда раскрыт
-    if (currentY <= 4) {
-      setIsVisible(true);
-      lastScrollYRef.current = currentY;
-      return;
-    }
+      const currentY = window.scrollY || 0;
+      const prevY = lastYRef.current || 0;
 
-    const anchorY = currentY + 140;
+      const goingUp = currentY < prevY - 6;
+      const goingDown = currentY > prevY + 2;
 
-    const heroTop = heroStage.offsetTop;
-    const heroBottom = heroTop + heroStage.offsetHeight;
-    const whyTop = whyChooseUs.offsetTop;
+      const heroStage = document.getElementById('hero-services-stage');
+      const whyChooseUs = document.getElementById('why-choose-us');
 
-    let nextVisible = isVisible;
+      if (!heroStage || !whyChooseUs) {
+        setHidden(false);
+        lastYRef.current = currentY;
+        return;
+      }
 
-    // Пока пользователь в hero / scroll-scene — header скрыт
-    if (anchorY >= heroTop && anchorY < heroBottom) {
-      nextVisible = false;
-    }
-    // Между концом scroll-scene и секцией "Почему выбирают нас" — тоже скрыт всегда
-    else if (anchorY >= heroBottom && anchorY < whyTop) {
-      nextVisible = false;
-    }
-    // После секции "Почему выбирают нас":
-    // вверх — показать, вниз — скрыть
-    else if (anchorY >= whyTop) {
-      if (isScrollingUp) nextVisible = true;
-      if (isScrollingDown) nextVisible = false;
-    }
-    // До начала scroll-scene
-    else if (anchorY < heroTop) {
-      nextVisible = true;
-    }
+      if (currentY <= 2) {
+        setHidden(false);
+        lastYRef.current = currentY;
+        return;
+      }
 
-    setIsVisible(nextVisible);
-    lastScrollYRef.current = currentY;
-  };
+      const anchor = currentY + 72;
+      const heroTop = heroStage.getBoundingClientRect().top + window.scrollY;
+      const heroBottom = heroTop + heroStage.offsetHeight;
+      const whyTop = whyChooseUs.getBoundingClientRect().top + window.scrollY;
 
-  handleScroll();
+      if (anchor < heroTop) {
+        setHidden(false);
+        lastYRef.current = currentY;
+        return;
+      }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('resize', handleScroll);
+      if (anchor >= heroTop && anchor < whyTop) {
+        setHidden(true);
+        lastYRef.current = currentY;
+        return;
+      }
 
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
-    window.removeEventListener('resize', handleScroll);
-  };
-}, [isVisible]);
+      if (anchor >= whyTop) {
+        if (goingUp) setHidden(false);
+        else if (goingDown) setHidden(true);
+
+        lastYRef.current = currentY;
+        return;
+      }
+
+      lastYRef.current = currentY;
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(decide);
+    };
+
+    const onResize = () => {
+      onScroll();
+    };
+
+    document.documentElement.dataset.headerHidden = '0';
+    hiddenRef.current = false;
+    lastYRef.current = window.scrollY || 0;
+
+    decide();
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      if (raf) window.cancelAnimationFrame(raf);
+      delete document.documentElement.dataset.headerHidden;
+    };
+  }, []);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
@@ -129,143 +152,139 @@ useEffect(() => {
   };
 
   return (
-<div
-  className={cn(
-    'header-shell',
-    isVisible ? 'header-shell--visible' : 'header-shell--hidden',
-  )}
->
-  <div className="header-shell__backdrop" />
+    <header
+      className="site-header fixed inset-x-0 top-0 z-50 border-b border-[var(--divider)]"
+      style={{
+        background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
+        backdropFilter: 'blur(18px) saturate(1.04)',
+        WebkitBackdropFilter: 'blur(18px) saturate(1.04)',
+      }}
+    >
+      <Container>
+        <div className="hidden items-center py-4 xl:flex">
+          <LogoBlock />
+          <OuterDivider className="ml-[36px]" />
+          <AnchorNav className="ml-[36px]" />
+          <OuterDivider className="ml-[36px]" />
+          <PhoneBlock className="ml-[36px]" />
+          <UtilityCluster
+            className="ml-[36px]"
+            theme={theme}
+            onToggleTheme={handleThemeToggle}
+          />
+        </div>
 
-  <div className="header-shell__inner">
-    <header className="pt-4 md:pt-6 xl:pt-10">
-        <Container>
-          <div className="hidden items-center xl:flex">
-            <LogoBlock />
-            <OuterDivider className="ml-[36px]" />
-            <AnchorNav className="ml-[36px]" />
-            <OuterDivider className="ml-[36px]" />
-            <PhoneBlock className="ml-[36px]" />
-            <UtilityCluster
-              className="ml-[36px]"
-              theme={theme}
-              onToggleTheme={handleThemeToggle}
-            />
+        <div className="py-4 xl:hidden">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="block h-[48px] w-[184px]">
+              <ThemeLogo
+                placement="header"
+                className="h-full w-full object-contain object-left"
+              />
+            </Link>
+
+            <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
+              <CompactAction
+                href={ctaRoutes.headerCalculator}
+                variant="accent"
+                ariaLabel="калькулятор"
+                forceIconDark
+              >
+                <Calculator size={20} strokeWidth={1.8} />
+              </CompactAction>
+
+              <button
+                type="button"
+                onClick={handleThemeToggle}
+                aria-label="сменить тему"
+                className={cn(
+                  'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  theme === 'light'
+                    ? 'bg-[var(--surface)] text-[var(--text)]'
+                    : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
+                )}
+              >
+                {theme === 'light' ? (
+                  <Moon size={20} strokeWidth={1.8} className="header-theme-icon" />
+                ) : (
+                  <Sun size={20} strokeWidth={1.8} className="header-theme-icon" />
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMenuOpen((prev) => !prev)}
+                aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
+                className={cn(
+                  'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  theme === 'light'
+                    ? 'bg-[var(--surface)] text-[var(--text)]'
+                    : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
+                )}
+              >
+                {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
+              </button>
+            </div>
           </div>
 
-          <div className="xl:hidden">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="block h-[48px] w-[184px]">
-                <ThemeLogo
-                  placement="header"
-                  className="h-full w-full object-contain object-left"
-                />
-              </Link>
+          {menuOpen ? (
+            <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
+              <div className="flex flex-col gap-4">
+                {homeNavigation.map((item) => {
+                  const isServices = item.href === '#services';
+                  const isAbout = item.href === '#about';
 
-              <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
-                <CompactAction
-                  href={ctaRoutes.headerCalculator}
-                  variant="accent"
-                  ariaLabel="калькулятор"
-                  forceIconDark
-                >
-                  <Calculator size={20} strokeWidth={1.8} />
-                </CompactAction>
-
-                <button
-                  type="button"
-                  onClick={handleThemeToggle}
-                  aria-label="сменить тему"
-                  className={cn(
-                    'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                    theme === 'light'
-                      ? 'bg-[var(--surface)] text-[var(--text)]'
-                      : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
-                  )}
-                >
-                  {theme === 'light' ? (
-                    <Moon size={20} strokeWidth={1.8} className="header-theme-icon" />
-                  ) : (
-                    <Sun size={20} strokeWidth={1.8} className="header-theme-icon" />
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen((prev) => !prev)}
-                  aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
-                  className={cn(
-                    'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
-                    theme === 'light'
-                      ? 'bg-[var(--surface)] text-[var(--text)]'
-                      : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
-                  )}
-                >
-                  {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
-                </button>
-              </div>
-            </div>
-
-            {menuOpen ? (
-              <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
-                <div className="flex flex-col gap-4">
-                  {homeNavigation.map((item) => {
-                    const isServices = item.href === '#services';
-                    const isAbout = item.href === '#about';
-
-                    if (isServices || isAbout) {
-                      return (
-                        <button
-                          key={item.href}
-                          type="button"
-                          onClick={() => {
-                            setMenuOpen(false);
-                            scrollToHeroScene(isServices ? 'services' : 'about');
-                          }}
-                          className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
-                        >
-                          {item.label}
-                        </button>
-                      );
-                    }
-
+                  if (isServices || isAbout) {
                     return (
-                      <Link
+                      <button
                         key={item.href}
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                        className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
+                        type="button"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          scrollToHeroScene(isServices ? 'services' : 'about');
+                        }}
+                        className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
                       >
                         {item.label}
-                      </Link>
+                      </button>
                     );
-                  })}
+                  }
 
-                  <div className="h-[2px] w-full rounded-full bg-[var(--bg)]" />
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
 
-                  <a
-                    href={contacts.phoneHref}
-                    className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
-                  >
-                    {contacts.phoneDisplay}
-                  </a>
+                <div className="h-[2px] w-full rounded-full bg-[var(--bg)]" />
 
-                  <Link
-                    href={ctaRoutes.headerCalculator}
-                    onClick={() => setMenuOpen(false)}
-                    className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
-                  >
-                    рассчитать стоимость
-                  </Link>
-                </div>
+                <a
+                  href={contacts.phoneHref}
+                  className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
+                >
+                  {contacts.phoneDisplay}
+                </a>
+
+                <Link
+                  href={ctaRoutes.headerCalculator}
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
+                >
+                  рассчитать стоимость
+                </Link>
               </div>
-            ) : null}
-          </div>
-        </Container>
-      </header>
-    </div>
-  </div>
-);
+            </div>
+          ) : null}
+        </div>
+      </Container>
+    </header>
+  );
 }
 
 function LogoBlock() {
