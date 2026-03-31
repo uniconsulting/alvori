@@ -87,13 +87,19 @@ export function HeroLeftScene() {
 
   const assets = useMemo(
     () => ({
-      trailer:
-        theme === 'light'
-          ? `${sitePath}/hero/trailer/light.svg`
-          : `${sitePath}/hero/trailer/dark.svg`,
+      trailerLight: `${sitePath}/hero/trailer/light.svg`,
+      trailerDark: `${sitePath}/hero/trailer/dark.svg`,
     }),
-    [theme],
+    [],
   );
+
+  useEffect(() => {
+    const light = new Image();
+    const dark = new Image();
+
+    light.src = assets.trailerLight;
+    dark.src = assets.trailerDark;
+  }, [assets]);
 
   const slide = heroSlides[activeSlide];
 
@@ -261,11 +267,25 @@ export function HeroLeftScene() {
           trailerReady && 'hero-trailer-shell--ready',
         )}
       >
-        <img
-          src={assets.trailer}
-          alt="Полуприцеп"
-          className="hero-trailer-visual h-full w-full object-contain object-left-top"
-        />
+        <div className="relative h-full w-full">
+          <img
+            src={assets.trailerLight}
+            alt="Полуприцеп"
+            className={cn(
+              'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+              theme === 'light' ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+
+          <img
+            src={assets.trailerDark}
+            alt="Полуприцеп"
+            className={cn(
+              'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+              theme === 'dark' ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+        </div>
 
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%] min-[1920px]:left-[45%]">
