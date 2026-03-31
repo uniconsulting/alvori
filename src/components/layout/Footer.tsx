@@ -5,8 +5,6 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
-import { legalLinks } from '@/content/legal';
-import { homeNavigation } from '@/config/anchors';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -111,7 +109,7 @@ export function Footer() {
         <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
           <Road trucks={assets.trucks} />
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-start">
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
             <div className="w-full max-w-[430px] justify-self-start space-y-8">
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
@@ -128,36 +126,6 @@ export function Footer() {
                 </div>
                 <div>все права защищены</div>
                 <div>© 2021 – 2026</div>
-              </div>
-            </div>
-
-            <div className="justify-self-center space-y-8 lg:-translate-x-16">
-              <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
-                инфо-блок
-              </h3>
-
-              <div className="flex flex-col gap-5">
-                {homeNavigation.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-
-                <div className="mt-1 h-[1px] w-full bg-[var(--footer-line)] opacity-25" />
-
-                {legalLinks.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
               </div>
             </div>
 
@@ -206,8 +174,8 @@ export function Footer() {
                       src={assets.developerLogo}
                       alt="Юни"
                       className="h-[20px] w-auto object-contain"
-                      />
-                    </div>
+                    />
+                  </div>
 
                   <span className="opacity-40 text-[var(--footer-muted)]">
                     Сайт разработан командой ЮНИ.ai
