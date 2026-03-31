@@ -4,7 +4,6 @@ import {
   ExternalLink,
   Mail,
   MapPinned,
-  MessageCircle,
   Phone,
   ShieldCheck,
   Building2,
@@ -93,24 +92,27 @@ export default function ContactsPage() {
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <div className="rounded-[32px] bg-[#26292e] px-6 py-6 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
-                <div className="grid grid-cols-[1fr_auto] gap-4">
-                  <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-[1fr_auto] items-stretch gap-4">
+                  <div className="grid grid-cols-3 gap-3 items-stretch">
                     <ContactMiniCard
                       icon={<Phone size={17} strokeWidth={2} />}
                       label="телефон"
                       value={CONTACTS.phoneDisplay}
                       href={CONTACTS.phoneHref}
+                      stretch
                     />
                     <ContactMiniCard
                       icon={<Mail size={17} strokeWidth={2} />}
                       label="почта"
                       value={CONTACTS.email}
                       href={CONTACTS.emailHref}
+                      stretch
                     />
                     <ContactMiniCard
                       icon={<Building2 size={17} strokeWidth={2} />}
                       label="код ati.su"
                       value={CONTACTS.atiCode}
+                      stretch
                     />
                   </div>
 
@@ -124,9 +126,9 @@ export default function ContactsPage() {
 
                     <Link
                       href={CONTACTS.maxHref}
-                      className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                      className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-white/10 px-6 text-[15px] font-semibold tracking-[-0.016em] text-white transition hover:bg-white/14"
                     >
-                      написать в MAX
+                      Написать в MAX
                     </Link>
                   </div>
                 </div>
@@ -140,23 +142,28 @@ export default function ContactsPage() {
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <div className="rounded-[30px] bg-[var(--surface)] px-6 py-6 shadow-[var(--shadow-soft)]">
                 <div className="grid grid-cols-[1fr_auto] items-center gap-4">
-                  <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
-                    <div className="flex items-center gap-3">
-                      <Building2
-                        size={18}
-                        strokeWidth={2}
-                        className="text-[var(--accent-1)]"
-                      />
-                      <div>
-                        <div className="text-[22px] font-semibold tracking-[-0.024em] text-[var(--text)]">
-                          {COMPANY.name}
-                        </div>
-                        <div className="mt-2 text-[16px] font-medium leading-[1.32] tracking-[-0.014em] text-[var(--muted)]">
-                          ИНН: {COMPANY.inn} <span className="px-2">|</span> ОГРН:{' '}
-                          {COMPANY.ogrn}
-                        </div>
-                      </div>
-                    </div>
+                  <div className="flex h-[54px] items-center rounded-[22px] bg-[var(--bg)] px-5">
+                    <Building2
+                      size={18}
+                      strokeWidth={2}
+                      className="mr-3 text-[var(--text)]"
+                    />
+
+                    <span className="text-[18px] font-semibold tracking-[-0.02em] text-[var(--text)]">
+                      {COMPANY.name}
+                    </span>
+
+                    <span className="mx-4 block h-[22px] w-[1px] bg-[var(--divider)]" />
+
+                    <span className="text-[18px] font-semibold tracking-[-0.02em] text-[var(--text)]">
+                      ИНН: {COMPANY.inn}
+                    </span>
+
+                    <span className="mx-4 block h-[22px] w-[1px] bg-[var(--divider)]" />
+
+                    <span className="text-[18px] font-semibold tracking-[-0.02em] text-[var(--text)]">
+                      ОГРН: {COMPANY.ogrn}
+                    </span>
                   </div>
 
                   <Link
@@ -202,13 +209,6 @@ export default function ContactsPage() {
                     <p className="mt-3 text-[15px] leading-[1.38] tracking-[-0.014em] text-white">
                       {CONTACTS.address}
                     </p>
-
-                    <Link
-                      href={CONTACTS.mapHref}
-                      className="mt-4 inline-flex h-[42px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
-                    >
-                      открыть на карте
-                    </Link>
                   </div>
                 </div>
               </div>
@@ -265,21 +265,23 @@ function ContactMiniCard({
   label,
   value,
   href,
+  stretch = false,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   href?: string;
+  stretch?: boolean;
 }) {
   const content = (
-    <div className="rounded-[20px] bg-white/6 px-5 py-5">
+    <div className={`rounded-[20px] bg-white/6 px-5 py-5 ${stretch ? 'h-full' : ''}`}>
       <div className="flex items-center gap-3">
         <span className="text-[var(--accent-1)]">{icon}</span>
         <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
           {label}
         </span>
       </div>
-      <div className="mt-3 text-[18px] font-semibold tracking-[-0.02em] text-white">
+      <div className="mt-3 text-[22px] font-semibold tracking-[-0.024em] text-white">
         {value}
       </div>
     </div>
