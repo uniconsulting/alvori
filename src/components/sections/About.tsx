@@ -1,6 +1,14 @@
 'use client';
 
-import { Calculator, CheckCheck, Dot, FileText, Quote, Send, Truck } from 'lucide-react';
+import {
+  Calculator,
+  CheckCheck,
+  Dot,
+  FileText,
+  Quote,
+  Send,
+  Truck,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
@@ -51,10 +59,15 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
-function useTypewriter(text: string, duration = 3200) {
+function useTypewriter(text: string, isActive: boolean, duration = 3200) {
   const [displayed, setDisplayed] = useState('');
 
   useEffect(() => {
+    if (!isActive) {
+      setDisplayed('');
+      return;
+    }
+
     let frame = 0;
     let isCancelled = false;
     const start = performance.now();
@@ -77,16 +90,21 @@ function useTypewriter(text: string, duration = 3200) {
       isCancelled = true;
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [text, duration]);
+  }, [text, isActive, duration]);
 
   return displayed;
 }
 
-export function About() {
+export function About({ revealProgress = 0 }: { revealProgress?: number }) {
   const quoteText =
     '«Стабильный бизнес – это ответственность,\nпредсказуемость и уважение к клиенту»';
 
-  const typedQuote = useTypewriter(quoteText, 3600);
+  const typewriterActive = revealProgress > 0.34;
+  const typedQuote = useTypewriter(quoteText, typewriterActive, 3600);
+
+  const introReveal = Math.min(revealProgress / 0.28, 1);
+  const quoteReveal = Math.min(Math.max((revealProgress - 0.22) / 0.28, 0), 1);
+  const processReveal = Math.min(Math.max((revealProgress - 0.46) / 0.28, 0), 1);
 
   return (
     <div id={homeAnchorIds.about} className="h-full scroll-mt-[120px]">
@@ -94,16 +112,37 @@ export function About() {
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
-              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+              <h2
+                className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] transition-all duration-500"
+                style={{
+                  opacity: introReveal,
+                  transform: `translateY(${18 - 18 * introReveal}px)`,
+                  filter: `blur(${6 - 6 * introReveal}px)`,
+                }}
+              >
                 О компании
               </h2>
 
-              <div>
+              <div
+                style={{
+                  opacity: introReveal,
+                  transform: `translateY(${16 - 16 * introReveal}px)`,
+                  filter: `blur(${6 - 6 * introReveal}px)`,
+                  transition: 'all 500ms cubic-bezier(0.22,1,0.36,1)',
+                }}
+              >
                 <AboutBreadcrumb />
               </div>
             </div>
 
-            <div className="mt-2 flex flex-col gap-6">
+            <div
+              className="mt-2 flex flex-col gap-6 transition-all duration-500"
+              style={{
+                opacity: introReveal,
+                transform: `translateY(${20 - 20 * introReveal}px)`,
+                filter: `blur(${7 - 7 * introReveal}px)`,
+              }}
+            >
               <p
                 className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
@@ -121,9 +160,23 @@ export function About() {
               </p>
             </div>
 
-            <div className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
+            <div
+              className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
+              style={{
+                opacity: introReveal,
+                transform: `scaleX(${0.72 + 0.28 * introReveal})`,
+                transformOrigin: 'left center',
+              }}
+            />
 
-            <div className="mt-6 grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
+            <div
+              className="mt-6 grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12 transition-all duration-[650ms]"
+              style={{
+                opacity: quoteReveal,
+                transform: `translateY(${24 - 24 * quoteReveal}px)`,
+                filter: `blur(${8 - 8 * quoteReveal}px)`,
+              }}
+            >
               <div className="flex items-start gap-5">
                 <Quote
                   size={48}
@@ -136,7 +189,7 @@ export function About() {
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   {typedQuote}
-                  <span className="about-quote-caret" />
+                  {typewriterActive ? <span className="about-quote-caret" /> : null}
                 </p>
               </div>
 
@@ -150,7 +203,14 @@ export function About() {
               </div>
             </div>
 
-            <div className="pt-12 xl:pt-14">
+            <div
+              className="pt-12 xl:pt-14 transition-all duration-[700ms]"
+              style={{
+                opacity: processReveal,
+                transform: `translateY(${26 - 26 * processReveal}px)`,
+                filter: `blur(${8 - 8 * processReveal}px)`,
+              }}
+            >
               <ProcessFlowNodes />
             </div>
           </div>
@@ -231,9 +291,9 @@ function ProcessFlowNodes() {
               >
                 <span
                   className={cn(
-                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-500',
+                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-all duration-500',
                     isActive
-                      ? 'text-[var(--text)]'
+                      ? 'text-[var(--text)] scale-[1.065]'
                       : isPassed
                         ? 'text-[var(--text)]'
                         : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
@@ -301,7 +361,11 @@ function SegmentConnector({
             active ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.12)]',
             animateNow && 'about-segment-activate',
           )}
-          style={animateNow ? ({ animationDelay: `${item * 120}ms` } as React.CSSProperties) : undefined}
+          style={
+            animateNow
+              ? ({ animationDelay: `${item * 120}ms` } as React.CSSProperties)
+              : undefined
+          }
         />
       ))}
     </div>
