@@ -60,8 +60,8 @@ export function Footer() {
 
     developerLogo:
       theme === 'dark'
-      ? `${sitePath}/brand/developer/dark/logo.svg`
-      : `${sitePath}/brand/developer/light/logo.svg`,
+        ? `${sitePath}/brand/developer/dark/logo.svg`
+        : `${sitePath}/brand/developer/light/logo.svg`,
 
     maxLogo: isLightTheme
       ? `${sitePath}/brand/messengers/max/light.svg`
@@ -109,7 +109,7 @@ export function Footer() {
         <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
           <Road trucks={assets.trucks} />
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-start">
             <div className="w-full max-w-[430px] justify-self-start space-y-8">
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
@@ -126,6 +126,19 @@ export function Footer() {
                 </div>
                 <div>все права защищены</div>
                 <div>© 2021 – 2026</div>
+              </div>
+            </div>
+
+            <div className="justify-self-center space-y-8 lg:-translate-x-10">
+              <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
+                инфо-блок
+              </h3>
+
+              <div className="space-y-3 text-[17px] leading-[1.25] tracking-[-0.01em] text-[var(--footer-text)]">
+                <div>{contacts.company}</div>
+                <div>ИНН: {contacts.inn}</div>
+                <div>грузоперевозки по РФ</div>
+                <div>запросы и коммерческие предложения</div>
               </div>
             </div>
 
