@@ -46,7 +46,7 @@ export function WhyChooseUsSection() {
   }, []);
 
   return (
-    <div ref={sectionRef} className="h-full">
+    <div id="why-choose-us" ref={sectionRef} className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
