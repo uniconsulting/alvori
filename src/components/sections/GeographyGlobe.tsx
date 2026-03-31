@@ -231,7 +231,7 @@ export function GeographyGlobe({
  <div className="relative h-[640px] w-[720px] max-w-none">
   <canvas
     ref={canvasRef}
-    className="h-[620px] w-[620px] max-w-none -translate-x-[42px] translate-y-[20px] cursor-grab"
+    className="h-[620px] w-[620px] max-w-none -translate-x-[56px] translate-y-[20px] cursor-grab"
             style={{ aspectRatio: '1 / 1' }}
             onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
             onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
@@ -264,7 +264,7 @@ export function GeographyGlobe({
           ))}
         </div>
 
-        <div className="absolute right-0 top-[40%] flex -translate-y-1/2 flex-col items-center gap-3">
+        <div className="absolute right-0 top-[20%] flex -translate-y-1/2 flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
