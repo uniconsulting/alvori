@@ -731,7 +731,7 @@ function ResultPanel({
           </div>
 
           <div className="mt-7 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-stretch">
-            <div className="flex h-full min-h-[324px] flex-col rounded-[24px] bg-white/6 px-6 py-6">
+            <div className="rounded-[24px] bg-white/6 px-6 py-6 self-start">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
               </p>
@@ -750,14 +750,14 @@ function ResultPanel({
               </div>
             </div>
 
-            <div className="grid h-full min-h-[324px] grid-cols-2 grid-rows-2 gap-4">
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
               <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
               <MetricCard label="Срок" value={days} />
               <MetricCard label="Кузов" value={body} />
               <MetricCard label="Ставка / км" value={pricePerKm} />
             </div>
 
-            <div className="flex h-full min-h-[324px] flex-col rounded-[24px] bg-white/6 px-5 py-5">
+            <div className="rounded-[24px] bg-white/6 px-5 py-5 h-full">
               <div className="flex items-center gap-2">
                 <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
                 <p className="text-[15px] font-semibold tracking-[-0.016em]">
@@ -784,11 +784,11 @@ function ResultPanel({
               отправить этот расчёт
             </Link>
 
-            <div className="grid h-[54px] grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 items-center">
               <div />
               <Link
                 href={requestHref}
-                className="col-start-1 col-end-3 inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                className="col-span-2 inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
               >
                 запросить коммерческое предложение
               </Link>
