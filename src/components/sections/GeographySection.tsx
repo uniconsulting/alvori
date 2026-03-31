@@ -97,7 +97,7 @@ export function GeographySection() {
                   </p>
                 </div>
 
-                <div className="mt-10 flex flex-col gap-3">
+                <div className="mt-16 flex flex-col gap-3">
                   {DISTRICTS.map((district, index) => (
                     <DistrictPill
                       key={district}
@@ -107,7 +107,7 @@ export function GeographySection() {
                   ))}
                 </div>
 
-                <div className="mt-10">
+                <div className="mt-16">
                   <Link
                     href="/calculator"
                     className="header-utility-button inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-[var(--accent-1-text)]"
