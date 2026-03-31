@@ -70,7 +70,7 @@ export function GeographySection() {
   return (
     <div id={homeAnchorIds.geography} ref={sectionRef} className="h-full scroll-mt-[120px]">
       <Container>
-        <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+        <div className="relative px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
               <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
@@ -82,75 +82,83 @@ export function GeographySection() {
               </div>
             </div>
 
-            <div className="relative grid grid-cols-[0.92fr_1.16fr_0.72fr] items-start gap-8 xl:gap-10">
-              <div className="relative z-10 flex flex-col gap-6">
-                <p
-                  className="max-w-[660px] text-[20px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  Работаем по ключевым направлениям
-                  <br />
-                  внутри РФ, выстраивая устойчивую логистику
-                  <br />
-                  под задачу клиента.
-                </p>
-
-                <div className="mt-2 flex flex-col gap-3">
-                  {DISTRICTS.map((district, index) => (
-                    <DistrictPill
-                      key={district}
-                      label={district}
-                      delayMs={index * 520}
-                    />
-                  ))}
-                </div>
-
-                <div className="pt-4">
-                  <Link
-                    href="/calculator"
-                    className="header-utility-button inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-[var(--accent-1-text)]"
-                  >
-                    <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
-                    <span
-                      className="text-[18px] font-semibold tracking-[-0.02em]"
+            <div className="grid grid-cols-[0.92fr_1.08fr] items-stretch gap-10 xl:gap-14">
+              <div className="relative z-10 flex h-full flex-col justify-between">
+                <div className="flex flex-col gap-6">
+                  <div className="mt-1 flex flex-col gap-5">
+                    <p
+                      className="max-w-[660px] text-[20px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      Открыть калькулятор
-                    </span>
-                  </Link>
+                      Работаем по ключевым направлениям
+                      <br />
+                      внутри РФ, выстраивая устойчивую логистику
+                      <br />
+                      под задачу клиента.
+                    </p>
+                  </div>
+
+                  <div className="mt-8 flex flex-col gap-3">
+                    {DISTRICTS.map((district, index) => (
+                      <DistrictPill
+                        key={district}
+                        label={district}
+                        delayMs={index * 520}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-12">
+                  <div className="flex items-stretch gap-5">
+                    <Link
+                      href="/calculator"
+                      className="header-utility-button inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-[var(--accent-1-text)]"
+                    >
+                      <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
+                      <span
+                        className="text-[18px] font-semibold tracking-[-0.02em]"
+                        style={{ fontFamily: 'var(--font-body-text)' }}
+                      >
+                        Открыть калькулятор
+                      </span>
+                    </Link>
+                  </div>
                 </div>
               </div>
 
-              <div className="relative z-30 flex min-h-[640px] items-start justify-center pt-8">
-                {shouldMountGlobe ? (
-                  <GeographyGlobe
-                    activeRouteIndex={activeRouteIndex}
-                    isActive={isGlobeActive}
-                  />
-                ) : (
-                  <div className="flex h-full min-h-[640px] items-start justify-center pt-6">
-                    <div className="h-[620px] w-[620px] max-w-full rounded-full bg-[var(--surface)]/60" />
-                  </div>
-                )}
-              </div>
-
-              <div className="relative z-10 flex justify-end pt-1">
-                <div className="inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
-                  <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                    активное направление
-                  </p>
-
-                  <div className="mt-2 flex items-center gap-3">
-                    <Route
-                      size={18}
-                      strokeWidth={2.05}
-                      className="shrink-0 text-[var(--accent-1)]"
-                    />
-
-                    <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.02em] text-white">
-                      {from.label} — {to.label}
+              <div className="relative z-30 pt-5">
+                <div className="pointer-events-none absolute inset-x-0 bottom-[0] top-0 z-40 flex items-end justify-end">
+                  <div className="pointer-events-auto inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
+                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                      активное направление
                     </p>
+
+                    <div className="mt-2 flex items-center gap-3">
+                      <Route
+                        size={18}
+                        strokeWidth={2.05}
+                        className="shrink-0 text-[var(--accent-1)]"
+                      />
+
+                      <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.02em] text-white">
+                        {from.label} — {to.label}
+                      </p>
+                    </div>
                   </div>
+                </div>
+
+                <div className="relative -ml-8 xl:-ml-10">
+                  {shouldMountGlobe ? (
+                    <GeographyGlobe
+                      activeRouteIndex={activeRouteIndex}
+                      isActive={isGlobeActive}
+                    />
+                  ) : (
+                    <div className="flex h-full min-h-[560px] items-start justify-center">
+                      <div className="h-[620px] w-[620px] max-w-none rounded-full bg-[var(--surface)]/60" />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
