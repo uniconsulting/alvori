@@ -85,7 +85,12 @@ export function Header() {
             </div>
 
             <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
-              <CompactAction href={ctaRoutes.headerCalculator} variant="accent" ariaLabel="калькулятор">
+              <CompactAction
+                href={ctaRoutes.headerCalculator}
+                variant="accent"
+                ariaLabel="калькулятор"
+                forceIconDark
+              >
                 <Calculator size={20} strokeWidth={1.8} />
               </CompactAction>
 
@@ -276,7 +281,12 @@ function UtilityCluster({
         className,
       )}
     >
-      <UtilityLinkButton href={ctaRoutes.headerCalculator} variant="accent" ariaLabel="калькулятор">
+      <UtilityLinkButton
+        href={ctaRoutes.headerCalculator}
+        variant="accent"
+        ariaLabel="калькулятор"
+        forceIconDark
+      >
         <Calculator size={22} strokeWidth={1.8} />
       </UtilityLinkButton>
 
@@ -316,12 +326,14 @@ function UtilityLinkButton({
   ariaLabel,
   variant,
   theme = 'light',
+  forceIconDark = false,
 }: {
   children: React.ReactNode;
   href: string;
   ariaLabel: string;
   variant: 'accent' | 'neutral';
   theme?: ThemeMode;
+  forceIconDark?: boolean;
 }) {
   return (
     <Link
@@ -330,10 +342,11 @@ function UtilityLinkButton({
       className={cn(
         'header-utility-button inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
         variant === 'accent'
-          ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
+          ? 'bg-[var(--accent-1)]'
           : theme === 'light'
             ? 'bg-[var(--surface)] text-[var(--text)]'
             : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
+        forceIconDark ? '!text-[#26292e]' : variant === 'accent' ? 'text-[var(--accent-1-text)]' : '',
       )}
     >
       {children}
@@ -346,11 +359,13 @@ function CompactAction({
   href,
   ariaLabel,
   variant,
+  forceIconDark = false,
 }: {
   children: React.ReactNode;
   href: string;
   ariaLabel: string;
   variant: 'accent' | 'neutral';
+  forceIconDark?: boolean;
 }) {
   return (
     <Link
@@ -359,8 +374,9 @@ function CompactAction({
       className={cn(
         'header-utility-button inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
         variant === 'accent'
-          ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
+          ? 'bg-[var(--accent-1)]'
           : 'bg-[var(--surface)] text-[var(--text)]',
+        forceIconDark ? '!text-[#26292e]' : variant === 'accent' ? 'text-[var(--accent-1-text)]' : '',
       )}
     >
       {children}
