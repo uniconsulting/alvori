@@ -133,6 +133,16 @@ export default function CalculatorPage() {
     setDistanceKm(calculateRoadDistanceKm(fromCityObj, toCityObj));
   }, [fromCityObj, toCityObj]);
 
+  useEffect(() => {
+    if (filtersOpen) {
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = previous;
+      };
+    }
+  }, [filtersOpen]);
+
   const result = useMemo(() => {
     const body = BODY_CONFIG[bodyType];
     const urg = URGENCY_CONFIG[urgency];
@@ -189,7 +199,7 @@ export default function CalculatorPage() {
       pricePerKmMin: minTotal / Math.max(distanceKm, 1),
       pricePerKmMax: maxTotal / Math.max(distanceKm, 1),
       factors: [
-        `Маршрут ${distanceKm > 0 ? `~ ${formatDistance(distanceKm)} км` : ''}`,
+        `Маршрут ~ ${formatDistance(distanceKm)} км`,
         `Тип кузова: ${body.label}`,
         `Срочность: ${urg.label}`,
         tempMode === 'temp' ? 'Температурный режим' : 'Стандартный температурный режим',
@@ -342,8 +352,8 @@ function PageHeader() {
             className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-white shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
-            <ArrowLeft size={15} className="mr-2 text-white" />
-            вернуться
+            <ArrowLeft size={15} className="mr-2 text-[var(--accent-1)]" />
+            <span className="text-white">вернуться</span>
           </Link>
 
           <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
@@ -351,7 +361,7 @@ function PageHeader() {
               className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
               style={{ fontFamily: 'var(--font-body-text)' }}
             >
-              калькулятор · запрос · КП
+              калькулятор <span className="text-[var(--accent-1)]">·</span> запрос <span className="text-[var(--accent-1)]">·</span> КП
             </span>
           </div>
         </div>
@@ -404,15 +414,13 @@ function ControlBar({
 }) {
   return (
     <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
-          <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
-            Параметры перевозки
-          </h2>
-        </div>
+      <div className="flex items-center gap-3">
+        <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
+        <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+          Параметры перевозки
+        </h2>
 
-        <div className="grid max-w-[390px] grid-cols-2 gap-3">
+        <div className="ml-auto grid max-w-[390px] grid-cols-2 gap-3">
           <button type="button" onClick={() => onModeChange('quick')} className={modeButtonClass(mode === 'quick')}>
             быстрый расчёт
           </button>
@@ -422,7 +430,7 @@ function ControlBar({
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-[1.25fr_1.25fr_0.85fr_0.65fr_auto] gap-3">
+      <div className="mt-6 grid grid-cols-[1.25fr_1.25fr_0.85fr_0.78fr_auto] gap-3">
         <CitySegment
           label="откуда"
           value={fromCity}
@@ -502,7 +510,7 @@ function CitySegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[84px] w-full items-center justify-between rounded-[22px] bg-[var(--surface-soft)] px-5 text-left transition hover:opacity-95"
+        className="flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95"
       >
         <div className="min-w-0">
           <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
@@ -537,8 +545,8 @@ function CitySegment({
                     setOpen(false);
                     setQuery('');
                   }}
-                  className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--surface-soft)] ${
-                    city.value === value ? 'bg-[var(--surface-soft)] font-semibold' : ''
+                  className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--bg)] ${
+                    city.value === value ? 'bg-[var(--bg)] font-semibold' : ''
                   }`}
                 >
                   {city.label}
@@ -582,7 +590,7 @@ function SelectSegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[84px] w-full items-center justify-between rounded-[22px] bg-[var(--surface-soft)] px-5 text-left transition hover:opacity-95"
+        className="flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95"
       >
         <div className="min-w-0">
           <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
@@ -606,8 +614,8 @@ function SelectSegment({
                   onChange(option.value);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--surface-soft)] ${
-                  option.value === value ? 'bg-[var(--surface-soft)] font-semibold' : ''
+                className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--bg)] ${
+                  option.value === value ? 'bg-[var(--bg)] font-semibold' : ''
                 }`}
               >
                 {option.label}
@@ -630,9 +638,9 @@ function PointsSegment({
   onChange: (value: number) => void;
 }) {
   return (
-    <div className="flex h-[84px] items-center justify-between rounded-[22px] bg-[var(--surface-soft)] px-5">
-      <div>
-        <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+    <div className="relative h-[84px] rounded-[18px] bg-[var(--bg)] px-5 py-4">
+      <div className="pr-[78px]">
+        <div className="whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
           {label}
         </div>
         <div className="mt-2 text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]">
@@ -640,18 +648,18 @@ function PointsSegment({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="absolute bottom-4 right-4 flex items-center gap-2">
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[12px] bg-[var(--surface)] text-[var(--text)]"
+          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]"
         >
           −
         </button>
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[12px] bg-[var(--surface)] text-[var(--text)]"
+          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]"
         >
           +
         </button>
@@ -672,8 +680,8 @@ function RouteMetaLine({
   return (
     <div className="inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
       <span className="text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]">
-        Маршрут: <span className="text-[var(--text)]">{from}</span> → <span className="text-[var(--text)]">{to}</span> · ~{' '}
-        <span className="text-[var(--text)]">{distance ? formatDistance(distance) : '—'} км</span>
+        Маршрут: <span className="text-[var(--text)]">{from} → {to}</span>{' '}
+        <span className="text-[var(--text)]">~ {distance ? formatDistance(distance) : '—'} км</span>
       </span>
     </div>
   );
@@ -715,79 +723,75 @@ function ResultPanel({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-[0.9fr_0.9fr_0.7fr] gap-6">
-            <div>
-              <div className="flex items-center gap-3">
-                <Route size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-                <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                  Результат
-                </h2>
-              </div>
+          <div className="flex items-center gap-3">
+            <Route size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
+            <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
+              Результат
+            </h2>
+          </div>
 
-              <div className="mt-8">
-                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                  ориентировочная стоимость
-                </p>
-                <p className="mt-2 font-heading text-[64px] leading-[0.94] tracking-[-0.05em]">
-                  {formatCurrency(center)} ₽
-                </p>
-              </div>
+          <div className="mt-7 grid grid-cols-[0.95fr_1.15fr_0.9fr] gap-4">
+            <div className="rounded-[24px] bg-white/6 px-6 py-6">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                ориентировочная стоимость
+              </p>
+              <p className="mt-3 font-heading text-[58px] leading-[0.94] tracking-[-0.05em]">
+                {formatCurrency(center)} ₽
+              </p>
 
-              <div className="mt-6 rounded-[20px] bg-white/6 px-5 py-4">
-                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+              <div className="mt-5 rounded-[18px] bg-white/6 px-5 py-4">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
                   рабочая вилка
                 </p>
-                <p className="mt-2 text-[26px] font-semibold tracking-[-0.03em]">
+                <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
                   {formatCurrency(min)} – {formatCurrency(max)} ₽
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 self-start pt-[54px]">
+            <div className="grid grid-cols-2 gap-4">
               <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
               <MetricCard label="Срок" value={days} />
               <MetricCard label="Кузов" value={body} />
               <MetricCard label="Ставка / км" value={pricePerKm} />
             </div>
 
-            <div className="flex flex-col justify-between rounded-[24px] bg-white/6 px-5 py-5">
-              <div>
-                <div className="flex items-center gap-2">
-                  <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
-                  <p className="text-[15px] font-semibold tracking-[-0.016em]">
-                    Что повлияло на цену
-                  </p>
-                </div>
-
-                <div className="mt-4 flex flex-col gap-3">
-                  {factors.map((factor) => (
-                    <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
-                      <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
-                      <span>{factor}</span>
-                    </div>
-                  ))}
-                </div>
+            <div className="rounded-[24px] bg-white/6 px-5 py-5">
+              <div className="flex items-center gap-2">
+                <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
+                <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                  Что повлияло на цену
+                </p>
               </div>
 
-              <div className="mt-6 flex flex-col gap-3">
-                <Link
-                  href={requestHref}
-                  className="header-utility-button inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
-                >
-                  отправить этот расчёт
-                </Link>
-
-                <Link
-                  href={requestHref}
-                  className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-                >
-                  запросить коммерческое предложение
-                </Link>
+              <div className="mt-4 flex flex-col gap-3">
+                {factors.map((factor) => (
+                  <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
+                    <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
+                    <span>{factor}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          <p className="mt-6 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
+          <div className="mt-5 flex gap-3">
+            <Link
+              href={requestHref}
+              className="header-utility-button inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
+            >
+              отправить этот расчёт
+            </Link>
+
+            <Link
+              href={requestHref}
+              className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+            >
+              запросить коммерческое предложение
+            </Link>
+          </div>
+
+          <p className="mt-5 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
             Итоговый тариф подтверждается после уточнения параметров груза, маршрута и условий подачи транспорта.
           </p>
         </>
@@ -804,11 +808,11 @@ function MetricCard({
   value: string;
 }) {
   return (
-    <div className="rounded-[18px] bg-white/6 px-4 py-4">
+    <div className="rounded-[20px] bg-white/6 px-5 py-5">
       <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
         {label}
       </p>
-      <p className="mt-2 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white">
+      <p className="mt-3 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white">
         {value}
       </p>
     </div>
@@ -843,7 +847,7 @@ function ExplainCard({
   text: string;
 }) {
   return (
-    <div className="rounded-[22px] bg-[var(--surface-soft)] px-5 py-5">
+    <div className="rounded-[18px] bg-[var(--bg)] px-5 py-5">
       <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.024em] text-[var(--text)]">
         {title}
       </h3>
@@ -890,14 +894,14 @@ function FiltersDrawer(props: {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-[rgba(38,41,46,0.22)] backdrop-blur-[6px] transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 bg-[rgba(38,41,46,0.22)] backdrop-blur-[6px] transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={onClose}
       />
 
       <aside
-        className={`fixed right-0 top-0 z-50 h-screen w-[480px] bg-[var(--surface)] px-6 py-6 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`fixed right-0 top-0 z-50 h-screen w-[480px] overflow-y-auto bg-[var(--surface)] px-6 py-6 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -909,18 +913,17 @@ function FiltersDrawer(props: {
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-[var(--surface-soft)] text-[var(--text)]"
+            className="inline-flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] text-[var(--accent-1-text)]"
           >
             <X size={18} />
           </button>
         </div>
 
         <div className="mt-8 space-y-6">
-          <div className="rounded-[22px] bg-[var(--surface-soft)] px-5 py-5">
+          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Груз
             </h3>
-
             <div className="mt-4 grid grid-cols-1 gap-3">
               <NumberControl label="Вес, т" value={weightTons} onChange={setWeightTons} />
               <NumberControl label="Объём, м³" value={volumeM3} onChange={setVolumeM3} />
@@ -928,36 +931,35 @@ function FiltersDrawer(props: {
             </div>
           </div>
 
-          <div className="rounded-[22px] bg-[var(--surface-soft)] px-5 py-5">
+          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Условия
             </h3>
-
             <div className="mt-4 grid grid-cols-1 gap-3">
               <DrawerSelect
+                label="Срочность"
                 value={urgency}
                 onChange={(v) => setUrgency(v as UrgencyType)}
-                label="Срочность"
                 options={Object.entries(URGENCY_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
               />
               <DrawerSelect
+                label="Температурный режим"
                 value={tempMode}
                 onChange={(v) => setTempMode(v as TempMode)}
-                label="Температурный режим"
                 options={Object.entries(TEMP_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
               />
               {mode === 'advanced' && (
                 <>
                   <DrawerSelect
+                    label="Тип загрузки"
                     value={loadingType}
                     onChange={(v) => setLoadingType(v as LoadingType)}
-                    label="Тип загрузки"
                     options={Object.entries(LOADING_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
                   />
                   <DrawerSelect
+                    label="Страхование"
                     value={insurance}
                     onChange={(v) => setInsurance(v as InsuranceType)}
-                    label="Страхование"
                     options={Object.entries(INSURANCE_CONFIG).map(([value, item]) => ({ value, label: item.label }))}
                   />
                 </>
@@ -965,7 +967,7 @@ function FiltersDrawer(props: {
             </div>
           </div>
 
-          <div className="rounded-[22px] bg-[var(--surface-soft)] px-5 py-5">
+          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Комментарий
             </h3>
@@ -992,7 +994,7 @@ function FiltersDrawer(props: {
               setInsurance('basic');
               setComment('');
             }}
-            className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--surface-soft)] px-6 text-[15px] font-semibold lowercase text-[var(--text)]"
+            className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase text-[var(--text)]"
           >
             сбросить
           </button>
@@ -1020,7 +1022,7 @@ function NumberControl({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="rounded-[18px] bg-[var(--surface)] px-4 py-4">
+    <div className="rounded-[14px] bg-[var(--surface)] px-4 py-4">
       <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
         {label}
       </div>
@@ -1028,7 +1030,7 @@ function NumberControl({
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[12px] bg-[var(--surface-soft)] text-[var(--text)]"
+          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--bg)] text-[var(--text)]"
         >
           −
         </button>
@@ -1036,7 +1038,7 @@ function NumberControl({
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[12px] bg-[var(--surface-soft)] text-[var(--text)]"
+          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--bg)] text-[var(--text)]"
         >
           +
         </button>
@@ -1070,6 +1072,6 @@ function modeButtonClass(active: boolean) {
   return `inline-flex h-[48px] items-center justify-center rounded-[14px] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] transition ${
     active
       ? 'bg-[var(--accent-1)] text-white'
-      : 'bg-[var(--surface-soft)] text-[var(--text)]'
+      : 'bg-[var(--bg)] text-[var(--text)]'
   }`;
 }
