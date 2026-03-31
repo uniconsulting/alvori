@@ -170,8 +170,8 @@ function BentoCard({
   });
 
   useEffect(() => {
-    const stiffness = 0.095;
-    const damping = 0.84;
+    const stiffness = 0.125;
+    const damping = 0.8;
 
     const step = () => {
       const current = currentRef.current;
@@ -211,6 +211,11 @@ function BentoCard({
       ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.12)_18%,rgba(255,255,255,0.34)_38%,rgba(255,255,255,0.68)_62%,rgba(255,255,255,0.93)_100%)]'
       : 'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
 
+  const borderClass =
+    theme === 'light'
+      ? 'bg-[linear-gradient(135deg,rgba(38,41,46,0.34)_0%,rgba(38,41,46,0.14)_24%,rgba(38,41,46,0.28)_48%,rgba(38,41,46,0.12)_74%,rgba(38,41,46,0.36)_100%)] opacity-95'
+      : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.06)_24%,rgba(255,255,255,0.12)_48%,rgba(255,255,255,0.05)_74%,rgba(255,255,255,0.18)_100%)] opacity-50';
+
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
 
@@ -218,17 +223,17 @@ function BentoCard({
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
 
-    const rotateY = (px - 0.5) * 4.2;
-    const rotateX = (0.5 - py) * 4.2;
+    const rotateY = (px - 0.5) * 3.2;
+    const rotateX = (0.5 - py) * 3.2;
 
     targetRef.current = {
       rotateX,
       rotateY,
-      y: -2,
-      scale: 1.006,
+      y: -1.5,
+      scale: 1.004,
       glowX: px * 100,
       glowY: py * 100,
-      glowOpacity: 0.78,
+      glowOpacity: 0.42,
     };
   };
 
@@ -266,7 +271,7 @@ function BentoCard({
             transform: `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
           }}
         >
-          <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.78)_0%,rgba(255,255,255,0.2)_24%,rgba(255,255,255,0.54)_48%,rgba(255,255,255,0.18)_74%,rgba(255,255,255,0.82)_100%)] opacity-80" />
+          <div className={cn('pointer-events-none absolute inset-0 rounded-[32px]', borderClass)} />
 
           <div
             className={cn(
@@ -281,9 +286,9 @@ function BentoCard({
             <img
               src={imageSrc}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{
-                transform: `translate3d(${(view.glowX - 50) * -0.055}px, ${(view.glowY - 50) * -0.055}px, 10px) scale(1.03)`,
+                transform: `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`,
               }}
             />
 
@@ -291,8 +296,8 @@ function BentoCard({
               className="pointer-events-none absolute inset-0"
               style={{
                 opacity: view.glowOpacity,
-                background: `radial-gradient(280px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.12), transparent 62%)`,
-                transition: 'opacity 220ms cubic-bezier(0.22,1,0.36,1)',
+                background: `radial-gradient(260px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.08), transparent 62%)`,
+                transition: 'opacity 180ms cubic-bezier(0.22,1,0.36,1)',
               }}
             />
 
@@ -306,7 +311,7 @@ function BentoCard({
             <div
               className="relative flex h-full flex-col justify-end p-5"
               style={{
-                transform: `translate3d(${(view.glowX - 50) * 0.035}px, ${(view.glowY - 50) * 0.035}px, 14px)`,
+                transform: `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`,
               }}
             >
               <div className="relative flex items-center justify-between gap-2">
@@ -321,10 +326,10 @@ function BentoCard({
 
                 <div
                   className={cn(
-                    'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
+                    'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
                     buttonClass,
                   )}
-                  style={{ transform: 'translateZ(16px)' }}
+                  style={{ transform: 'translateZ(12px)' }}
                 >
                   <ArrowRight size={19} strokeWidth={2.1} />
                 </div>
