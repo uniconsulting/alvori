@@ -219,8 +219,8 @@ export function Footer() {
 
 function Road({ trucks }: { trucks: string[] }) {
   return (
-    <div className="footer-road relative h-[56px]">
-      <div className="footer-road-line absolute left-0 right-0 top-[70%] h-[2px] -translate-y-1/2 bg-[var(--footer-line)]" />
+    <div className="footer-road relative h-[72px]">
+      <div className="footer-road-line absolute left-0 right-0 top-[78%] h-[2px] -translate-y-1/2 bg-[var(--footer-line)]" />
 
       <Truck
         src={trucks[0]}
