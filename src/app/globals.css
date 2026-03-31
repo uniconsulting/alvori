@@ -153,11 +153,11 @@ img {
 }
 
 .footer-truck {
-  width: 124px;
-  height: 46px;
+  width: 136px;
+  height: 52px;
   left: 0;
-  top: calc(78% - 46px);
-  transform: translate3d(-150px, 0, 0);
+  top: calc(81% - 52px);
+  transform: translate3d(-164px, 0, 0);
   will-change: transform;
   backface-visibility: hidden;
   animation-name: footerTruckDrive;
@@ -182,11 +182,11 @@ img {
 
 @keyframes footerTruckDrive {
   0% {
-    transform: translate3d(-150px, 0, 0);
+    transform: translate3d(-164px, 0, 0);
   }
 
   100% {
-    transform: translate3d(calc(100vw + 150px), 0, 0);
+    transform: translate3d(calc(100vw + 164px), 0, 0);
   }
 }
 
@@ -199,7 +199,7 @@ img {
   .footer-truck {
     animation: none;
     transform: translate3d(0, 0, 0);
-    top: calc(78% - 46px);
+    top: calc(81% - 52px);
   }
 }
 
