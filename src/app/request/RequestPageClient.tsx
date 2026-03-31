@@ -231,7 +231,7 @@ export default function RequestPageClient() {
       <div className="mt-4 flex flex-col gap-3 text-[15px] text-white/78">
         <Bullet text="Выберите сценарий: запросить или отправить КП" />
         <Bullet text="Заполните основные контактные данные и комментарий" />
-        <Bullet text="Отправьте запрос для дальнейшей обработки и обратной связи" />
+        <Bullet text="Отправьте запрос для получения обратной связи" />
       </div>
 
       <div className="mt-auto flex flex-col gap-3 pt-4">
@@ -340,9 +340,9 @@ export default function RequestPageClient() {
         >
           вернуться к калькулятору
         </Link>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+  )}
       </div>
     </div>
   </Container>
