@@ -159,7 +159,7 @@ export function GeographySection() {
                   </div>
                 </div>
 
-                <div className="h-[640px]" />
+                <div className="h-[580px]" />
               </div>
             </div>
           </div>
