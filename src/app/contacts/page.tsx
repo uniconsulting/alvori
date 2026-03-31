@@ -1,15 +1,13 @@
 import Link from 'next/link';
 import {
   ArrowLeft,
-  Calculator,
-  FileText,
+  ExternalLink,
   Mail,
   MapPinned,
   MessageCircle,
   Phone,
   ShieldCheck,
   Building2,
-  ExternalLink,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -53,7 +51,40 @@ export default function ContactsPage() {
         <section className="pb-6 pt-12 md:pb-8 md:pt-14 xl:pb-8 xl:pt-16">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <PageHeader />
+              <Link
+                href="/"
+                className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                <ArrowLeft size={15} className="mr-2" />
+                вернуться
+              </Link>
+
+              <div className="mt-5 flex items-center justify-between gap-6">
+                <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
+                  Свяжитесь с нами
+                </h1>
+
+                <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+                  <span
+                    className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    главная
+                    <span className="px-[8px] text-[var(--accent-1)]">·</span>
+                    контакты
+                  </span>
+                </div>
+              </div>
+
+              <p
+                className="mt-10 max-w-[820px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                Выберите удобный способ связи, ознакомьтесь с юридической информацией
+                <br />
+                и при необходимости перейдите к карте или документации.
+              </p>
             </div>
           </Container>
         </section>
@@ -61,7 +92,45 @@ export default function ContactsPage() {
         <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <ContactsHeroCard />
+              <div className="rounded-[32px] bg-[#26292e] px-6 py-6 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
+                <div className="grid grid-cols-[1fr_auto] gap-4">
+                  <div className="grid grid-cols-3 gap-3">
+                    <ContactMiniCard
+                      icon={<Phone size={17} strokeWidth={2} />}
+                      label="телефон"
+                      value={CONTACTS.phoneDisplay}
+                      href={CONTACTS.phoneHref}
+                    />
+                    <ContactMiniCard
+                      icon={<Mail size={17} strokeWidth={2} />}
+                      label="почта"
+                      value={CONTACTS.email}
+                      href={CONTACTS.emailHref}
+                    />
+                    <ContactMiniCard
+                      icon={<Building2 size={17} strokeWidth={2} />}
+                      label="код ati.su"
+                      value={CONTACTS.atiCode}
+                    />
+                  </div>
+
+                  <div className="flex w-[248px] flex-col gap-3">
+                    <Link
+                      href={CONTACTS.telegramHref}
+                      className="inline-flex h-[56px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                    >
+                      написать в Telegram
+                    </Link>
+
+                    <Link
+                      href={CONTACTS.maxHref}
+                      className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                    >
+                      написать в MAX
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -69,7 +138,35 @@ export default function ContactsPage() {
         <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <CompanyInfoCard />
+              <div className="rounded-[30px] bg-[var(--surface)] px-6 py-6 shadow-[var(--shadow-soft)]">
+                <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                  <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
+                    <div className="flex items-center gap-3">
+                      <Building2
+                        size={18}
+                        strokeWidth={2}
+                        className="text-[var(--accent-1)]"
+                      />
+                      <div>
+                        <div className="text-[22px] font-semibold tracking-[-0.024em] text-[var(--text)]">
+                          {COMPANY.name}
+                        </div>
+                        <div className="mt-2 text-[16px] font-medium leading-[1.32] tracking-[-0.014em] text-[var(--muted)]">
+                          ИНН: {COMPANY.inn} <span className="px-2">|</span> ОГРН:{' '}
+                          {COMPANY.ogrn}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={COMPANY.rusprofile}
+                    className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
+                  >
+                    посмотреть больше данных
+                  </Link>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -77,7 +174,44 @@ export default function ContactsPage() {
         <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <MapAndAddressSection />
+              <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
+                <div className="relative overflow-hidden rounded-[26px]">
+                  <iframe
+                    src={CONTACTS.mapEmbed}
+                    width="100%"
+                    height="480"
+                    loading="lazy"
+                    style={{ border: 0, display: 'block' }}
+                    title="Карта офиса АЛВОРИ"
+                  />
+
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.28)_0%,rgba(38,41,46,0.1)_28%,rgba(38,41,46,0.08)_100%)]" />
+
+                  <div className="absolute left-5 top-5 max-w-[420px] rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 text-white shadow-[0_18px_36px_rgba(0,0,0,0.22)] backdrop-blur-[10px]">
+                    <div className="flex items-center gap-2">
+                      <MapPinned
+                        size={16}
+                        strokeWidth={2}
+                        className="text-[var(--accent-1)]"
+                      />
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/62">
+                        адрес
+                      </span>
+                    </div>
+
+                    <p className="mt-3 text-[15px] leading-[1.38] tracking-[-0.014em] text-white">
+                      {CONTACTS.address}
+                    </p>
+
+                    <Link
+                      href={CONTACTS.mapHref}
+                      className="mt-4 inline-flex h-[42px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
+                    >
+                      открыть на карте
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -85,7 +219,37 @@ export default function ContactsPage() {
         <section className="pb-12 pt-0 md:pb-14 xl:pb-16">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <DocumentsSection />
+              <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8 shadow-[var(--shadow-soft)]">
+                <div className="flex items-center gap-3">
+                  <ShieldCheck
+                    size={19}
+                    strokeWidth={2}
+                    className="text-[var(--accent-1)]"
+                  />
+                  <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+                    Документация
+                  </h2>
+                </div>
+
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  {DOCUMENTS.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="group flex items-center justify-between rounded-[22px] bg-[var(--bg)] px-5 py-5 transition hover:translate-y-[-1px]"
+                    >
+                      <span className="text-[16px] font-semibold leading-[1.2] tracking-[-0.016em] text-[var(--text)]">
+                        {item.label}
+                      </span>
+                      <ExternalLink
+                        size={16}
+                        strokeWidth={2}
+                        className="text-[var(--muted)] transition group-hover:text-[var(--text)]"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -96,243 +260,7 @@ export default function ContactsPage() {
   );
 }
 
-function PageHeader() {
-  return (
-    <>
-      <Link
-        href="/"
-        className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        <ArrowLeft size={15} className="mr-2" />
-        вернуться
-      </Link>
-
-      <div className="mt-5 flex items-center justify-between gap-6">
-        <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
-          Свяжитесь с нами
-        </h1>
-
-        <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-          <span
-            className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-            style={{ fontFamily: 'var(--font-body-text)' }}
-          >
-            главная
-            <span className="px-[8px] text-[var(--accent-1)]">·</span>
-            контакты
-          </span>
-        </div>
-      </div>
-
-      <p
-        className="mt-10 max-w-[820px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        Выберите удобный способ связи, ознакомьтесь с юридической информацией
-        <br />
-        и при необходимости перейдите к карте или документации.
-      </p>
-    </>
-  );
-}
-
-function ContactsHeroCard() {
-  return (
-    <div className="rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
-      <div className="grid grid-cols-[0.96fr_0.72fr] gap-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <Phone size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-            <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-              Контакты для связи
-            </h2>
-          </div>
-
-          <div className="mt-8 grid grid-cols-1 gap-3">
-            <ContactLine
-              icon={<Phone size={17} strokeWidth={2} />}
-              label="телефон"
-              value={CONTACTS.phoneDisplay}
-              href={CONTACTS.phoneHref}
-            />
-            <ContactLine
-              icon={<Mail size={17} strokeWidth={2} />}
-              label="почта"
-              value={CONTACTS.email}
-              href={CONTACTS.emailHref}
-            />
-            <ContactLine
-              icon={<Building2 size={17} strokeWidth={2} />}
-              label="код ati.su"
-              value={CONTACTS.atiCode}
-            />
-          </div>
-        </div>
-
-        <div className="flex h-full flex-col justify-between rounded-[24px] bg-white/6 px-5 py-5">
-          <div>
-            <div className="flex items-center gap-2">
-              <MessageCircle
-                size={16}
-                strokeWidth={2}
-                className="text-[var(--accent-1)]"
-              />
-              <p className="text-[15px] font-semibold tracking-[-0.016em]">
-                Быстрые действия
-              </p>
-            </div>
-
-            <div className="mt-4 flex flex-col gap-3 text-[15px] text-white/78">
-              <Bullet text="Позвоните нам напрямую" />
-              <Bullet text="Напишите на электронную почту" />
-              <Bullet text="Перейдите в удобный мессенджер" />
-            </div>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-3">
-            <Link
-              href={CONTACTS.telegramHref}
-              className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-            >
-              написать в Telegram
-            </Link>
-
-            <Link
-              href={CONTACTS.maxHref}
-              className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-            >
-              написать в Max
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CompanyInfoCard() {
-  return (
-    <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8 shadow-[var(--shadow-soft)]">
-      <div className="grid grid-cols-[1fr_auto] items-center gap-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <Building2
-              size={19}
-              strokeWidth={2}
-              className="text-[var(--accent-1)]"
-            />
-            <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
-              Юридическая информация
-            </h2>
-          </div>
-
-          <div className="mt-6 rounded-[22px] bg-[var(--bg)] px-5 py-5">
-            <div className="text-[22px] font-semibold tracking-[-0.024em] text-[var(--text)]">
-              {COMPANY.name}
-            </div>
-            <div className="mt-3 text-[16px] font-medium leading-[1.32] tracking-[-0.014em] text-[var(--muted)]">
-              ИНН: {COMPANY.inn} <span className="px-2">|</span> ОГРН:{' '}
-              {COMPANY.ogrn}
-            </div>
-          </div>
-        </div>
-
-        <Link
-          href={COMPANY.rusprofile}
-          className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
-        >
-          посмотреть больше данных
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function MapAndAddressSection() {
-  return (
-    <div className="grid grid-cols-[1.08fr_0.72fr] gap-6">
-      <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
-        <div className="overflow-hidden rounded-[26px] bg-[var(--bg)]">
-          <iframe
-            src={CONTACTS.mapEmbed}
-            width="100%"
-            height="460"
-            loading="lazy"
-            style={{ border: 0, display: 'block' }}
-            title="Карта офиса АЛВОРИ"
-          />
-        </div>
-      </div>
-
-      <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8 shadow-[var(--shadow-soft)]">
-        <div className="flex items-center gap-3">
-          <MapPinned
-            size={19}
-            strokeWidth={2}
-            className="text-[var(--accent-1)]"
-          />
-          <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
-            Адрес
-          </h2>
-        </div>
-
-        <div className="mt-6 rounded-[22px] bg-[var(--bg)] px-5 py-5">
-          <p className="text-[16px] font-medium leading-[1.38] tracking-[-0.014em] text-[var(--text)]">
-            {CONTACTS.address}
-          </p>
-        </div>
-
-        <div className="mt-6">
-          <Link
-            href={CONTACTS.mapHref}
-            className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
-          >
-            открыть на карте
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DocumentsSection() {
-  return (
-    <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8 shadow-[var(--shadow-soft)]">
-      <div className="flex items-center gap-3">
-        <ShieldCheck
-          size={19}
-          strokeWidth={2}
-          className="text-[var(--accent-1)]"
-        />
-        <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
-          Документация
-        </h2>
-      </div>
-
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        {DOCUMENTS.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="group flex items-center justify-between rounded-[22px] bg-[var(--bg)] px-5 py-5 transition hover:translate-y-[-1px]"
-          >
-            <span className="text-[16px] font-semibold leading-[1.2] tracking-[-0.016em] text-[var(--text)]">
-              {item.label}
-            </span>
-            <ExternalLink
-              size={16}
-              strokeWidth={2}
-              className="text-[var(--muted)] transition group-hover:text-[var(--text)]"
-            />
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ContactLine({
+function ContactMiniCard({
   icon,
   label,
   value,
@@ -344,7 +272,7 @@ function ContactLine({
   href?: string;
 }) {
   const content = (
-    <div className="rounded-[18px] bg-white/6 px-5 py-5">
+    <div className="rounded-[20px] bg-white/6 px-5 py-5">
       <div className="flex items-center gap-3">
         <span className="text-[var(--accent-1)]">{icon}</span>
         <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
@@ -357,18 +285,6 @@ function ContactLine({
     </div>
   );
 
-  if (href) {
-    return <Link href={href}>{content}</Link>;
-  }
-
+  if (href) return <Link href={href}>{content}</Link>;
   return content;
-}
-
-function Bullet({ text }: { text: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
-      <span>{text}</span>
-    </div>
-  );
 }
