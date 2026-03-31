@@ -45,35 +45,7 @@ export function GeographyGlobe({
     theta: number;
   } | null>(null);
 
-  const [isDark, setIsDark] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(6);
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    const updateTheme = () => {
-      const darkByClass = root.classList.contains('dark');
-      const darkByAttr =
-        root.getAttribute('data-theme') === 'dark' ||
-        document.body.getAttribute('data-theme') === 'dark';
-
-      setIsDark(darkByClass || darkByAttr);
-    };
-
-    updateTheme();
-
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(root, {
-      attributes: true,
-      attributeFilter: ['class', 'data-theme'],
-    });
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class', 'data-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     scaleRef.current = ZOOM_STEPS[zoomIndex];
@@ -131,17 +103,17 @@ export function GeographyGlobe({
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: 2,
-      width: 820 * 2,
-      height: 820 * 2,
+      width: 920 * 2,
+      height: 920 * 2,
       phi: phiRef.current,
       theta: thetaRef.current,
-      dark: isDark ? 1 : 0,
-      diffuse: isDark ? 1.18 : 1.34,
+      dark: 0,
+      diffuse: 1.34,
       mapSamples: 24000,
-      mapBrightness: isDark ? 3.4 : 4.8,
+      mapBrightness: 4.8,
       mapBaseBrightness: 0.0,
-      baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
-      glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
+      baseColor: rgb('#eef1f5'),
+      glowColor: rgb('#ffffff'),
       markerColor: rgb('#ffffff'),
       arcColor: rgb('#fab021'),
       arcWidth: 1.2,
@@ -164,12 +136,12 @@ export function GeographyGlobe({
         phi: phiRef.current,
         theta: thetaRef.current,
         scale: scaleRef.current,
-        dark: isDark ? 1 : 0,
-        diffuse: isDark ? 1.18 : 1.34,
-        mapBrightness: isDark ? 3.4 : 4.8,
+        dark: 0,
+        diffuse: 1.34,
+        mapBrightness: 4.8,
         mapBaseBrightness: 0.0,
-        baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
-        glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
+        baseColor: rgb('#eef1f5'),
+        glowColor: rgb('#ffffff'),
         markerColor: rgb('#ffffff'),
         markers: markersRef.current,
         arcs: arcsRef.current,
@@ -185,7 +157,7 @@ export function GeographyGlobe({
       globe.destroy();
       globeRef.current = null;
     };
-  }, [isDark, isActive]);
+  }, [isActive]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
@@ -226,12 +198,12 @@ export function GeographyGlobe({
   const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
   return (
-    <div className="flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[640px] w-full items-start justify-center">
- <div className="relative h-[640px] w-[720px] max-w-none">
-  <canvas
-    ref={canvasRef}
-    className="h-[620px] w-[620px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
+    <div className="relative z-20 flex h-full flex-col items-center justify-start">
+      <div className="relative flex h-[720px] w-full items-start justify-center">
+        <div className="relative h-[720px] w-[860px] max-w-none">
+          <canvas
+            ref={canvasRef}
+            className="h-[700px] w-[700px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
             style={{ aspectRatio: '1 / 1' }}
             onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
             onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
@@ -268,10 +240,7 @@ export function GeographyGlobe({
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
-            className={`
-              inline-flex h-8 w-8 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(38,41,46,0.06)]
-              ${isDark ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]'}
-            `}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
             aria-label="увеличить"
           >
             <Plus size={14} />
@@ -302,12 +271,8 @@ export function GeographyGlobe({
                         isActive
                           ? 'bg-[var(--accent-1)]'
                           : major
-                            ? isDark
-                              ? 'bg-white/72'
-                              : 'bg-[rgba(38,41,46,0.72)]'
-                            : isDark
-                              ? 'bg-white/18'
-                              : 'bg-[rgba(38,41,46,0.16)]'
+                            ? 'bg-[rgba(38,41,46,0.72)]'
+                            : 'bg-[rgba(38,41,46,0.16)]'
                       }
                     `}
                   />
@@ -319,10 +284,7 @@ export function GeographyGlobe({
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex - 1)}
-            className={`
-              inline-flex h-8 w-8 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(38,41,46,0.06)]
-              ${isDark ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]'}
-            `}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
             aria-label="уменьшить"
           >
             <Minus size={14} />
