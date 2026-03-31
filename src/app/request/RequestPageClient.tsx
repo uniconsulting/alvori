@@ -154,7 +154,7 @@ export default function RequestPageClient() {
       </div>
 
       <div className="rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
-        <div className="grid min-h-[640px] grid-cols-[0.98fr_0.72fr] gap-6">
+        <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
           <div className="flex h-full flex-col">
             <div className="flex items-center gap-3">
               <SendHorizonal size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
@@ -218,7 +218,7 @@ export default function RequestPageClient() {
             </div>
           </div>
 
-          <div className="flex h-full flex-col justify-between rounded-[24px] bg-white/6 px-5 py-5">
+          <div className="flex h-full min-h-[488px] flex-col justify-between rounded-[24px] bg-white/6 px-5 py-5">
             <div>
               {mode === 'request' ? (
                 <>
@@ -232,11 +232,11 @@ export default function RequestPageClient() {
                   <div className="mt-4 flex flex-col gap-3 text-[15px] text-white/78">
                     <Bullet text="Выберите сценарий: запросить или отправить КП" />
                     <Bullet text="Заполните основные контактные данные и комментарий" />
-                    <Bullet text="Отправьте запрос для дальнейшей обработки и обратной связи" />
+                    <Bullet text="Отправьте запрос для получения обратной связи" />
                   </div>
                 </>
               ) : (
-                <div className="group relative">
+                <div className="group">
                   <div className="flex items-center gap-2">
                     <Paperclip size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
                     <p className="text-[15px] font-semibold tracking-[-0.016em]">
@@ -244,19 +244,7 @@ export default function RequestPageClient() {
                     </p>
                   </div>
 
-                  <label className="mt-4 flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-[18px] bg-white/6 px-5 py-5 text-center transition hover:bg-white/10">
-                    <Upload size={22} strokeWidth={2} className="text-[var(--accent-1)]" />
-                    <span className="mt-3 text-[15px] font-semibold">
-                      Загрузить файлы
-                    </span>
-                    <span className="mt-2 text-[13px] text-white/58">
-                      PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
-                    </span>
-
-                    <div className="pointer-events-none absolute inset-x-5 bottom-5 rounded-[14px] bg-white/10 px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 transition duration-300 group-hover:text-white/72 group-hover:opacity-100">
-                      Прикрепите до 5 файлов с коммерческим предложением в допустимых форматах.
-                    </div>
-
+                  <label className="relative mt-4 flex min-h-[300px] cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 text-center transition hover:bg-white/10">
                     <input
                       type="file"
                       multiple
@@ -264,29 +252,62 @@ export default function RequestPageClient() {
                       accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
                       onChange={(e) => handleFileSelect(e.target.files)}
                     />
-                  </label>
 
-                  {files.length > 0 ? (
-                    <div className="mt-4 flex flex-col gap-2">
-                      {files.map((file, index) => (
-                        <div
-                          key={`${file.name}-${index}`}
-                          className="flex items-center justify-between rounded-[14px] bg-white/8 px-4 py-3"
-                        >
-                          <span className="truncate text-[14px] text-white/84">
-                            {file.name}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => removeFile(index)}
-                            className="ml-3 inline-flex h-[28px] w-[28px] items-center justify-center rounded-[10px] bg-white/10 text-white"
-                          >
-                            <X size={14} />
-                          </button>
+                    {files.length === 0 ? (
+                      <div className="flex h-full flex-col items-center justify-center">
+                        <Upload size={22} strokeWidth={2} className="text-[var(--accent-1)]" />
+                        <span className="mt-3 text-[15px] font-semibold">
+                          Загрузить файлы
+                        </span>
+                        <span className="mt-2 text-[13px] text-white/58">
+                          PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
+                        </span>
+
+                        <div className="pointer-events-none absolute inset-x-5 bottom-5 rounded-[14px] bg-white/10 px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 transition duration-300 group-hover:text-white/72 group-hover:opacity-100">
+                          Прикрепите до 3 файлов с коммерческим предложением в допустимых форматах.
                         </div>
-                      ))}
-                    </div>
-                  ) : null}
+                      </div>
+                    ) : (
+                      <div className="flex h-full flex-col">
+                        <div className="mb-3 flex items-center justify-between">
+                          <span className="text-[13px] font-semibold text-white/72">
+                            Загруженные файлы
+                          </span>
+                          <span className="text-[12px] text-white/52">
+                            {files.length}/5
+                          </span>
+                        </div>
+
+                        <div className="flex-1 space-y-2 overflow-y-auto pr-1">
+                          {files.map((file, index) => (
+                            <div
+                              key={`${file.name}-${index}`}
+                              className="flex items-center justify-between rounded-[14px] bg-white/8 px-4 py-3"
+                            >
+                              <span className="truncate pr-3 text-[14px] text-white/84">
+                                {file.name}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  removeFile(index);
+                                }}
+                                className="ml-2 inline-flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white"
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-3 rounded-[12px] bg-white/8 px-4 py-3 text-[12px] leading-[1.35] text-white/60">
+                          Нажмите в область, чтобы добавить ещё файлы.
+                        </div>
+                      </div>
+                    )}
+                  </label>
                 </div>
               )}
             </div>
