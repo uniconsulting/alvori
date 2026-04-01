@@ -7,10 +7,10 @@ export const homeAnchorIds = {
 } as const;
 
 export const homeAnchorHrefs = {
-  services: `#${homeAnchorIds.services}`,
-  about: `#${homeAnchorIds.about}`,
-  geography: `#${homeAnchorIds.geography}`,
-  fleet: `#${homeAnchorIds.fleet}`,
+  services: '/?scene=services',
+  about: '/?scene=about',
+  geography: `/#${homeAnchorIds.geography}`,
+  fleet: `/#${homeAnchorIds.fleet}`,
   contacts: `#${homeAnchorIds.contacts}`,
 } as const;
 
