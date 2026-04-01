@@ -52,7 +52,7 @@ export function HeroRightScene() {
   );
 
   return (
-    <div className="mt-4 -translate-y-[3px] grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
+    <div className="mt-6 grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)] grid-rows-[168px_168px] gap-3 sm:grid-rows-[188px_188px] sm:gap-4 md:max-w-[540px] md:grid-cols-[258px_258px] md:grid-rows-none md:gap-6 xl:mt-0 xl:-translate-y-[3px]">
       <BentoCard
         title={
           <>
@@ -65,7 +65,7 @@ export function HeroRightScene() {
         imageSrc={assets.request}
         theme={theme}
         variant="accent"
-        heightClassName="h-[236px]"
+        heightClassName="h-[168px] sm:h-[188px] md:h-[236px]"
         visible={card1Ready}
       />
 
@@ -81,7 +81,7 @@ export function HeroRightScene() {
         imageSrc={assets.principles}
         theme={theme}
         variant="dark"
-        heightClassName="h-[496px]"
+        heightClassName="h-[348px] sm:h-[392px] md:h-[496px]"
         tall
         specialButton
         visible={card3Ready}
@@ -99,7 +99,7 @@ export function HeroRightScene() {
         imageSrc={assets.calc}
         theme={theme}
         variant="light"
-        heightClassName="h-[236px]"
+        heightClassName="h-[168px] sm:h-[188px] md:h-[236px]"
         visible={card2Ready}
       />
     </div>
@@ -195,15 +195,15 @@ function BentoCard({
     };
   }, []);
 
-const textClass = 'text-[#f6f6f6]';
+  const textClass = 'text-[#f6f6f6]';
 
-const buttonClass = specialButton
-  ? 'bg-white text-black'
-  : 'bg-[#222429] text-white';
+  const buttonClass = specialButton
+    ? 'bg-white text-black'
+    : 'bg-[#222429] text-white';
 
-const bottomMaskClass =
-  'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
-  
+  const bottomMaskClass =
+    'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
+
   const borderClass =
     theme === 'light'
       ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.42)_24%,rgba(255,255,255,0.88)_48%,rgba(255,255,255,0.36)_74%,rgba(255,255,255,0.98)_100%)] opacity-100'
@@ -249,7 +249,7 @@ const bottomMaskClass =
         visible &&
           'opacity-100 translate-y-0 scale-100 transition-all duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
         heightClassName,
-        tall && 'md:row-span-2',
+        tall && 'row-span-2',
       )}
     >
       <div
@@ -259,16 +259,21 @@ const bottomMaskClass =
       >
         <Link
           href={href}
-          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[2px]"
+          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[24px] p-[2px] sm:rounded-[28px] md:rounded-[32px]"
           style={{
             transform: `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
           }}
         >
-          <div className={cn('pointer-events-none absolute inset-0 rounded-[32px]', borderClass)} />
+          <div
+            className={cn(
+              'pointer-events-none absolute inset-0 rounded-[24px] sm:rounded-[28px] md:rounded-[32px]',
+              borderClass,
+            )}
+          />
 
           <div
             className={cn(
-              'relative h-full overflow-hidden rounded-[30px]',
+              'relative h-full overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]',
               variant === 'accent'
                 ? 'bg-[var(--accent-1)]'
                 : variant === 'light'
@@ -296,21 +301,21 @@ const bottomMaskClass =
 
             <div
               className={cn(
-                'pointer-events-none absolute bottom-0 left-0 right-0 h-[132px]',
+                'pointer-events-none absolute bottom-0 left-0 right-0 h-[104px] sm:h-[118px] md:h-[132px]',
                 bottomMaskClass,
               )}
             />
 
             <div
-              className="relative flex h-full flex-col justify-end p-5"
+              className="relative flex h-full flex-col justify-end p-3.5 sm:p-4 md:p-5"
               style={{
                 transform: `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`,
               }}
             >
-              <div className="relative flex items-center justify-between gap-2">
+              <div className="relative flex items-end justify-between gap-2">
                 <div
                   className={cn(
-                    'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                    'max-w-[124px] text-[11px] font-semibold leading-[1.12] tracking-[-0.01em] sm:max-w-[136px] sm:text-[11px] md:max-w-[152px] md:text-[12px]',
                     textClass,
                   )}
                 >
@@ -319,12 +324,13 @@ const bottomMaskClass =
 
                 <div
                   className={cn(
-                    'inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px] transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
+                    'inline-flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[12px] transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px] sm:h-[36px] sm:w-[36px] sm:rounded-[13px] md:h-[38px] md:w-[38px] md:rounded-[14px]',
                     buttonClass,
                   )}
                   style={{ transform: 'translateZ(12px)' }}
                 >
-                  <ArrowRight size={19} strokeWidth={2.1} />
+                  <ArrowRight size={17} strokeWidth={2.1} className="md:hidden" />
+                  <ArrowRight size={19} strokeWidth={2.1} className="hidden md:block" />
                 </div>
               </div>
             </div>
