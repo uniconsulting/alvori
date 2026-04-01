@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Calculator, FileText, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
@@ -12,8 +12,9 @@ import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
 
 type ThemeMode = 'light' | 'dark';
+type HeroScene = 'services' | 'about';
 
-function scrollToHeroScene(scene: 'services' | 'about') {
+function scrollToHeroScene(scene: HeroScene) {
   if (typeof window === 'undefined') return;
 
   const root = document.getElementById('hero-services-stage');
@@ -38,9 +39,11 @@ export function Header() {
 
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const lastYRef = useRef(0);
   const hiddenRef = useRef(false);
+  const handledSceneRef = useRef<string | null>(null);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -93,7 +96,6 @@ export function Header() {
 
       const anchor = currentY + 72;
       const heroTop = heroStage.getBoundingClientRect().top + window.scrollY;
-      const heroBottom = heroTop + heroStage.offsetHeight;
       const whyTop = whyChooseUs.getBoundingClientRect().top + window.scrollY;
 
       if (anchor < heroTop) {
@@ -145,6 +147,43 @@ export function Header() {
     };
   }, []);
 
+  // Обработка перехода на нужную стадию scroll-scene после входа на главную
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const scene = searchParams.get('scene');
+    if (scene !== 'services' && scene !== 'about') return;
+
+    if (handledSceneRef.current === scene) return;
+    handledSceneRef.current = scene;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | null = null;
+
+    const run = () => {
+      // Двойной RAF + небольшой таймаут, чтобы сцена успела смонтироваться
+      raf1 = window.requestAnimationFrame(() => {
+        raf2 = window.requestAnimationFrame(() => {
+          timeoutId = window.setTimeout(() => {
+            scrollToHeroScene(scene);
+
+            // Убираем query-параметр из URL после выполнения
+            router.replace('/', { scroll: false });
+          }, 60);
+        });
+      });
+    };
+
+    run();
+
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [pathname, searchParams, router]);
+
   const handleThemeToggle = () => {
     const root = document.documentElement;
     const current: ThemeMode = root.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -155,9 +194,9 @@ export function Header() {
     setTheme(next);
   };
 
-  const navigateToHomeScene = (scene: 'services' | 'about') => {
+  const navigateToHomeScene = (scene: HeroScene) => {
     if (pathname !== '/') {
-      router.push(scene === 'services' ? '/#services' : '/#about');
+      router.push(`/?scene=${scene}`);
       return;
     }
 
@@ -179,7 +218,6 @@ export function Header() {
           <OuterDivider className="ml-[36px]" />
           <AnchorNav
             className="ml-[36px]"
-            pathname={pathname}
             onNavigateHomeScene={navigateToHomeScene}
           />
           <OuterDivider className="ml-[36px]" />
@@ -328,12 +366,10 @@ function OuterDivider({ className }: { className?: string }) {
 
 function AnchorNav({
   className,
-  pathname,
   onNavigateHomeScene,
 }: {
   className?: string;
-  pathname: string;
-  onNavigateHomeScene: (scene: 'services' | 'about') => void;
+  onNavigateHomeScene: (scene: HeroScene) => void;
 }) {
   return (
     <nav
