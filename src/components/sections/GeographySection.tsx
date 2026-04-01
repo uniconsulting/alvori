@@ -24,48 +24,45 @@ export function GeographySection() {
   const [isGlobeActive, setIsGlobeActive] = useState(false);
 
   useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
+  const node = sectionRef.current;
+  if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const visible = entry.isIntersecting;
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      const visible = entry.isIntersecting;
 
-        if (visible) {
-          setShouldMountGlobe(true);
-        }
-
-        setIsGlobeActive(visible);
-      },
-      {
-        threshold: 0.18,
-        rootMargin: '160px 0px 160px 0px',
-      },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isGlobeActive) return;
-
-    const interval = window.setInterval(() => {
-      setActiveRouteIndex((prev) => (prev + 1) % GEO_ROUTES.length);
-    }, 4200);
-
-    return () => window.clearInterval(interval);
-  }, [isGlobeActive]);
-
-  const activeRoute = GEO_ROUTES[activeRouteIndex];
-
-  const cityMap = useMemo(
-    () => new Map(GEO_CITIES.map((city) => [city.id, city])),
-    [],
+      setShouldMountGlobe(visible);
+      setIsGlobeActive(visible);
+    },
+    {
+      threshold: 0.12,
+      rootMargin: '220px 0px 220px 0px',
+    },
   );
 
-  const from = cityMap.get(activeRoute.from)!;
-  const to = cityMap.get(activeRoute.to)!;
+  observer.observe(node);
+  return () => observer.disconnect();
+}, []);
+
+useEffect(() => {
+  if (!isGlobeActive) return;
+
+  const interval = window.setInterval(() => {
+    setActiveRouteIndex((prev) => (prev + 1) % GEO_ROUTES.length);
+  }, 4200);
+
+  return () => window.clearInterval(interval);
+}, [isGlobeActive]);
+
+const activeRoute = GEO_ROUTES[activeRouteIndex];
+
+const cityMap = useMemo(
+  () => new Map(GEO_CITIES.map((city) => [city.id, city])),
+  [],
+);
+
+const from = cityMap.get(activeRoute.from)!;
+const to = cityMap.get(activeRoute.to)!;
 
   return (
     <div id={homeAnchorIds.geography} ref={sectionRef} className="h-full scroll-mt-[120px]">
