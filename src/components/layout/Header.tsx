@@ -11,6 +11,7 @@ import { legalLinks } from '@/content/legal';
 import { homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
+import { sitePath } from '@/lib/site-path';
 
 type ThemeMode = 'light' | 'dark';
 type HeroScene = 'services' | 'about';
@@ -211,10 +212,10 @@ export function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const mobileLogoSrc =
-    theme === 'dark'
-      ? '/brand/header/dark/logo.png'
-      : '/brand/header/light/logo.png';
+const mobileLogoSrc =
+  theme === 'dark'
+    ? `${sitePath}/brand/header/dark/logo.png`
+    : `${sitePath}/brand/header/light/logo.png`;
 
   return (
     <header
