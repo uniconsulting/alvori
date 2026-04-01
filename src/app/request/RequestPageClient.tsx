@@ -91,7 +91,7 @@ export default function RequestPageClient() {
 
   return (
     <>
-      <section className="pb-6 pt-12 md:pb-8 md:pt-14 xl:pb-8 xl:pt-16">
+      <section className="page-offset-from-header pb-6 md:pb-8 xl:pb-8">
         <Container>
           <div className="px-[10px] md:px-[14px] xl:px-[16px]">
             <Link
