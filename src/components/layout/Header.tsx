@@ -10,7 +10,6 @@ import { contacts } from '@/content/contacts';
 import { homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
-import { sitePath } from '@/lib/site-path';
 
 type ThemeMode = 'light' | 'dark';
 type HeroScene = 'services' | 'about';
@@ -149,13 +148,7 @@ export function Header() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
-    const isHomePath =
-      pathname === '/' ||
-      pathname === sitePath ||
-      pathname === `${sitePath}/`;
-
-    if (!isHomePath) return;
+    if (pathname !== '/') return;
 
     const params = new URLSearchParams(window.location.search);
     const scene = params.get('scene');
@@ -173,8 +166,8 @@ export function Header() {
       raf2 = window.requestAnimationFrame(() => {
         timeoutId = window.setTimeout(() => {
           scrollToHeroScene(scene);
-          router.replace(sitePath || '/', { scroll: false });
-        }, 60);
+          router.replace('/', { scroll: false });
+        }, 80);
       });
     });
 
@@ -196,13 +189,8 @@ export function Header() {
   };
 
   const navigateToHomeScene = (scene: HeroScene) => {
-    const isHomePath =
-      pathname === '/' ||
-      pathname === sitePath ||
-      pathname === `${sitePath}/`;
-
-    if (!isHomePath) {
-      router.push(`${sitePath || ''}/?scene=${scene}`);
+    if (pathname !== '/') {
+      router.push(`/?scene=${scene}`);
       return;
     }
 
@@ -237,7 +225,7 @@ export function Header() {
 
         <div className="py-4 xl:hidden">
           <div className="flex items-center justify-between">
-            <Link href={sitePath || '/'} className="block h-[48px] w-[184px]">
+            <Link href="/" className="block h-[48px] w-[184px]">
               <ThemeLogo
                 placement="header"
                 className="h-full w-full object-contain object-left"
@@ -350,7 +338,7 @@ export function Header() {
 
 function LogoBlock() {
   return (
-    <Link href={sitePath || '/'} className="block h-[60px] w-[230px] shrink-0">
+    <Link href="/" className="block h-[60px] w-[230px] shrink-0">
       <ThemeLogo
         placement="header"
         className="h-full w-full object-contain object-left"
