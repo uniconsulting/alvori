@@ -313,13 +313,13 @@ export function HeroLeftScene() {
 
   return (
     <div className="relative w-full xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
-<div
-  className={cn(
-    'hero-trailer-shell relative w-[144%] max-w-none',
-    'h-[286px] sm:h-[340px] md:h-[438px] xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
-    trailerReady && 'hero-trailer-shell--ready',
-  )}
->
+      <div
+        className={cn(
+          'hero-trailer-shell relative w-[144%] max-w-none',
+          'h-[286px] sm:h-[340px] md:h-[438px] xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
+          trailerReady && 'hero-trailer-shell--ready',
+        )}
+      >
         <div className="relative h-full w-full">
           <img
             src={assets.trailerLight}
@@ -355,19 +355,21 @@ export function HeroLeftScene() {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-5 xl:hidden">
-        <div
-          key={activeSlide}
-          className={cn(
-            'flex flex-col gap-6',
-            !metricsReady && 'hero-metrics-hidden',
-            metricsReady && 'hero-metrics-enter',
-            metricsReady && 'hero-slide-animate',
-          )}
-        >
-          {MetricsContent}
+        <div className="pointer-events-none absolute inset-0 xl:hidden">
+          <div className="absolute left-[28px] top-[56px] w-[236px]">
+            <div
+              key={activeSlide}
+              className={cn(
+                'pointer-events-auto flex flex-col gap-4',
+                !metricsReady && 'hero-metrics-hidden',
+                metricsReady && 'hero-metrics-enter',
+                metricsReady && 'hero-slide-animate',
+              )}
+            >
+              {MetricsContent}
+            </div>
+          </div>
         </div>
       </div>
     </div>
