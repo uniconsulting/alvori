@@ -52,57 +52,121 @@ export function HeroRightScene() {
   );
 
   return (
-    <div className="mt-6 grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)] grid-rows-[168px_168px] gap-3 sm:grid-rows-[188px_188px] sm:gap-4 md:max-w-[540px] md:grid-cols-[258px_258px] md:grid-rows-none md:gap-6 xl:mt-0 xl:-translate-y-[3px]">
-      <BentoCard
-        title={
-          <>
-            единая форма
-            <br />
-            запроса и отправки кп
-          </>
-        }
-        href={appRoutes.request}
-        imageSrc={assets.request}
-        theme={theme}
-        variant="accent"
-        heightClassName="h-[168px] sm:h-[188px] md:h-[236px]"
-        visible={card1Ready}
-      />
+    <>
+      <div className="xl:hidden">
+        <div className="-mx-[2px] flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="min-w-[calc(100%-8px)] snap-start">
+            <BentoCard
+              title={
+                <>
+                  единая форма
+                  <br />
+                  запроса и отправки кп
+                </>
+              }
+              href={appRoutes.request}
+              imageSrc={assets.request}
+              theme={theme}
+              variant="accent"
+              heightClassName="aspect-square w-full"
+              visible={card1Ready}
+              mobileSquare
+            />
+          </div>
 
-      <BentoCard
-        title={
-          <>
-            ознакомиться
-            <br />
-            с нашими принципами
-          </>
-        }
-        href={homeAnchorHrefs.about}
-        imageSrc={assets.principles}
-        theme={theme}
-        variant="dark"
-        heightClassName="h-[348px] sm:h-[392px] md:h-[496px]"
-        tall
-        specialButton
-        visible={card3Ready}
-      />
+          <div className="min-w-[calc(100%-8px)] snap-start">
+            <BentoCard
+              title={
+                <>
+                  ознакомиться
+                  <br />
+                  с нашими принципами
+                </>
+              }
+              href={homeAnchorHrefs.about}
+              imageSrc={assets.principles}
+              theme={theme}
+              variant="dark"
+              heightClassName="aspect-square w-full"
+              visible={card3Ready}
+              specialButton
+              mobileSquare
+            />
+          </div>
 
-      <BentoCard
-        title={
-          <>
-            сделать расчёт
-            <br />
-            вашей грузоперевозки
-          </>
-        }
-        href={appRoutes.calculator}
-        imageSrc={assets.calc}
-        theme={theme}
-        variant="light"
-        heightClassName="h-[168px] sm:h-[188px] md:h-[236px]"
-        visible={card2Ready}
-      />
-    </div>
+          <div className="min-w-[calc(100%-8px)] snap-start">
+            <BentoCard
+              title={
+                <>
+                  сделать расчёт
+                  <br />
+                  вашей грузоперевозки
+                </>
+              }
+              href={appRoutes.calculator}
+              imageSrc={assets.calc}
+              theme={theme}
+              variant="light"
+              heightClassName="aspect-square w-full"
+              visible={card2Ready}
+              mobileSquare
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden w-full max-w-[540px] md:max-w-none xl:grid xl:w-full xl:grid-cols-[258px_258px] xl:gap-6 xl:-translate-y-[3px]">
+        <BentoCard
+          title={
+            <>
+              единая форма
+              <br />
+              запроса и отправки кп
+            </>
+          }
+          href={appRoutes.request}
+          imageSrc={assets.request}
+          theme={theme}
+          variant="accent"
+          heightClassName="h-[236px]"
+          visible={card1Ready}
+        />
+
+        <BentoCard
+          title={
+            <>
+              ознакомиться
+              <br />
+              с нашими принципами
+            </>
+          }
+          href={homeAnchorHrefs.about}
+          imageSrc={assets.principles}
+          theme={theme}
+          variant="dark"
+          heightClassName="h-[496px]"
+          tall
+          specialButton
+          visible={card3Ready}
+        />
+
+        <BentoCard
+          title={
+            <>
+              сделать расчёт
+              <br />
+              вашей грузоперевозки
+            </>
+          }
+          href={appRoutes.calculator}
+          imageSrc={assets.calc}
+          theme={theme}
+          variant="light"
+          heightClassName="h-[236px]"
+          visible={card2Ready}
+        />
+      </div>
+    </>
   );
 }
 
@@ -116,6 +180,7 @@ function BentoCard({
   tall = false,
   specialButton = false,
   visible,
+  mobileSquare = false,
 }: {
   title: React.ReactNode;
   href: string;
@@ -126,6 +191,7 @@ function BentoCard({
   tall?: boolean;
   specialButton?: boolean;
   visible: boolean;
+  mobileSquare?: boolean;
 }) {
   const currentRef = useRef({
     rotateX: 0,
@@ -210,7 +276,7 @@ function BentoCard({
       : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.06)_24%,rgba(255,255,255,0.12)_48%,rgba(255,255,255,0.05)_74%,rgba(255,255,255,0.18)_100%)] opacity-50';
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (window.innerWidth < 1024) return;
+    if (window.innerWidth < 1280) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) / rect.width;
@@ -249,7 +315,7 @@ function BentoCard({
         visible &&
           'opacity-100 translate-y-0 scale-100 transition-all duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
         heightClassName,
-        tall && 'row-span-2',
+        tall && 'xl:row-span-2',
       )}
     >
       <div
@@ -259,21 +325,29 @@ function BentoCard({
       >
         <Link
           href={href}
-          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[24px] p-[2px] sm:rounded-[28px] md:rounded-[32px]"
+          className={cn(
+            'hero-card-tilt group relative block h-full overflow-hidden p-[2px]',
+            mobileSquare ? 'rounded-[26px]' : 'rounded-[32px]',
+          )}
           style={{
-            transform: `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
+            transform:
+              window.innerWidth >= 1280
+                ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
+                : 'none',
           }}
         >
           <div
             className={cn(
-              'pointer-events-none absolute inset-0 rounded-[24px] sm:rounded-[28px] md:rounded-[32px]',
+              'pointer-events-none absolute inset-0',
+              mobileSquare ? 'rounded-[26px]' : 'rounded-[32px]',
               borderClass,
             )}
           />
 
           <div
             className={cn(
-              'relative h-full overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]',
+              'relative h-full overflow-hidden',
+              mobileSquare ? 'rounded-[24px]' : 'rounded-[30px]',
               variant === 'accent'
                 ? 'bg-[var(--accent-1)]'
                 : variant === 'light'
@@ -286,7 +360,10 @@ function BentoCard({
               alt=""
               className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{
-                transform: `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`,
+                transform:
+                  window.innerWidth >= 1280
+                    ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
+                    : 'scale(1.025)',
               }}
             />
 
@@ -301,36 +378,48 @@ function BentoCard({
 
             <div
               className={cn(
-                'pointer-events-none absolute bottom-0 left-0 right-0 h-[104px] sm:h-[118px] md:h-[132px]',
+                'pointer-events-none absolute bottom-0 left-0 right-0',
+                mobileSquare ? 'h-[124px]' : 'h-[132px]',
                 bottomMaskClass,
               )}
             />
 
             <div
-              className="relative flex h-full flex-col justify-end p-3.5 sm:p-4 md:p-5"
+              className={cn(
+                'relative flex h-full flex-col justify-between',
+                mobileSquare ? 'p-4' : 'p-5',
+              )}
               style={{
-                transform: `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`,
+                transform:
+                  window.innerWidth >= 1280
+                    ? `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`
+                    : 'none',
               }}
             >
-              <div className="relative flex items-end justify-between gap-2">
+              <div className="flex justify-end">
                 <div
                   className={cn(
-                    'max-w-[124px] text-[11px] font-semibold leading-[1.12] tracking-[-0.01em] sm:max-w-[136px] sm:text-[11px] md:max-w-[152px] md:text-[12px]',
-                    textClass,
-                  )}
-                >
-                  {title}
-                </div>
-
-                <div
-                  className={cn(
-                    'inline-flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[12px] transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px] sm:h-[36px] sm:w-[36px] sm:rounded-[13px] md:h-[38px] md:w-[38px] md:rounded-[14px]',
+                    'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
+                    mobileSquare
+                      ? 'h-[38px] w-[38px] rounded-[14px]'
+                      : 'h-[38px] w-[38px] rounded-[14px]',
                     buttonClass,
                   )}
                   style={{ transform: 'translateZ(12px)' }}
                 >
-                  <ArrowRight size={17} strokeWidth={2.1} className="md:hidden" />
-                  <ArrowRight size={19} strokeWidth={2.1} className="hidden md:block" />
+                  <ArrowRight size={19} strokeWidth={2.1} />
+                </div>
+              </div>
+
+              <div className="relative">
+                <div
+                  className={cn(
+                    'max-w-[176px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                    mobileSquare ? 'text-[14px]' : 'max-w-[152px] text-[12px]',
+                    textClass,
+                  )}
+                >
+                  {title}
                 </div>
               </div>
             </div>
