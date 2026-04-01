@@ -291,23 +291,25 @@ export function HeroLeftScene() {
         )}
       </div>
 
-      <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
-        <HeroActionButton
-          label={slide.ctaLabel}
-          href={slide.href}
-          external={slide.external}
-        />
+<div className="flex items-center gap-2.5 xl:flex-row xl:items-center xl:gap-3">
+  <HeroActionButton
+    label={slide.ctaLabel}
+    href={slide.href}
+    external={slide.external}
+  />
 
-        <div className="flex items-center gap-3">
-          <ArrowSquareButton ariaLabel="предыдущая характеристика" onClick={goPrev}>
-            <ArrowLeft size={22} strokeWidth={2.1} />
-          </ArrowSquareButton>
+  <div className="flex items-center gap-2.5">
+    <ArrowSquareButton ariaLabel="предыдущая характеристика" onClick={goPrev}>
+      <ArrowLeft size={18} strokeWidth={2.1} className="xl:hidden" />
+      <ArrowLeft size={22} strokeWidth={2.1} className="hidden xl:block" />
+    </ArrowSquareButton>
 
-          <ArrowSquareButton ariaLabel="следующая характеристика" onClick={goNext}>
-            <ArrowRight size={22} strokeWidth={2.1} />
-          </ArrowSquareButton>
-        </div>
-      </div>
+    <ArrowSquareButton ariaLabel="следующая характеристика" onClick={goNext}>
+      <ArrowRight size={18} strokeWidth={2.1} className="xl:hidden" />
+      <ArrowRight size={22} strokeWidth={2.1} className="hidden xl:block" />
+    </ArrowSquareButton>
+  </div>
+</div>
     </>
   );
 
@@ -340,21 +342,21 @@ export function HeroLeftScene() {
           />
         </div>
 
-        <div className="pointer-events-none absolute inset-0 hidden xl:block">
-          <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%] min-[1920px]:left-[45%]">
-            <div
-              key={activeSlide}
-              className={cn(
-                'pointer-events-auto flex flex-col gap-11',
-                !metricsReady && 'hero-metrics-hidden',
-                metricsReady && 'hero-metrics-enter',
-                metricsReady && 'hero-slide-animate',
-              )}
-            >
-              {MetricsContent}
-            </div>
-          </div>
-        </div>
+<div className="pointer-events-none absolute inset-0 xl:hidden">
+  <div className="absolute left-[74px] top-[34px] w-[224px]">
+    <div
+      key={activeSlide}
+      className={cn(
+        'pointer-events-auto flex flex-col gap-3.5',
+        !metricsReady && 'hero-metrics-hidden',
+        metricsReady && 'hero-metrics-enter',
+        metricsReady && 'hero-slide-animate',
+      )}
+    >
+      {MetricsContent}
+    </div>
+  </div>
+</div>
 
         <div className="pointer-events-none absolute inset-0 xl:hidden">
           <div className="absolute left-[28px] top-[56px] w-[236px]">
@@ -386,8 +388,8 @@ function HeroActionButton({
   external?: boolean;
 }) {
   const className =
-    'hero-cta-lift inline-flex h-[52px] w-full items-center justify-center rounded-[18px] bg-[var(--accent-1)] px-6 text-[15px] font-medium lowercase text-[var(--accent-1-text)] sm:text-[16px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
-
+  'hero-cta-lift inline-flex h-[42px] w-[166px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[13px] font-medium lowercase text-[var(--accent-1-text)] sm:h-[44px] sm:w-[176px] sm:text-[14px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
+  
   if (label.trim().toLowerCase() === 'познакомиться') {
     return (
       <button
@@ -429,7 +431,7 @@ function ArrowSquareButton({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="hero-cta-lift inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] sm:h-[48px] sm:w-[48px] sm:rounded-[18px]"
+      className="hero-cta-lift inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[14px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] sm:h-[44px] sm:w-[44px] sm:rounded-[15px] xl:h-[48px] xl:w-[48px] xl:rounded-[18px]"
     >
       {children}
     </button>
