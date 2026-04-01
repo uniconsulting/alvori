@@ -62,6 +62,22 @@ img {
   max-width: 100%;
 }
 
+.page-offset-from-header {
+  padding-top: 112px;
+}
+
+@media (min-width: 768px) {
+  .page-offset-from-header {
+    padding-top: 124px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-offset-from-header {
+    padding-top: 136px;
+  }
+}
+
 .font-heading {
   font-family: var(--font-body-text-fit), Arial, system-ui, sans-serif;
 }
