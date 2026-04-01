@@ -166,7 +166,7 @@ export function HeroServicesStage() {
 
                 <Container className="pointer-events-none relative h-full">
                   <div
-                    className="pointer-events-auto absolute bottom-0 left-0 right-0 w-full xl:hidden"
+                    className="pointer-events-auto absolute bottom-[18px] left-0 right-0 w-full xl:hidden"
                     style={{
                       transform: `translateX(${transforms.heroRightX})`,
                       filter: `blur(${transforms.heroRightBlur})`,
@@ -177,17 +177,18 @@ export function HeroServicesStage() {
                     <HeroRightScene />
                   </div>
 
-<div
-  className="pointer-events-auto absolute bottom-[18px] left-0 right-0 w-full xl:hidden"
-  style={{
-    transform: `translateX(${transforms.heroRightX})`,
-    filter: `blur(${transforms.heroRightBlur})`,
-    opacity: transforms.heroRightOpacity,
-    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-  }}
->
-  <HeroRightScene />
-</div>
+                  <div
+                    className="pointer-events-auto absolute top-[10px] hidden w-[540px] xl:block"
+                    style={{
+                      right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+                      transform: `translateX(${transforms.heroRightX})`,
+                      filter: `blur(${transforms.heroRightBlur})`,
+                      opacity: transforms.heroRightOpacity,
+                      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                    }}
+                  >
+                    <HeroRightScene />
+                  </div>
                 </Container>
               </div>
             </div>
