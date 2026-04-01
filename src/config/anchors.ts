@@ -1,3 +1,7 @@
+import { sitePath } from '@/lib/site-path';
+
+const root = sitePath || '';
+
 export const homeAnchorIds = {
   services: 'services',
   about: 'about',
@@ -7,10 +11,10 @@ export const homeAnchorIds = {
 } as const;
 
 export const homeAnchorHrefs = {
-  services: '/?scene=services',
-  about: '/?scene=about',
-  geography: `/#${homeAnchorIds.geography}`,
-  fleet: `/#${homeAnchorIds.fleet}`,
+  services: `${root}/?scene=services`,
+  about: `${root}/?scene=about`,
+  geography: `${root}/#${homeAnchorIds.geography}`,
+  fleet: `${root}/#${homeAnchorIds.fleet}`,
   contacts: `#${homeAnchorIds.contacts}`,
 } as const;
 
@@ -19,5 +23,5 @@ export const homeNavigation = [
   { label: 'о компании', href: homeAnchorHrefs.about },
   { label: 'география', href: homeAnchorHrefs.geography },
   { label: 'автопарк', href: homeAnchorHrefs.fleet },
-  { label: 'контакты', href: '/contacts' },
+  { label: 'контакты', href: `${root}/contacts` },
 ] as const;
