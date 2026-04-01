@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Calculator, FileText, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
@@ -39,7 +39,6 @@ export function Header() {
 
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const lastYRef = useRef(0);
   const hiddenRef = useRef(false);
@@ -148,41 +147,40 @@ export function Header() {
   }, []);
 
   // Обработка перехода на нужную стадию scroll-scene после входа на главную
-  useEffect(() => {
-    if (pathname !== '/') return;
+useEffect(() => {
+  if (pathname !== '/') return;
+  if (typeof window === 'undefined') return;
 
-    const scene = searchParams.get('scene');
-    if (scene !== 'services' && scene !== 'about') return;
+  const params = new URLSearchParams(window.location.search);
+  const scene = params.get('scene');
 
-    if (handledSceneRef.current === scene) return;
-    handledSceneRef.current = scene;
+  if (scene !== 'services' && scene !== 'about') return;
+  if (handledSceneRef.current === scene) return;
 
-    let raf1 = 0;
-    let raf2 = 0;
-    let timeoutId: number | null = null;
+  handledSceneRef.current = scene;
 
-    const run = () => {
-      // Двойной RAF + небольшой таймаут, чтобы сцена успела смонтироваться
-      raf1 = window.requestAnimationFrame(() => {
-        raf2 = window.requestAnimationFrame(() => {
-          timeoutId = window.setTimeout(() => {
-            scrollToHeroScene(scene);
+  let raf1 = 0;
+  let raf2 = 0;
+  let timeoutId: number | null = null;
 
-            // Убираем query-параметр из URL после выполнения
-            router.replace('/', { scroll: false });
-          }, 60);
-        });
-      });
-    };
+  raf1 = window.requestAnimationFrame(() => {
+    raf2 = window.requestAnimationFrame(() => {
+      timeoutId = window.setTimeout(() => {
+        scrollToHeroScene(scene);
 
-    run();
+        const url = new URL(window.location.href);
+        url.searchParams.delete('scene');
+        router.replace(url.pathname + url.hash, { scroll: false });
+      }, 60);
+    });
+  });
 
-    return () => {
-      if (raf1) window.cancelAnimationFrame(raf1);
-      if (raf2) window.cancelAnimationFrame(raf2);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, [pathname, searchParams, router]);
+  return () => {
+    if (raf1) window.cancelAnimationFrame(raf1);
+    if (raf2) window.cancelAnimationFrame(raf2);
+    if (timeoutId) window.clearTimeout(timeoutId);
+  };
+}, [pathname, router]);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
