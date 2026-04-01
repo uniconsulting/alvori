@@ -19,5 +19,5 @@ export const homeNavigation = [
   { label: 'о компании', href: homeAnchorHrefs.about },
   { label: 'география', href: homeAnchorHrefs.geography },
   { label: 'автопарк', href: homeAnchorHrefs.fleet },
-  { label: 'контакты', href: homeAnchorHrefs.contacts },
+  { label: 'контакты', href: '/contacts' },
 ] as const;
