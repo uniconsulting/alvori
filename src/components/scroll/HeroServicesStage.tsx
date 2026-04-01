@@ -149,6 +149,12 @@ export function HeroServicesStage() {
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
+          <div className="absolute inset-x-0 top-0 z-50 px-[14px] md:hidden">
+            <div className="pt-2">
+              <SceneIndicator progress={progress} />
+            </div>
+          </div>
+
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-x-0 top-[56px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
               <div className="pointer-events-none absolute inset-0 z-10">
@@ -248,9 +254,9 @@ export function HeroServicesStage() {
             <About revealProgress={transforms.aboutReveal} />
           </div>
 
-<div className="absolute inset-x-0 bottom-[194px] z-50 md:bottom-[32px] xl:bottom-[36px]">
-  <SceneIndicator progress={progress} />
-</div>
+          <div className="absolute inset-x-0 bottom-[28px] z-50 hidden md:block md:bottom-[32px] xl:bottom-[36px]">
+            <SceneIndicator progress={progress} />
+          </div>
         </div>
       </div>
     </section>
