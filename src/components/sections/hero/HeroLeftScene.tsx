@@ -300,12 +300,12 @@ export function HeroLeftScene() {
 
         <div className="flex items-center gap-2.5">
           <ArrowSquareButton ariaLabel="предыдущая характеристика" onClick={goPrev}>
-            <ArrowLeft size={18} strokeWidth={2.1} className="xl:hidden" />
+            <ArrowLeft size={16} strokeWidth={2.1} className="xl:hidden" />
             <ArrowLeft size={22} strokeWidth={2.1} className="hidden xl:block" />
           </ArrowSquareButton>
 
           <ArrowSquareButton ariaLabel="следующая характеристика" onClick={goNext}>
-            <ArrowRight size={18} strokeWidth={2.1} className="xl:hidden" />
+            <ArrowRight size={16} strokeWidth={2.1} className="xl:hidden" />
             <ArrowRight size={22} strokeWidth={2.1} className="hidden xl:block" />
           </ArrowSquareButton>
         </div>
@@ -387,8 +387,8 @@ function HeroActionButton({
   href: string;
   external?: boolean;
 }) {
-  const className =
-     'hero-cta-lift inline-flex h-[42px] w-[180px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[13px] font-medium lowercase whitespace-nowrap text-[var(--accent-1-text)] sm:h-[44px] sm:w-[190px] sm:text-[14px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
+ const className =
+  'hero-cta-lift inline-flex h-[40px] w-[170px] items-center justify-center rounded-[13px] bg-[var(--accent-1)] px-3.5 text-[12px] font-medium lowercase whitespace-nowrap text-[var(--accent-1-text)] sm:h-[42px] sm:w-[182px] sm:text-[13px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
 
   if (label.trim().toLowerCase() === 'познакомиться') {
     return (
@@ -431,7 +431,7 @@ function ArrowSquareButton({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="hero-cta-lift inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[14px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] sm:h-[44px] sm:w-[44px] sm:rounded-[15px] xl:h-[48px] xl:w-[48px] xl:rounded-[18px]"
+      className="hero-cta-lift inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[13px] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_12px_rgba(38,41,46,0.05)] sm:h-[42px] sm:w-[42px] sm:rounded-[14px] xl:h-[48px] xl:w-[48px] xl:rounded-[18px]"
     >
       {children}
     </button>
