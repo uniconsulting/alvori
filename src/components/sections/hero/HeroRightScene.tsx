@@ -54,15 +54,7 @@ export function HeroRightScene() {
   return (
     <>
       <div className="xl:hidden">
-        <div
-          className="px-4 sm:px-5"
-          style={{
-            WebkitMaskImage:
-              'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-            maskImage:
-              'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-          }}
-        >
+        <div className="relative px-4 sm:px-5">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-2 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
               <BentoCard
@@ -96,7 +88,7 @@ export function HeroRightScene() {
                 imageSrc={assets.principles}
                 theme={theme}
                 variant="dark"
-                heightClassName="h-[236px] w-full sm:h-[252px]"
+                heightClassName="h-[252px] w-full sm:h-[268px]"
                 visible={card3Ready}
                 specialButton
                 mobileSquare
@@ -122,6 +114,26 @@ export function HeroRightScene() {
               />
             </div>
           </div>
+
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-10"
+            style={{
+              background:
+                'linear-gradient(90deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
+            }}
+          />
+
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-10"
+            style={{
+              background:
+                'linear-gradient(270deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
+            }}
+          />
         </div>
       </div>
 
