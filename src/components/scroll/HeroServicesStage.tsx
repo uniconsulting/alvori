@@ -166,7 +166,7 @@ export function HeroServicesStage() {
 
                 <Container className="pointer-events-none relative h-full">
                   <div
-                    className="pointer-events-auto absolute bottom-[18px] left-0 right-0 w-full xl:hidden"
+                    className="pointer-events-auto absolute bottom-[44px] left-0 right-0 w-full xl:hidden"
                     style={{
                       transform: `translateX(${transforms.heroRightX})`,
                       filter: `blur(${transforms.heroRightBlur})`,
