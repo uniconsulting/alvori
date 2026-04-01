@@ -54,8 +54,8 @@ export function HeroRightScene() {
   return (
     <>
       <div className="xl:hidden">
-        <div className="-mx-[2px] flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="min-w-[calc(100%-8px)] snap-start">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-[2px] pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
             <BentoCard
               title={
                 <>
@@ -74,7 +74,7 @@ export function HeroRightScene() {
             />
           </div>
 
-          <div className="min-w-[calc(100%-8px)] snap-start">
+          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
             <BentoCard
               title={
                 <>
@@ -94,7 +94,7 @@ export function HeroRightScene() {
             />
           </div>
 
-          <div className="min-w-[calc(100%-8px)] snap-start">
+          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
             <BentoCard
               title={
                 <>
