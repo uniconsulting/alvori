@@ -95,75 +95,73 @@ export function GeographyGlobe({
     arcsRef.current = activeArc;
   }, [activeArc]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+useEffect(() => {
+  const canvas = canvasRef.current;
+  if (!canvas || !isActive) return;
 
-    let frame = 0;
+  let frame = 0;
 
-    const globe = createGlobe(canvas, {
-      devicePixelRatio: 2,
-      width: 820 * 2,
-      height: 820 * 2,
+  const globe = createGlobe(canvas, {
+    devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
+    width: 720 * 2,
+    height: 720 * 2,
+    phi: phiRef.current,
+    theta: thetaRef.current,
+
+    dark: 0,
+    diffuse: 1.22,
+    mapSamples: 14000,
+    mapBrightness: 4.2,
+    mapBaseBrightness: 0.0,
+    baseColor: rgb('#eef1f5'),
+    glowColor: rgb('#ffffff'),
+
+    markerColor: rgb('#ffffff'),
+    arcColor: rgb('#fab021'),
+    arcWidth: 1.1,
+    arcHeight: 0.13,
+    markerElevation: 0.04,
+    scale: scaleRef.current,
+    offset: [0, -12],
+    markers: markersRef.current,
+    arcs: arcsRef.current,
+  });
+
+  globeRef.current = globe;
+
+  const animate = () => {
+    if (!dragStartRef.current) {
+      phiRef.current += 0.00042;
+    }
+
+    globe.update({
       phi: phiRef.current,
       theta: thetaRef.current,
+      scale: scaleRef.current,
 
-      // Всегда держим светлую тему глобуса
       dark: 0,
-      diffuse: 1.34,
-      mapSamples: 24000,
-      mapBrightness: 4.8,
+      diffuse: 1.22,
+      mapBrightness: 4.2,
       mapBaseBrightness: 0.0,
       baseColor: rgb('#eef1f5'),
       glowColor: rgb('#ffffff'),
 
       markerColor: rgb('#ffffff'),
-      arcColor: rgb('#fab021'),
-      arcWidth: 1.2,
-      arcHeight: 0.14,
-      markerElevation: 0.04,
-      scale: scaleRef.current,
-      offset: [0, -12],
       markers: markersRef.current,
       arcs: arcsRef.current,
     });
 
-    globeRef.current = globe;
-
-    const animate = () => {
-      if (isActive && !dragStartRef.current) {
-        phiRef.current += 0.00055;
-      }
-
-      globe.update({
-        phi: phiRef.current,
-        theta: thetaRef.current,
-        scale: scaleRef.current,
-
-        // Всегда светлая палитра
-        dark: 0,
-        diffuse: 1.34,
-        mapBrightness: 4.8,
-        mapBaseBrightness: 0.0,
-        baseColor: rgb('#eef1f5'),
-        glowColor: rgb('#ffffff'),
-
-        markerColor: rgb('#ffffff'),
-        markers: markersRef.current,
-        arcs: arcsRef.current,
-      });
-
-      frame = requestAnimationFrame(animate);
-    };
-
     frame = requestAnimationFrame(animate);
+  };
 
-    return () => {
-      cancelAnimationFrame(frame);
-      globe.destroy();
-      globeRef.current = null;
-    };
-  }, [isActive]);
+  frame = requestAnimationFrame(animate);
+
+  return () => {
+    cancelAnimationFrame(frame);
+    globe.destroy();
+    globeRef.current = null;
+  };
+}, [isActive]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
