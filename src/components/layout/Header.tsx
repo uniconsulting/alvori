@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Calculator, FileText, Menu, Moon, Sun, X } from 'lucide-react';
+import { Calculator, FileText, Menu, Moon, Phone, Sun, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ThemeLogo } from '@/components/ui/ThemeLogo';
@@ -159,16 +159,34 @@ export function Header() {
 
     const html = document.documentElement;
     const body = document.body;
+    const scrollY = window.scrollY || window.pageYOffset || 0;
 
-    const previousHtmlOverflow = html.style.overflow;
-    const previousBodyOverflow = body.style.overflow;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyPosition = body.style.position;
+    const prevBodyTop = body.style.top;
+    const prevBodyLeft = body.style.left;
+    const prevBodyRight = body.style.right;
+    const prevBodyWidth = body.style.width;
 
     html.style.overflow = 'hidden';
     body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
 
     return () => {
-      html.style.overflow = previousHtmlOverflow;
-      body.style.overflow = previousBodyOverflow;
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      body.style.position = prevBodyPosition;
+      body.style.top = prevBodyTop;
+      body.style.left = prevBodyLeft;
+      body.style.right = prevBodyRight;
+      body.style.width = prevBodyWidth;
+
+      window.scrollTo(0, scrollY);
     };
   }, [menuOpen]);
 
@@ -195,8 +213,8 @@ export function Header() {
 
   const mobileLogoSrc =
     theme === 'dark'
-      ? '/brand/header/logo-mobile-dark.png'
-      : '/brand/header/logo-mobile-light.png';
+      ? '/brand/header/dark/logo.png'
+      : '/brand/header/light/logo.png';
 
   return (
     <header
@@ -282,101 +300,104 @@ export function Header() {
       </Container>
 
       {menuOpen ? (
-        <div className="absolute inset-x-0 top-full z-[60] xl:hidden">
-          <div className="bg-[color:color-mix(in_oklab,var(--bg)_94%,transparent)]">
-            <Container>
-              <div className="px-[10px] pb-4">
-                <div className="max-h-[calc(100dvh-92px)] overflow-y-auto overscroll-contain rounded-[28px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
-                  <a
-                    href={contacts.phoneHref}
-                    className="header-phone-hover block text-[20px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
-                  >
-                    {contacts.phoneDisplay}
-                  </a>
+        <div className="absolute inset-x-0 top-full z-[60] h-[calc(100dvh-92px)] xl:hidden">
+          <div className="absolute inset-0 bg-[color:color-mix(in_oklab,var(--bg)_96%,transparent)]" />
 
-                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+          <Container className="relative h-full">
+            <div className="h-full px-[10px] pb-4">
+              <div className="h-full overflow-y-auto overscroll-contain rounded-[28px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
+                <a
+                  href={contacts.phoneHref}
+                  className="header-phone-hover flex items-center gap-3 text-[20px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
+                >
+                  <span className="inline-flex h-[24px] w-[24px] items-center justify-center text-[var(--accent-1)]">
+                    <Phone size={18} strokeWidth={2} />
+                  </span>
+                  <span>{contacts.phoneDisplay}</span>
+                </a>
 
-                  <nav className="mt-5 flex flex-col gap-4">
-                    {homeNavigation.map((item) => {
-                      const isServices = item.href.includes('scene=services');
-                      const isAbout = item.href.includes('scene=about');
+                <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
 
-                      if (isServices || isAbout) {
-                        return (
-                          <button
-                            key={item.href}
-                            type="button"
-                            onClick={() => {
-                              closeMenu();
-                              navigateToHomeScene(isServices ? 'services' : 'about');
-                            }}
-                            className="header-link-hover text-left text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
-                          >
-                            {item.label}
-                          </button>
-                        );
-                      }
+                <nav className="mt-5 flex flex-col gap-4">
+                  {homeNavigation.map((item) => {
+                    const isServices = item.href.includes('scene=services');
+                    const isAbout = item.href.includes('scene=about');
 
+                    if (isServices || isAbout) {
                       return (
-                        <Link
+                        <button
                           key={item.href}
-                          href={item.href}
-                          onClick={closeMenu}
-                          className="header-link-hover text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
+                          type="button"
+                          onClick={() => {
+                            closeMenu();
+                            navigateToHomeScene(isServices ? 'services' : 'about');
+                          }}
+                          className="header-link-hover text-left text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
                         >
                           {item.label}
-                        </Link>
+                        </button>
                       );
-                    })}
-                  </nav>
+                    }
 
-                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="header-link-hover text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
 
-                  <div className="mt-5 grid gap-3">
-                    <Link
-                      href={ctaRoutes.headerCalculator}
-                      onClick={closeMenu}
-                      className="inline-flex h-[52px] w-full items-center justify-center rounded-[18px] bg-[var(--accent-1)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
-                    >
-                      рассчитать стоимость
-                    </Link>
+                <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
 
-                    <Link
-                      href={ctaRoutes.headerRequest}
-                      onClick={closeMenu}
-                      className="inline-flex h-[48px] w-full items-center justify-center rounded-[16px] bg-[var(--surface-soft)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)]"
-                    >
-                      запросить или отправить кп
-                    </Link>
-                  </div>
+                <div className="mt-5 grid gap-3">
+                  <Link
+                    href={ctaRoutes.headerCalculator}
+                    onClick={closeMenu}
+                    className="inline-flex h-[52px] w-full items-center justify-center rounded-[18px] bg-[var(--accent-1)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
+                  >
+                    рассчитать стоимость
+                  </Link>
 
-                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+                  <Link
+                    href={ctaRoutes.headerRequest}
+                    onClick={closeMenu}
+                    className="inline-flex h-[48px] w-full items-center justify-center rounded-[16px] bg-[var(--surface-soft)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)]"
+                  >
+                    запросить или отправить кп
+                  </Link>
+                </div>
 
-                  <div className="mt-5 pb-2">
-                    <p
-                      className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]/48"
-                      style={{ fontFamily: 'var(--font-body-text)' }}
-                    >
-                      документы
-                    </p>
+                <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
 
-                    <div className="mt-4 grid gap-3">
-                      {legalLinks.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={closeMenu}
-                          className="header-link-hover text-[15px] font-medium lowercase leading-[1.2] tracking-[-0.014em] text-[var(--text)]"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
+                <div className="mt-5 pb-2">
+                  <p
+                    className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]/48"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    документы
+                  </p>
+
+                  <div className="mt-4 grid gap-3">
+                    {legalLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="header-link-hover text-[15px] font-medium lowercase leading-[1.2] tracking-[-0.014em] text-[var(--text)]"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
-            </Container>
-          </div>
+            </div>
+          </Container>
         </div>
       ) : null}
     </header>
