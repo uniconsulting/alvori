@@ -53,7 +53,10 @@ export function Header() {
       setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
     });
 
-    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -159,16 +162,13 @@ export function Header() {
 
     const previousHtmlOverflow = html.style.overflow;
     const previousBodyOverflow = body.style.overflow;
-    const previousBodyTouchAction = body.style.touchAction;
 
     html.style.overflow = 'hidden';
     body.style.overflow = 'hidden';
-    body.style.touchAction = 'none';
 
     return () => {
       html.style.overflow = previousHtmlOverflow;
       body.style.overflow = previousBodyOverflow;
-      body.style.touchAction = previousBodyTouchAction;
     };
   }, [menuOpen]);
 
@@ -193,6 +193,11 @@ export function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const mobileLogoSrc =
+    theme === 'dark'
+      ? '/brand/header/logo-mobile-dark.png'
+      : '/brand/header/logo-mobile-light.png';
+
   return (
     <header
       className="site-header fixed inset-x-0 top-0 z-50"
@@ -206,7 +211,10 @@ export function Header() {
         <div className="hidden items-center py-4 xl:flex">
           <LogoBlock />
           <OuterDivider className="ml-[36px]" />
-          <AnchorNav className="ml-[36px]" onNavigateHomeScene={navigateToHomeScene} />
+          <AnchorNav
+            className="ml-[36px]"
+            onNavigateHomeScene={navigateToHomeScene}
+          />
           <OuterDivider className="ml-[36px]" />
           <PhoneBlock className="ml-[36px]" />
           <UtilityCluster
@@ -219,9 +227,11 @@ export function Header() {
         <div className="py-4 xl:hidden">
           <div className="flex items-center justify-between">
             <Link href="/" className="ml-[6px] block h-[48px] w-[184px] shrink-0">
-              <ThemeLogo
-                placement="header"
-                className="h-full w-full object-contain object-left"
+              <img
+                src={mobileLogoSrc}
+                alt="Алвори"
+                className="block h-full w-full object-contain object-left"
+                draggable={false}
               />
             </Link>
 
@@ -272,13 +282,11 @@ export function Header() {
       </Container>
 
       {menuOpen ? (
-        <div className="fixed inset-x-0 bottom-0 top-[92px] z-[49] xl:hidden">
-          <div className="absolute inset-0 bg-[color:color-mix(in_oklab,var(--bg)_92%,transparent)]" />
-
-          <div className="relative h-full overflow-y-auto overscroll-contain">
-            <Container className="h-full">
-              <div className="flex min-h-full flex-col px-[10px] pb-8 pt-2">
-                <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
+        <div className="absolute inset-x-0 top-full z-[60] xl:hidden">
+          <div className="bg-[color:color-mix(in_oklab,var(--bg)_94%,transparent)]">
+            <Container>
+              <div className="px-[10px] pb-4">
+                <div className="max-h-[calc(100dvh-92px)] overflow-y-auto overscroll-contain rounded-[28px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
                   <a
                     href={contacts.phoneHref}
                     className="header-phone-hover block text-[20px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
@@ -344,7 +352,7 @@ export function Header() {
 
                   <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
 
-                  <div className="mt-5">
+                  <div className="mt-5 pb-2">
                     <p
                       className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]/48"
                       style={{ fontFamily: 'var(--font-body-text)' }}
