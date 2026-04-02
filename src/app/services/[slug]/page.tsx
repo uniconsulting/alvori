@@ -5,21 +5,27 @@ import { Container } from '@/components/layout/Container';
 import { Card } from '@/components/ui/Card';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
-const titles: Record<string, string> = {
+const titles = {
   intercity: 'междугородние перевозки',
   interterminal: 'межтерминальные перевозки',
   expedition: 'экспедиционное направление',
   project: 'проектные перевозки',
   adr: 'опасные грузы',
-};
+} as const;
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return Object.keys(titles).map((slug) => ({ slug }));
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const title = titles[slug];
+  const title = titles[slug as keyof typeof titles];
 
   if (!title) {
     notFound();
