@@ -143,8 +143,7 @@ export function HeroServicesStage() {
 
   return (
     <>
-      <MobileHeroServicesStage progress={progress} />
-
+      <MobileHeroServicesStage />
       <DesktopHeroServicesStage
         rootRef={rootRef}
         progress={progress}
@@ -154,29 +153,114 @@ export function HeroServicesStage() {
   );
 }
 
-function MobileHeroServicesStage({ progress }: { progress: number }) {
+function MobileHeroServicesStage() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const rect = root.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const total = rect.height - viewportHeight;
+      const passed = clamp(-rect.top, 0, total);
+      const nextProgress = total <= 0 ? 0 : passed / total;
+
+      setProgress(clamp(nextProgress, 0, 1));
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
+
+  const transforms = useMemo(() => {
+    const heroExit = remap(progress, 0.12, 0.34);
+    const servicesEnter = remap(progress, 0.22, 0.46);
+    const servicesExit = remap(progress, 0.58, 0.76);
+    const aboutEnter = remap(progress, 0.68, 0.92);
+
+    return {
+      heroOpacity: 1 - heroExit * 0.92,
+      heroY: `${heroExit * -46}px`,
+      heroBlur: `${heroExit * 8}px`,
+
+      servicesOpacity: servicesEnter * (1 - servicesExit * 0.96),
+      servicesY: `${28 - servicesEnter * 28 - servicesExit * 96}px`,
+      servicesBlur: `${(1 - servicesEnter) * 10 + servicesExit * 10}px`,
+
+      aboutOpacity: aboutEnter,
+      aboutY: `${34 - aboutEnter * 34}px`,
+      aboutBlur: `${(1 - aboutEnter) * 10}px`,
+    };
+  }, [progress]);
+
   return (
-    <section className="relative xl:hidden">
-      <div className="relative">
-        <div className="sticky top-[92px] z-30 px-[14px] pt-2">
-          <SceneIndicator progress={progress} />
-        </div>
-
-        <div className="pt-4">
-          <Container>
-            <div className="flex flex-col gap-6">
-              <HeroLeftScene />
-              <HeroRightScene />
+    <section
+      ref={rootRef}
+      className="relative h-[230vh] xl:hidden"
+    >
+      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
+        <div className="relative h-full w-full">
+          <div className="absolute inset-x-0 top-0 z-40 px-[14px]">
+            <div className="pt-2">
+              <SceneIndicator progress={progress} />
             </div>
-          </Container>
-        </div>
+          </div>
 
-        <div className="pt-8">
-          <ServicesSection headerProgress={1} cardsProgress={1} />
-        </div>
+          <div
+            className="absolute inset-x-0 top-[44px] z-10"
+            style={{
+              opacity: transforms.heroOpacity,
+              transform: `translateY(${transforms.heroY})`,
+              filter: `blur(${transforms.heroBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <Container>
+              <div className="flex flex-col gap-6">
+                <HeroLeftScene />
+                <HeroRightScene />
+              </div>
+            </Container>
+          </div>
 
-        <div className="pt-8">
-          <About revealProgress={1} />
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[36px] z-20',
+              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.servicesOpacity,
+              transform: `translateY(${transforms.servicesY})`,
+              filter: `blur(${transforms.servicesBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <ServicesSection headerProgress={1} cardsProgress={1} />
+          </div>
+
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[36px] z-30',
+              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.aboutOpacity,
+              transform: `translateY(${transforms.aboutY})`,
+              filter: `blur(${transforms.aboutBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <About revealProgress={1} />
+          </div>
         </div>
       </div>
     </section>
