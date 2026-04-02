@@ -124,6 +124,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
               </h2>
 
               <div
+                className="hidden xl:block"
                 style={{
                   opacity: introReveal,
                   transform: `translateY(${16 - 16 * introReveal}px)`,
@@ -210,15 +211,15 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
 
               <div className="xl:hidden">
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3">
                     <Quote
-                      size={34}
-                      strokeWidth={2.1}
+                      size={28}
+                      strokeWidth={2}
                       className="mt-[2px] shrink-0 text-[var(--accent-1)]"
                     />
 
                     <p
-                      className="about-quote-text whitespace-pre-line text-[18px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)] md:text-[20px]"
+                      className="about-quote-text whitespace-pre-line text-[16px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
                       {typedQuote}
@@ -413,59 +414,59 @@ function ProcessFlowNodesMobile() {
   }, [activeIndex, displayedIndex]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        {PROCESS_STEPS.map((step, index) => {
-          const isActive = index === activeIndex;
+    <div className="rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+      <div className="mb-5 flex justify-end">
+        <div className="flex items-center gap-2">
+          {PROCESS_STEPS.map((step, index) => {
+            const isActive = index === activeIndex;
 
-          return (
-            <button
-              key={step.id}
-              type="button"
-              onClick={() => setActiveIndex(index)}
-              aria-label={step.title}
-              className={cn(
-                'rounded-full transition-all duration-300 ease-out',
-                isActive
-                  ? 'h-[8px] w-[34px] bg-[var(--accent-1)]'
-                  : 'h-[8px] w-[18px] bg-[var(--accent-2)]',
-              )}
-            />
-          );
-        })}
+            return (
+              <button
+                key={step.id}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                aria-label={step.title}
+                className={cn(
+                  'rounded-full transition-all duration-300 ease-out',
+                  isActive
+                    ? 'h-[3px] w-[34px] bg-[var(--accent-1)]'
+                    : 'h-[3px] w-[18px] bg-[var(--accent-2)]',
+                )}
+              />
+            );
+          })}
+        </div>
       </div>
 
-      <div className="rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-        <div
-          className={cn(
-            'transition-all duration-300 ease-out',
-            textVisible
-              ? 'translate-y-0 opacity-100 blur-0'
-              : 'translate-y-[6px] opacity-0 blur-[4px]',
-          )}
-        >
-          <div className="flex items-start gap-3">
-            <ActiveIcon
-              size={20}
-              strokeWidth={2.05}
-              className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-            />
+      <div
+        className={cn(
+          'transition-all duration-300 ease-out',
+          textVisible
+            ? 'translate-y-0 opacity-100 blur-0'
+            : 'translate-y-[6px] opacity-0 blur-[4px]',
+        )}
+      >
+        <div className="flex items-start gap-3">
+          <ActiveIcon
+            size={20}
+            strokeWidth={2.05}
+            className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+          />
 
-            <div className="min-w-0">
-              <h3
-                className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                {activeStep.title}
-              </h3>
+          <div className="min-w-0">
+            <h3
+              className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
+              style={{ fontFamily: 'var(--font-body-text)' }}
+            >
+              {activeStep.title}
+            </h3>
 
-              <p
-                className="mt-3 text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                {activeStep.description}
-              </p>
-            </div>
+            <p
+              className="mt-3 text-left text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
+              style={{ fontFamily: 'var(--font-body-text)' }}
+            >
+              {activeStep.description}
+            </p>
           </div>
         </div>
       </div>
