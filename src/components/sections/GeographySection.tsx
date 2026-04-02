@@ -237,7 +237,7 @@ export function GeographySection() {
                   />
                 ) : (
 <div className="absolute inset-0 flex items-center justify-end overflow-hidden">
-  <div className="aspect-square w-[148vw] max-w-none translate-x-[62%] rounded-full bg-[var(--surface)]/60" />
+  <div className="aspect-square w-[98vw] max-w-none translate-x-[44%] rounded-full bg-[var(--surface)]/60" />
 </div>
                 )}
               </div>
