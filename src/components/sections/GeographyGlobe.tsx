@@ -1,8 +1,7 @@
 'use client';
 
 import createGlobe from 'cobe';
-import { Minus, Plus } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
 function rgb(hex: string): [number, number, number] {
@@ -21,22 +20,26 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const ZOOM_STEPS = [0.78, 0.84, 0.9, 0.96, 1.02, 1.08, 1.14, 1.2, 1.26, 1.32];
-const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
+type PointerPoint = {
+  x: number;
+  y: number;
+};
 
 export function GeographyGlobe({
   activeRouteIndex,
   isActive,
+  mobile = false,
 }: {
   activeRouteIndex: number;
   isActive: boolean;
+  mobile?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(-2.75);
-  const thetaRef = useRef(0.75);
-  const scaleRef = useRef(1.18);
+  const phiRef = useRef(mobile ? -2.3 : -2.75);
+  const thetaRef = useRef(mobile ? 0.42 : 0.75);
+  const scaleRef = useRef(mobile ? 1.34 : 1.18);
 
   const dragStartRef = useRef<{
     x: number;
@@ -45,11 +48,11 @@ export function GeographyGlobe({
     theta: number;
   } | null>(null);
 
-  const [zoomIndex, setZoomIndex] = useState(6);
-
-  useEffect(() => {
-    scaleRef.current = ZOOM_STEPS[zoomIndex];
-  }, [zoomIndex]);
+  const pointersRef = useRef<Map<number, PointerPoint>>(new Map());
+  const pinchStartRef = useRef<{
+    distance: number;
+    scale: number;
+  } | null>(null);
 
   const activeRoute = GEO_ROUTES[activeRouteIndex];
 
@@ -67,10 +70,10 @@ export function GeographyGlobe({
     () =>
       activeCities.map((city) => ({
         location: city.location,
-        size: 0.022,
+        size: mobile ? 0.024 : 0.022,
         id: city.id,
       })),
-    [activeCities],
+    [activeCities, mobile],
   );
 
   const activeArc = useMemo(
@@ -95,73 +98,80 @@ export function GeographyGlobe({
     arcsRef.current = activeArc;
   }, [activeArc]);
 
-useEffect(() => {
-  const canvas = canvasRef.current;
-  if (!canvas || !isActive) return;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !isActive) return;
 
-  let frame = 0;
+    let frame = 0;
 
-  const globe = createGlobe(canvas, {
-    devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
-    width: 720 * 2,
-    height: 720 * 2,
-    phi: phiRef.current,
-    theta: thetaRef.current,
-
-    dark: 0,
-    diffuse: 1.22,
-    mapSamples: 14000,
-    mapBrightness: 4.2,
-    mapBaseBrightness: 0.0,
-    baseColor: rgb('#eef1f5'),
-    glowColor: rgb('#ffffff'),
-
-    markerColor: rgb('#ffffff'),
-    arcColor: rgb('#fab021'),
-    arcWidth: 1.1,
-    arcHeight: 0.13,
-    markerElevation: 0.04,
-    scale: scaleRef.current,
-    offset: [0, -12],
-    markers: markersRef.current,
-    arcs: arcsRef.current,
-  });
-
-  globeRef.current = globe;
-
-  const animate = () => {
-    if (!dragStartRef.current) {
-      phiRef.current += 0.00042;
-    }
-
-    globe.update({
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5),
+      width: mobile ? 900 : 1440,
+      height: mobile ? 900 : 1440,
       phi: phiRef.current,
       theta: thetaRef.current,
-      scale: scaleRef.current,
 
       dark: 0,
       diffuse: 1.22,
+      mapSamples: mobile ? 11000 : 14000,
       mapBrightness: 4.2,
       mapBaseBrightness: 0.0,
       baseColor: rgb('#eef1f5'),
       glowColor: rgb('#ffffff'),
 
       markerColor: rgb('#ffffff'),
+      arcColor: rgb('#fab021'),
+      arcWidth: mobile ? 1.2 : 1.1,
+      arcHeight: 0.13,
+      markerElevation: 0.04,
+      scale: scaleRef.current,
+      offset: mobile ? [70, 0] : [0, -12],
       markers: markersRef.current,
       arcs: arcsRef.current,
     });
 
+    globeRef.current = globe;
+
+    const animate = () => {
+      if (!dragStartRef.current && pointersRef.current.size < 2) {
+        phiRef.current += mobile ? 0.00028 : 0.00042;
+      }
+
+      globe.update({
+        phi: phiRef.current,
+        theta: thetaRef.current,
+        scale: scaleRef.current,
+
+        dark: 0,
+        diffuse: 1.22,
+        mapBrightness: 4.2,
+        mapBaseBrightness: 0.0,
+        baseColor: rgb('#eef1f5'),
+        glowColor: rgb('#ffffff'),
+
+        markerColor: rgb('#ffffff'),
+        markers: markersRef.current,
+        arcs: arcsRef.current,
+        offset: mobile ? [70, 0] : [0, -12],
+      });
+
+      frame = requestAnimationFrame(animate);
+    };
+
     frame = requestAnimationFrame(animate);
-  };
 
-  frame = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(frame);
+      globe.destroy();
+      globeRef.current = null;
+    };
+  }, [isActive, mobile]);
 
-  return () => {
-    cancelAnimationFrame(frame);
-    globe.destroy();
-    globeRef.current = null;
+  const getDistance = (a: PointerPoint, b: PointerPoint) => {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
   };
-}, [isActive]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
@@ -183,8 +193,8 @@ useEffect(() => {
     const deltaX = clientX - start.x;
     const deltaY = clientY - start.y;
 
-    phiRef.current = start.phi + deltaX / 220;
-    thetaRef.current = clamp(start.theta + deltaY / 260, -0.55, 0.55);
+    phiRef.current = start.phi + deltaX / (mobile ? 190 : 220);
+    thetaRef.current = clamp(start.theta + deltaY / (mobile ? 300 : 260), -0.55, 0.55);
   };
 
   const endDrag = () => {
@@ -194,107 +204,120 @@ useEffect(() => {
     }
   };
 
-  const changeZoom = (nextIndex: number) => {
-    setZoomIndex(clamp(nextIndex, 0, ZOOM_STEPS.length - 1));
+  const handlePointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const canvas = event.currentTarget;
+    canvas.setPointerCapture(event.pointerId);
+
+    pointersRef.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    if (pointersRef.current.size === 1) {
+      startDrag(event.clientX, event.clientY);
+      pinchStartRef.current = null;
+      return;
+    }
+
+    if (pointersRef.current.size === 2) {
+      const [a, b] = Array.from(pointersRef.current.values());
+      pinchStartRef.current = {
+        distance: getDistance(a, b),
+        scale: scaleRef.current,
+      };
+      dragStartRef.current = null;
+    }
   };
 
-  const isMajorMark = (index: number) => index % 5 === 0;
-  const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
+  const handlePointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!pointersRef.current.has(event.pointerId)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    pointersRef.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    if (pointersRef.current.size === 1) {
+      moveDrag(event.clientX, event.clientY);
+      return;
+    }
+
+    if (pointersRef.current.size === 2 && pinchStartRef.current) {
+      const [a, b] = Array.from(pointersRef.current.values());
+      const nextDistance = getDistance(a, b);
+      const ratio = nextDistance / pinchStartRef.current.distance;
+
+      scaleRef.current = clamp(
+        pinchStartRef.current.scale * ratio,
+        mobile ? 1.08 : 0.78,
+        mobile ? 1.7 : 1.32,
+      );
+    }
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    pointersRef.current.delete(event.pointerId);
+
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {}
+
+    if (pointersRef.current.size === 0) {
+      pinchStartRef.current = null;
+      endDrag();
+      return;
+    }
+
+    if (pointersRef.current.size === 1) {
+      const remaining = Array.from(pointersRef.current.values())[0];
+      pinchStartRef.current = null;
+      startDrag(remaining.x, remaining.y);
+    }
+  };
 
   return (
-    <div className="relative z-10 flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[580px] w-full items-start justify-center">
-        <div className="relative h-[580px] w-[720px] max-w-none">
-          <canvas
-            ref={canvasRef}
-            className="h-[620px] w-[620px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
-            style={{ aspectRatio: '1 / 1' }}
-            onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
-            onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
-            onMouseUp={endDrag}
-            onMouseLeave={endDrag}
-            onTouchStart={(event) => {
-              if (event.touches[0]) {
-                startDrag(event.touches[0].clientX, event.touches[0].clientY);
-              }
-            }}
-            onTouchMove={(event) => {
-              if (event.touches[0]) {
-                moveDrag(event.touches[0].clientX, event.touches[0].clientY);
-              }
-            }}
-            onTouchEnd={endDrag}
-          />
-
-          {activeCities.map((city) => (
-            <div
-              key={city.id}
-              className="geography-globe-label pointer-events-none"
-              style={{
-                positionAnchor: `--cobe-${city.id}` as React.CSSProperties['positionAnchor'],
-                opacity: `var(--cobe-visible-${city.id}, 0)`,
-              }}
-            >
-              {city.label}
-            </div>
-          ))}
-        </div>
-
-        <div className="absolute right-0 top-[35%] z-20 flex -translate-y-1/2 flex-col items-center gap-3">
-          <button
-            type="button"
-            onClick={() => changeZoom(zoomIndex + 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
-            aria-label="увеличить"
-          >
-            <Plus size={14} />
-          </button>
-
-          <div className="flex h-[360px] flex-col items-center justify-between py-1">
-            {SCALE_MARKS.map((markIndex) => {
-              const major = isMajorMark(markIndex);
-              const isActive = markIndex === activeMarkIndex;
-
-              return (
-                <button
-                  key={markIndex}
-                  type="button"
-                  onClick={() => {
-                    const normalized = 1 - markIndex / 15;
-                    const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
-                    changeZoom(snapped);
-                  }}
-                  className="flex h-[20px] items-center justify-center"
-                  aria-label={`шаг масштаба ${markIndex + 1}`}
-                >
-                  <span
-                    className={`
-                      block rounded-full transition-all duration-300
-                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
-                      ${
-                        isActive
-                          ? 'bg-[var(--accent-1)]'
-                          : major
-                            ? 'bg-[rgba(38,41,46,0.72)]'
-                            : 'bg-[rgba(38,41,46,0.16)]'
-                      }
-                    `}
-                  />
-                </button>
-              );
-            })}
+    <div
+      className={mobile ? 'relative z-10 h-full w-full' : 'relative z-10 flex h-full flex-col items-center justify-start'}
+      style={mobile ? { touchAction: 'none' } : undefined}
+    >
+      {mobile ? (
+        <div className="relative h-full w-full overflow-hidden" style={{ touchAction: 'none' }}>
+          <div className="absolute inset-y-0 right-[-28%] w-[128vw]">
+            <canvas
+              ref={canvasRef}
+              className="h-full w-full cursor-grab"
+              style={{ touchAction: 'none' }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+            />
           </div>
-
-          <button
-            type="button"
-            onClick={() => changeZoom(zoomIndex - 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
-            aria-label="уменьшить"
-          >
-            <Minus size={14} />
-          </button>
         </div>
-      </div>
+      ) : (
+        <div className="relative flex h-[580px] w-full items-start justify-center">
+          <div className="relative h-[580px] w-[720px] max-w-none">
+            <canvas
+              ref={canvasRef}
+              className="h-[620px] w-[620px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
+              style={{ aspectRatio: '1 / 1' }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
