@@ -69,7 +69,7 @@ export function HeroRightScene() {
                 imageSrc={assets.request}
                 theme={theme}
                 variant="accent"
-                heightClassName="h-[236px] w-full sm:h-[252px]"
+                heightClassName="h-[260px] w-full sm:h-[272px]"
                 visible={card1Ready}
                 mobileSquare
               />
@@ -88,7 +88,7 @@ export function HeroRightScene() {
                 imageSrc={assets.principles}
                 theme={theme}
                 variant="dark"
-                heightClassName="h-[252px] w-full sm:h-[268px]"
+                heightClassName="h-[260px] w-full sm:h-[272px]"
                 visible={card3Ready}
                 specialButton
                 mobileSquare
@@ -108,7 +108,7 @@ export function HeroRightScene() {
                 imageSrc={assets.calc}
                 theme={theme}
                 variant="light"
-                heightClassName="h-[236px] w-full sm:h-[252px]"
+                heightClassName="h-[260px] w-full sm:h-[272px]"
                 visible={card2Ready}
                 mobileSquare
               />
