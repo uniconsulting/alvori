@@ -709,25 +709,25 @@ function ServiceCard({
     <div className={cn(mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>{cardBody}</div>
   );
 
-  return (
-    <TiltCardShell mobile={mobile} mobileProgress={mobileAmount}>
-      <Link href={href} className="block h-full">
-        <div
-          style={
-            mobile
-              ? {
-                  transform: `perspective(1400px) rotateY(${(1 - mobileDepth) * -18}deg) translateX(${(1 - mobileDepth) * -14}px) scale(${0.94 + mobileDepth * 0.06})`,
-                  opacity: 0.72 + mobileDepth * 0.28,
-                  transformOrigin: 'center center',
-                }
-              : undefined
-          }
-        >
-          {wrapped}
-        </div>
-      </Link>
-    </TiltCardShell>
-  );
+return (
+  <TiltCardShell mobile={mobile}>
+    <Link href={href} className="block h-full">
+      <div
+        style={
+          mobile
+            ? {
+                transform: `perspective(1400px) rotateY(${(1 - mobileDepth) * -18}deg) translateX(${(1 - mobileDepth) * -14}px) scale(${0.94 + mobileDepth * 0.06})`,
+                opacity: 0.72 + mobileDepth * 0.28,
+                transformOrigin: 'center center',
+              }
+            : undefined
+        }
+      >
+        {wrapped}
+      </div>
+    </Link>
+  </TiltCardShell>
+);
 }
 
 function ServiceTallCard({
