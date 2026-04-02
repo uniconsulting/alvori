@@ -235,11 +235,8 @@ function ServicesMobileLayout({ progress }: { progress: number }) {
         }
       }
 
-      if (scrollLeft <= targets[0]) {
-        nextProgress = 0;
-      } else {
-        nextProgress = targets.length - 1;
-      }
+      if (scrollLeft <= targets[0]) nextProgress = 0;
+      else nextProgress = targets.length - 1;
 
       setScrollProgress(nextProgress);
       frameRef.current = null;
@@ -309,12 +306,6 @@ function ServicesMobileLayout({ progress }: { progress: number }) {
     const end = baseMainIndices[currentIndex + 1];
 
     return start + (end - start) * local;
-  })();
-
-  const accentHeight = (() => {
-    const nearest = Math.round(scrollProgress);
-    const distance = Math.abs(scrollProgress - nearest);
-    return 42 - clamp(distance / 0.5, 0, 1) * 10;
   })();
 
   return (
@@ -433,7 +424,6 @@ function ServicesMobileLayout({ progress }: { progress: number }) {
           railRef={railRef}
           totalTicks={totalTicks}
           accentMarkerIndex={accentMarkerIndex}
-          accentHeight={accentHeight}
           baseMainIndices={baseMainIndices}
           onTickClick={(index) => scrollToProgress(index, true)}
           onPointerDown={(event) => {
@@ -481,7 +471,6 @@ function ServicesMobileRail({
   railRef,
   totalTicks,
   accentMarkerIndex,
-  accentHeight,
   baseMainIndices,
   onTickClick,
   onPointerDown,
@@ -492,7 +481,6 @@ function ServicesMobileRail({
   railRef: React.RefObject<HTMLDivElement | null>;
   totalTicks: number;
   accentMarkerIndex: number;
-  accentHeight: number;
   baseMainIndices: number[];
   onTickClick: (index: number) => void;
   onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => void;
@@ -511,7 +499,7 @@ function ServicesMobileRail({
     <div className="flex justify-center">
       <div
         ref={railRef}
-        className="services-mobile-rail relative flex items-end gap-[10px] rounded-[20px] px-2 py-2 touch-pan-x"
+        className="relative flex items-end gap-[8px] rounded-[18px] px-1 py-2 touch-pan-x"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -521,6 +509,10 @@ function ServicesMobileRail({
           const isMain = baseMainIndices.includes(index);
           const cardIndex = mainToCardIndex.get(index);
 
+          const distanceToAccent = Math.abs(index - accentMarkerIndex);
+          const isActiveMain = isMain && distanceToAccent < 0.5;
+          const isTrail = !isMain && distanceToAccent < 0.65;
+
           let opacity = 1;
 
           if (index <= 3) {
@@ -528,12 +520,13 @@ function ServicesMobileRail({
           } else if (index >= totalTicks - 4) {
             opacity = [0.6, 0.4, 0.2, 0.1][index - (totalTicks - 4)] ?? 1;
           } else if (isMain) {
-            opacity = 0.72;
+            opacity = 0.9;
           } else {
-            opacity = 1;
+            opacity = 0.95;
           }
 
-          const baseHeight = isMain ? 32 : 22;
+          const height = isMain ? (isActiveMain ? 38 : 28) : 20;
+          const background = isActiveMain || isTrail ? 'var(--accent-1)' : 'var(--accent-2)';
 
           return (
             <button
@@ -549,27 +542,16 @@ function ServicesMobileRail({
               )}
             >
               <span
-                className="block w-[8px] rounded-full bg-[var(--accent-2)]"
+                className="services-mobile-rail-tick block w-[6px] rounded-full"
                 style={{
-                  height: `${baseHeight}px`,
+                  height: `${height}px`,
                   opacity,
+                  background,
                 }}
               />
             </button>
           );
         })}
-
-        <div
-          className="services-mobile-rail-accent pointer-events-none absolute bottom-2 left-2"
-          style={{
-            transform: `translateX(${accentMarkerIndex * 18}px)`,
-          }}
-        >
-          <span
-            className="block w-[8px] rounded-full bg-[var(--accent-1)]"
-            style={{ height: `${accentHeight}px` }}
-          />
-        </div>
       </div>
     </div>
   );
@@ -646,7 +628,7 @@ function ServiceCard({
     <div
       className={cn(
         'relative overflow-hidden bg-[var(--surface)]',
-        mobile ? 'h-[248px] rounded-[22px]' : 'h-[262px] rounded-[26px]',
+        mobile ? 'h-[258px] rounded-[22px]' : 'h-[262px] rounded-[26px]',
       )}
     >
       <div
@@ -659,8 +641,9 @@ function ServiceCard({
 
       <div
         className={cn(
-          'relative flex h-full flex-col',
-          mobile ? 'px-5 py-5' : 'px-8 py-8',
+          mobile
+            ? 'relative grid h-full grid-rows-[auto_auto_54px] px-5 py-5'
+            : 'relative flex h-full flex-col px-8 py-8',
         )}
       >
         <div className="flex items-start justify-between gap-4">
@@ -696,14 +679,14 @@ function ServiceCard({
         <div
           className={cn(
             'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
-            mobile ? 'mt-6 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
+            mobile ? 'mt-[18px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
           )}
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
         </div>
 
-        <div className={cn('mt-auto', mobile ? 'pt-6' : 'pt-[32px]')}>
+        <div className={cn(mobile ? 'mt-[18px] self-end' : 'mt-auto pt-[32px]')}>
           <CardCTA label={ctaLabel} darkButton={false} mobile={mobile} />
         </div>
       </div>
@@ -768,7 +751,7 @@ function ServiceTallCard({
         <div
           className={cn(
             'relative overflow-hidden bg-[var(--accent-2)]',
-            mobile ? 'h-[278px] rounded-[24px]' : 'h-[548px] rounded-[28px]',
+            mobile ? 'h-[316px] rounded-[24px]' : 'h-[548px] rounded-[28px]',
           )}
         >
           <img
@@ -788,7 +771,7 @@ function ServiceTallCard({
           <div
             className={cn(
               'relative flex h-full flex-col',
-              mobile ? 'px-5 pt-5 pb-5' : 'px-8 pt-8 pb-[30px]',
+              mobile ? 'px-5 pt-5 pb-6' : 'px-8 pt-8 pb-[30px]',
             )}
           >
             <div className="mt-auto">
@@ -812,7 +795,7 @@ function ServiceTallCard({
               <div
                 className={cn(
                   'font-normal tracking-[-0.012em] text-white/88',
-                  mobile ? 'mt-6 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
+                  mobile ? 'mt-7 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
                 )}
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
@@ -834,12 +817,10 @@ function TiltCardShell({
   children,
   className,
   mobile = false,
-  mobileProgress = 0,
 }: {
   children: React.ReactNode;
   className?: string;
   mobile?: boolean;
-  mobileProgress?: number;
 }) {
   const currentRef = useRef<TiltView>({
     rotateX: 0,
@@ -934,7 +915,7 @@ function TiltCardShell({
       style={
         mobile
           ? {
-              transform: `perspective(1400px) translateZ(0)`,
+              transform: 'perspective(1400px) translateZ(0)',
               willChange: 'transform',
             }
           : undefined
@@ -993,7 +974,7 @@ function CardCTA({
           darkButton ? 'bg-[#26292e] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
-        <ArrowRight size={mobile ? 20 : 20} strokeWidth={2.1} />
+        <ArrowRight size={20} strokeWidth={2.1} />
       </div>
     </div>
   );
