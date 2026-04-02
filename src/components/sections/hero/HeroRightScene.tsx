@@ -10,11 +10,55 @@ import { homeAnchorHrefs } from '@/config/anchors';
 
 type ThemeMode = 'light' | 'dark';
 
+type MobileCardTransform = {
+  rotateY: number;
+  translateX: number;
+  scaleX: number;
+  scaleY: number;
+  opacity: number;
+  shadowOpacity: number;
+};
+
+function clamp(value: number, min = 0, max = 1) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function getMobileCardTransform(
+  cardRect: DOMRect,
+  containerRect: DOMRect,
+): MobileCardTransform {
+  const containerCenter = containerRect.left + containerRect.width / 2;
+  const cardCenter = cardRect.left + cardRect.width / 2;
+
+  const distance = cardCenter - containerCenter;
+  const normalized = clamp(distance / (containerRect.width * 0.52), -1, 1);
+  const absN = Math.abs(normalized);
+
+  return {
+    rotateY: -normalized * 18,
+    translateX: -normalized * 8,
+    scaleX: 1 - absN * 0.1,
+    scaleY: 1 - absN * 0.03,
+    opacity: 1 - absN * 0.18,
+    shadowOpacity: 0.1 + (1 - absN) * 0.08,
+  };
+}
+
 export function HeroRightScene() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [card1Ready, setCard1Ready] = useState(false);
   const [card2Ready, setCard2Ready] = useState(false);
   const [card3Ready, setCard3Ready] = useState(false);
+
+  const mobileScrollerRef = useRef<HTMLDivElement | null>(null);
+  const mobileItemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const frameRef = useRef<number | null>(null);
+
+  const [mobileTransforms, setMobileTransforms] = useState<MobileCardTransform[]>([
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+  ]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -42,6 +86,50 @@ export function HeroRightScene() {
     };
   }, []);
 
+  useEffect(() => {
+    const scroller = mobileScrollerRef.current;
+    if (!scroller) return;
+
+    const updateTransforms = () => {
+      const containerRect = scroller.getBoundingClientRect();
+      const next = mobileItemRefs.current.map((node) => {
+        if (!node) {
+          return {
+            rotateY: 0,
+            translateX: 0,
+            scaleX: 1,
+            scaleY: 1,
+            opacity: 1,
+            shadowOpacity: 0.18,
+          };
+        }
+
+        return getMobileCardTransform(node.getBoundingClientRect(), containerRect);
+      });
+
+      setMobileTransforms(next);
+      frameRef.current = null;
+    };
+
+    const requestUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateTransforms);
+    };
+
+    updateTransforms();
+
+    scroller.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      scroller.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, []);
+
   const assets = useMemo(
     () => ({
       request: `${sitePath}/hero/cards/request.webp`,
@@ -56,14 +144,20 @@ export function HeroRightScene() {
       <div className="xl:hidden">
         <div className="relative">
           <div
-            className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:px-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            ref={mobileScrollerRef}
+            className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-5"
             style={{
               scrollPaddingLeft: '16px',
               scrollPaddingRight: '16px',
               WebkitOverflowScrolling: 'touch',
             }}
           >
-            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
+            <div
+              ref={(node) => {
+                mobileItemRefs.current[0] = node;
+              }}
+              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+            >
               <BentoCard
                 title={
                   <>
@@ -79,10 +173,16 @@ export function HeroRightScene() {
                 heightClassName="h-[264px] w-full sm:h-[276px]"
                 visible={card1Ready}
                 mobileSquare
+                mobileTransform={mobileTransforms[0]}
               />
             </div>
 
-            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
+            <div
+              ref={(node) => {
+                mobileItemRefs.current[1] = node;
+              }}
+              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+            >
               <BentoCard
                 title={
                   <>
@@ -99,10 +199,16 @@ export function HeroRightScene() {
                 visible={card3Ready}
                 specialButton
                 mobileSquare
+                mobileTransform={mobileTransforms[1]}
               />
             </div>
 
-            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
+            <div
+              ref={(node) => {
+                mobileItemRefs.current[2] = node;
+              }}
+              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+            >
               <BentoCard
                 title={
                   <>
@@ -118,6 +224,7 @@ export function HeroRightScene() {
                 heightClassName="h-[264px] w-full sm:h-[276px]"
                 visible={card2Ready}
                 mobileSquare
+                mobileTransform={mobileTransforms[2]}
               />
             </div>
           </div>
@@ -127,8 +234,6 @@ export function HeroRightScene() {
             style={{
               background:
                 'linear-gradient(90deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
             }}
           />
 
@@ -137,8 +242,6 @@ export function HeroRightScene() {
             style={{
               background:
                 'linear-gradient(270deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
             }}
           />
         </div>
@@ -210,6 +313,7 @@ function BentoCard({
   specialButton = false,
   visible,
   mobileSquare = false,
+  mobileTransform,
 }: {
   title: React.ReactNode;
   href: string;
@@ -221,6 +325,7 @@ function BentoCard({
   specialButton?: boolean;
   visible: boolean;
   mobileSquare?: boolean;
+  mobileTransform?: MobileCardTransform;
 }) {
   const currentRef = useRef({
     rotateX: 0,
@@ -359,6 +464,9 @@ function BentoCard({
         heightClassName,
         tall && 'xl:row-span-2',
       )}
+      style={{
+        perspective: mobileSquare ? '1200px' : undefined,
+      }}
     >
       <div
         className="h-full"
@@ -375,8 +483,21 @@ function BentoCard({
           style={{
             transform: isDesktop
               ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
-              : undefined,
+              : mobileSquare && mobileTransform
+                ? `translateX(${mobileTransform.translateX}px) rotateY(${mobileTransform.rotateY}deg) scaleX(${mobileTransform.scaleX}) scaleY(${mobileTransform.scaleY})`
+                : undefined,
+            transformStyle: 'preserve-3d',
+            transformOrigin:
+              mobileSquare && mobileTransform
+                ? mobileTransform.rotateY > 0
+                  ? 'left center'
+                  : 'right center'
+                : undefined,
+            opacity: mobileSquare && mobileTransform ? mobileTransform.opacity : undefined,
             WebkitTapHighlightColor: 'transparent',
+            transition: isDesktop
+              ? undefined
+              : 'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
           }}
         >
           <div
@@ -397,6 +518,12 @@ function BentoCard({
                   ? 'bg-[var(--surface)]'
                   : 'bg-[var(--accent-2)]',
             )}
+            style={{
+              boxShadow:
+                mobileSquare && mobileTransform
+                  ? `0 10px 26px rgba(38,41,46,${mobileTransform.shadowOpacity})`
+                  : undefined,
+            }}
           >
             <img
               src={imageSrc}
@@ -405,7 +532,9 @@ function BentoCard({
               style={{
                 transform: isDesktop
                   ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
-                  : 'scale(1.02)',
+                  : mobileSquare && mobileTransform
+                    ? `scale(${1.02 + (1 - mobileTransform.scaleX) * 0.08})`
+                    : 'scale(1.02)',
               }}
             />
 
@@ -417,6 +546,32 @@ function BentoCard({
                 transition: 'opacity 180ms cubic-bezier(0.22,1,0.36,1)',
               }}
             />
+
+            {mobileSquare && mobileTransform ? (
+              <div
+                className="pointer-events-none absolute inset-y-0 right-0 w-[24%]"
+                style={{
+                  opacity: Math.abs(mobileTransform.rotateY) / 18,
+                  background:
+                    mobileTransform.rotateY < 0
+                      ? 'linear-gradient(270deg, rgba(38,41,46,0.24) 0%, rgba(38,41,46,0.08) 45%, transparent 100%)'
+                      : 'transparent',
+                }}
+              />
+            ) : null}
+
+            {mobileSquare && mobileTransform ? (
+              <div
+                className="pointer-events-none absolute inset-y-0 left-0 w-[24%]"
+                style={{
+                  opacity: Math.abs(mobileTransform.rotateY) / 18,
+                  background:
+                    mobileTransform.rotateY > 0
+                      ? 'linear-gradient(90deg, rgba(38,41,46,0.24) 0%, rgba(38,41,46,0.08) 45%, transparent 100%)'
+                      : 'transparent',
+                }}
+              />
+            ) : null}
 
             <div
               className={cn(
