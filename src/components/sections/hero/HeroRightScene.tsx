@@ -229,24 +229,6 @@ export function HeroRightScene() {
             </div>
           </div>
 
-          <div
-            className="pointer-events-none absolute inset-y-0 left-0 w-6 sm:w-8"
-            style={{
-              background:
-                'linear-gradient(90deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
-            }}
-          />
-
-          <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-6 sm:w-8"
-            style={{
-              background:
-                'linear-gradient(270deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
-            }}
-          />
-        </div>
-      </div>
-
       <div className="hidden w-full max-w-[540px] md:max-w-none xl:grid xl:w-full xl:grid-cols-[258px_258px] xl:gap-6 xl:-translate-y-[3px]">
         <BentoCard
           title={
