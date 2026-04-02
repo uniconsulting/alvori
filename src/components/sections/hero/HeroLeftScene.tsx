@@ -291,7 +291,7 @@ export function HeroLeftScene() {
         )}
       </div>
 
-      <div className="flex items-center gap-2.5 xl:gap-3">
+      <div className="flex items-center gap-2.5 xl:flex-row xl:items-center xl:gap-3">
         <HeroActionButton
           label={slide.ctaLabel}
           href={slide.href}
@@ -314,62 +314,95 @@ export function HeroLeftScene() {
   );
 
   return (
-    <div className="relative w-full xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
-      <div
-        className={cn(
-          'hero-trailer-shell relative w-[144%] max-w-none',
-          'h-[286px] sm:h-[340px] md:h-[438px] xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
-          trailerReady && 'hero-trailer-shell--ready',
-        )}
-      >
-        <div className="relative h-full w-full">
-          <img
-            src={assets.trailerLight}
-            alt="Полуприцеп"
+    <div className="relative xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 xl:hidden">
+        <div className="relative mr-4 sm:mr-5">
+          <div
             className={cn(
-              'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
-              theme === 'light' ? 'opacity-100' : 'opacity-0',
+              'hero-trailer-shell relative w-[146%] max-w-none',
+              'h-[286px] sm:h-[340px] md:h-[438px]',
+              trailerReady && 'hero-trailer-shell--ready',
             )}
-          />
+          >
+            <div className="relative h-full w-full">
+              <img
+                src={assets.trailerLight}
+                alt="Полуприцеп"
+                className={cn(
+                  'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                  theme === 'light' ? 'opacity-100' : 'opacity-0',
+                )}
+              />
 
-          <img
-            src={assets.trailerDark}
-            alt="Полуприцеп"
-            className={cn(
-              'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
-              theme === 'dark' ? 'opacity-100' : 'opacity-0',
-            )}
-          />
-        </div>
+              <img
+                src={assets.trailerDark}
+                alt="Полуприцеп"
+                className={cn(
+                  'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                  theme === 'dark' ? 'opacity-100' : 'opacity-0',
+                )}
+              />
+            </div>
 
-        <div className="pointer-events-none absolute inset-0 hidden xl:block">
-          <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%] min-[1920px]:left-[45%]">
-            <div
-              key={activeSlide}
-              className={cn(
-                'pointer-events-auto flex flex-col gap-11',
-                !metricsReady && 'hero-metrics-hidden',
-                metricsReady && 'hero-metrics-enter',
-                metricsReady && 'hero-slide-animate',
-              )}
-            >
-              {MetricsContent}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute right-[16px] top-[40px] w-[260px] sm:right-[20px]">
+                <div
+                  key={activeSlide}
+                  className={cn(
+                    'pointer-events-auto flex flex-col gap-3.5',
+                    !metricsReady && 'hero-metrics-hidden',
+                    metricsReady && 'hero-metrics-enter',
+                    metricsReady && 'hero-slide-animate',
+                  )}
+                >
+                  {MetricsContent}
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="pointer-events-none absolute inset-0 xl:hidden">
-          <div className="absolute left-[162px] top-[40px] w-[234px]">
-            <div
-              key={activeSlide}
+      <div className="hidden xl:block">
+        <div
+          className={cn(
+            'hero-trailer-shell relative h-[550px] w-[840px] min-[1920px]:w-[910px]',
+            trailerReady && 'hero-trailer-shell--ready',
+          )}
+        >
+          <div className="relative h-full w-full">
+            <img
+              src={assets.trailerLight}
+              alt="Полуприцеп"
               className={cn(
-                'pointer-events-auto flex flex-col gap-3.5',
-                !metricsReady && 'hero-metrics-hidden',
-                metricsReady && 'hero-metrics-enter',
-                metricsReady && 'hero-slide-animate',
+                'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                theme === 'light' ? 'opacity-100' : 'opacity-0',
               )}
-            >
-              {MetricsContent}
+            />
+
+            <img
+              src={assets.trailerDark}
+              alt="Полуприцеп"
+              className={cn(
+                'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                theme === 'dark' ? 'opacity-100' : 'opacity-0',
+              )}
+            />
+          </div>
+
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%] min-[1920px]:left-[45%]">
+              <div
+                key={activeSlide}
+                className={cn(
+                  'pointer-events-auto flex flex-col gap-11',
+                  !metricsReady && 'hero-metrics-hidden',
+                  metricsReady && 'hero-metrics-enter',
+                  metricsReady && 'hero-slide-animate',
+                )}
+              >
+                {MetricsContent}
+              </div>
             </div>
           </div>
         </div>
@@ -387,8 +420,8 @@ function HeroActionButton({
   href: string;
   external?: boolean;
 }) {
- const className =
-  'hero-cta-lift inline-flex h-[40px] w-[170px] items-center justify-center rounded-[13px] bg-[var(--accent-1)] px-3.5 text-[12px] font-medium lowercase whitespace-nowrap text-[var(--accent-1-text)] sm:h-[42px] sm:w-[182px] sm:text-[13px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
+  const className =
+    'hero-cta-lift inline-flex h-[40px] w-[170px] items-center justify-center rounded-[13px] bg-[var(--accent-1)] px-3.5 text-[12px] font-medium lowercase whitespace-nowrap text-[var(--accent-1-text)] sm:h-[42px] sm:w-[182px] sm:text-[13px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
 
   if (label.trim().toLowerCase() === 'познакомиться') {
     return (
