@@ -54,9 +54,16 @@ export function HeroRightScene() {
   return (
     <>
       <div className="xl:hidden">
-        <div className="relative px-4 sm:px-5">
-          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-2 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
+        <div className="relative">
+          <div
+            className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:px-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            style={{
+              scrollPaddingLeft: '16px',
+              scrollPaddingRight: '16px',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
               <BentoCard
                 title={
                   <>
@@ -69,13 +76,13 @@ export function HeroRightScene() {
                 imageSrc={assets.request}
                 theme={theme}
                 variant="accent"
-                heightClassName="h-[260px] w-full sm:h-[272px]"
+                heightClassName="h-[264px] w-full sm:h-[276px]"
                 visible={card1Ready}
                 mobileSquare
               />
             </div>
 
-            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
+            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
               <BentoCard
                 title={
                   <>
@@ -88,14 +95,14 @@ export function HeroRightScene() {
                 imageSrc={assets.principles}
                 theme={theme}
                 variant="dark"
-                heightClassName="h-[260px] w-full sm:h-[272px]"
+                heightClassName="h-[264px] w-full sm:h-[276px]"
                 visible={card3Ready}
                 specialButton
                 mobileSquare
               />
             </div>
 
-            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
+            <div className="w-[248px] shrink-0 snap-start sm:w-[260px]">
               <BentoCard
                 title={
                   <>
@@ -108,7 +115,7 @@ export function HeroRightScene() {
                 imageSrc={assets.calc}
                 theme={theme}
                 variant="light"
-                heightClassName="h-[260px] w-full sm:h-[272px]"
+                heightClassName="h-[264px] w-full sm:h-[276px]"
                 visible={card2Ready}
                 mobileSquare
               />
@@ -116,7 +123,7 @@ export function HeroRightScene() {
           </div>
 
           <div
-            className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-10"
+            className="pointer-events-none absolute inset-y-0 left-0 w-6 sm:w-8"
             style={{
               background:
                 'linear-gradient(90deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
@@ -126,7 +133,7 @@ export function HeroRightScene() {
           />
 
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-10"
+            className="pointer-events-none absolute inset-y-0 right-0 w-6 sm:w-8"
             style={{
               background:
                 'linear-gradient(270deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 78%, transparent) 46%, transparent 100%)',
@@ -354,20 +361,22 @@ function BentoCard({
       )}
     >
       <div
-        className="hero-card-shell h-full"
+        className="h-full"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
         <Link
           href={href}
           className={cn(
-            'hero-card-tilt group relative block h-full overflow-hidden p-[2px]',
+            isDesktop ? 'hero-card-tilt hero-card-shell' : '',
+            'group relative block h-full overflow-hidden p-[2px]',
             mobileSquare ? 'rounded-[24px]' : 'rounded-[32px]',
           )}
           style={{
             transform: isDesktop
               ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
               : undefined,
+            WebkitTapHighlightColor: 'transparent',
           }}
         >
           <div
@@ -396,14 +405,14 @@ function BentoCard({
               style={{
                 transform: isDesktop
                   ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
-                  : 'scale(1.025)',
+                  : 'scale(1.02)',
               }}
             />
 
             <div
               className="pointer-events-none absolute inset-0"
               style={{
-                opacity: view.glowOpacity,
+                opacity: isDesktop ? view.glowOpacity : 0,
                 background: `radial-gradient(260px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.08), transparent 62%)`,
                 transition: 'opacity 180ms cubic-bezier(0.22,1,0.36,1)',
               }}
@@ -412,7 +421,7 @@ function BentoCard({
             <div
               className={cn(
                 'pointer-events-none absolute bottom-0 left-0 right-0',
-                mobileSquare ? 'h-[116px]' : 'h-[132px]',
+                mobileSquare ? 'h-[122px]' : 'h-[132px]',
                 bottomMaskClass,
               )}
             />
@@ -431,9 +440,10 @@ function BentoCard({
               <div className="flex justify-end">
                 <div
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
+                    'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]',
                     mobileSquare ? 'h-[34px] w-[34px] rounded-[12px]' : 'h-[38px] w-[38px] rounded-[14px]',
                     buttonClass,
+                    isDesktop ? 'group-hover:translate-x-[1px]' : '',
                   )}
                   style={{ transform: isDesktop ? 'translateZ(12px)' : undefined }}
                 >
@@ -445,7 +455,7 @@ function BentoCard({
                 <div
                   className={cn(
                     'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[162px] text-[13px]' : 'max-w-[152px] text-[12px]',
+                    mobileSquare ? 'max-w-[168px] text-[13px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
