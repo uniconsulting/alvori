@@ -161,14 +161,14 @@ export function GeographySection() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 xl:hidden">
-            <div className="flex items-start justify-between gap-4">
-              <h2 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] md:text-[42px]">
-                <span className="mr-[0.014em] inline-block">Г</span>еография
-              </h2>
-            </div>
+          <div className="relative xl:hidden">
+            <div className="relative z-10 flex flex-col gap-8">
+              <div className="flex items-start justify-between gap-4">
+                <h2 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] md:text-[42px]">
+                  <span className="mr-[0.014em] inline-block">Г</span>еография
+                </h2>
+              </div>
 
-            <div className="flex flex-col gap-8">
               <p
                 className="text-[18px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)] md:text-[19px]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
@@ -180,32 +180,20 @@ export function GeographySection() {
                 логистику под задачу клиента.
               </p>
 
-              <div className="flex flex-col items-start gap-3">
-                {DISTRICTS.map((district, index) => (
-                  <DistrictPill
-                    key={district}
-                    label={district}
-                    delayMs={index * 520}
-                    mobile
-                  />
-                ))}
+              <div className="relative">
+                <div className="relative z-10 flex flex-col items-start gap-3">
+                  {DISTRICTS.map((district, index) => (
+                    <DistrictPill
+                      key={district}
+                      label={district}
+                      delayMs={index * 520}
+                      mobile
+                    />
+                  ))}
+                </div>
               </div>
 
-              <div className="relative -mx-[14px] h-[420px] overflow-hidden md:-mx-[18px] md:h-[460px]">
-                {shouldMountGlobe ? (
-                  <GeographyGlobe
-                    activeRouteIndex={activeRouteIndex}
-                    isActive={isGlobeActive}
-                    mobile
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-end">
-                    <div className="h-[460px] w-[460px] rounded-full bg-[var(--surface)]/60 translate-x-[26%]" />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-3">
+              <div className="relative z-30 flex flex-col gap-3">
                 <div className="inline-flex h-[72px] w-full flex-col justify-center rounded-[20px] bg-[#26292e] px-5">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/56">
                     активное направление
@@ -236,6 +224,22 @@ export function GeographySection() {
                     Открыть калькулятор
                   </span>
                 </Link>
+              </div>
+            </div>
+
+            <div className="pointer-events-none absolute inset-x-0 top-[186px] bottom-[142px] z-20 md:top-[200px] md:bottom-[150px]">
+              <div className="pointer-events-auto absolute inset-y-0 right-[-14px] w-[78vw] min-w-[320px] max-w-[440px] md:right-[-18px] md:w-[74vw]">
+                {shouldMountGlobe ? (
+                  <GeographyGlobe
+                    activeRouteIndex={activeRouteIndex}
+                    isActive={isGlobeActive}
+                    mobile
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-end">
+                    <div className="h-[520px] w-[520px] rounded-full bg-[var(--surface)]/60" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -279,15 +283,15 @@ function DistrictPill({
   return (
     <div
       className={cn(
-        'geography-pill inline-flex w-fit bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]',
-        mobile ? 'rounded-[14px] px-4 py-3' : 'rounded-[16px] px-4 py-3',
+        'geography-pill inline-flex bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]',
+        mobile ? 'w-[86%] rounded-[14px] px-4 py-3' : 'w-fit rounded-[16px] px-4 py-3',
       )}
       style={{ animationDelay: `${delayMs}ms` }}
     >
       <span
         className={cn(
           'font-medium leading-[1.28] tracking-[-0.014em] text-[var(--text)]',
-          mobile ? 'text-[15px]' : 'text-[16px]',
+          mobile ? 'whitespace-nowrap text-[15px]' : 'text-[16px]',
         )}
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
