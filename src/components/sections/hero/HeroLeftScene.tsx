@@ -316,46 +316,48 @@ export function HeroLeftScene() {
   return (
     <div className="relative xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
       <div className="relative left-1/2 w-screen -translate-x-1/2 xl:hidden">
-        <div className="relative mr-4 sm:mr-5">
-          <div
-            className={cn(
-              'hero-trailer-shell relative w-[146%] max-w-none',
-              'h-[286px] sm:h-[340px] md:h-[438px]',
-              trailerReady && 'hero-trailer-shell--ready',
-            )}
-          >
-            <div className="relative h-full w-full">
-              <img
-                src={assets.trailerLight}
-                alt="Полуприцеп"
-                className={cn(
-                  'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
-                  theme === 'light' ? 'opacity-100' : 'opacity-0',
-                )}
-              />
-
-              <img
-                src={assets.trailerDark}
-                alt="Полуприцеп"
-                className={cn(
-                  'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
-                  theme === 'dark' ? 'opacity-100' : 'opacity-0',
-                )}
-              />
-            </div>
-
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute right-[16px] top-[40px] w-[260px] sm:right-[20px]">
-                <div
-                  key={activeSlide}
+        <div className="relative ml-0 mr-4 sm:mr-5">
+          <div className="relative mx-auto w-full max-w-[430px]">
+            <div
+              className={cn(
+                'hero-trailer-shell relative w-[146%] max-w-none',
+                'h-[286px] sm:h-[340px] md:h-[438px]',
+                trailerReady && 'hero-trailer-shell--ready',
+              )}
+            >
+              <div className="relative h-full w-full">
+                <img
+                  src={assets.trailerLight}
+                  alt="Полуприцеп"
                   className={cn(
-                    'pointer-events-auto flex flex-col gap-3.5',
-                    !metricsReady && 'hero-metrics-hidden',
-                    metricsReady && 'hero-metrics-enter',
-                    metricsReady && 'hero-slide-animate',
+                    'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                    theme === 'light' ? 'opacity-100' : 'opacity-0',
                   )}
-                >
-                  {MetricsContent}
+                />
+
+                <img
+                  src={assets.trailerDark}
+                  alt="Полуприцеп"
+                  className={cn(
+                    'hero-trailer-visual absolute inset-0 h-full w-full object-contain object-left-top transition-opacity duration-150',
+                    theme === 'dark' ? 'opacity-100' : 'opacity-0',
+                  )}
+                />
+              </div>
+
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute left-[168px] top-[40px] w-[236px] sm:left-[182px] sm:w-[244px]">
+                  <div
+                    key={activeSlide}
+                    className={cn(
+                      'pointer-events-auto flex flex-col gap-3.5',
+                      !metricsReady && 'hero-metrics-hidden',
+                      metricsReady && 'hero-metrics-enter',
+                      metricsReady && 'hero-slide-animate',
+                    )}
+                  >
+                    {MetricsContent}
+                  </div>
                 </div>
               </div>
             </div>
@@ -470,4 +472,3 @@ function ArrowSquareButton({
     </button>
   );
 }
-
