@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Calculator, Dot, Route } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
