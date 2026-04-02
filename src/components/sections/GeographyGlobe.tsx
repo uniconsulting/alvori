@@ -37,9 +37,9 @@ export function GeographyGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(mobile ? -2.3 : -2.75);
-  const thetaRef = useRef(mobile ? 0.42 : 0.75);
-  const scaleRef = useRef(mobile ? 1.34 : 1.18);
+  const phiRef = useRef(mobile ? -2.42 : -2.75);
+  const thetaRef = useRef(mobile ? 0.44 : 0.75);
+  const scaleRef = useRef(mobile ? 1.18 : 1.18);
 
   const dragStartRef = useRef<{
     x: number;
@@ -105,15 +105,15 @@ export function GeographyGlobe({
     let frame = 0;
 
     const globe = createGlobe(canvas, {
-      devicePixelRatio: Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5),
-      width: mobile ? 900 : 1440,
-      height: mobile ? 900 : 1440,
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 1.5),
+      width: mobile ? 1120 : 1440,
+      height: mobile ? 1120 : 1440,
       phi: phiRef.current,
       theta: thetaRef.current,
 
       dark: 0,
       diffuse: 1.22,
-      mapSamples: mobile ? 11000 : 14000,
+      mapSamples: mobile ? 13000 : 14000,
       mapBrightness: 4.2,
       mapBaseBrightness: 0.0,
       baseColor: rgb('#eef1f5'),
@@ -125,7 +125,7 @@ export function GeographyGlobe({
       arcHeight: 0.13,
       markerElevation: 0.04,
       scale: scaleRef.current,
-      offset: mobile ? [70, 0] : [0, -12],
+      offset: mobile ? [98, -6] : [0, -12],
       markers: markersRef.current,
       arcs: arcsRef.current,
     });
@@ -152,7 +152,7 @@ export function GeographyGlobe({
         markerColor: rgb('#ffffff'),
         markers: markersRef.current,
         arcs: arcsRef.current,
-        offset: mobile ? [70, 0] : [0, -12],
+        offset: mobile ? [98, -6] : [0, -12],
       });
 
       frame = requestAnimationFrame(animate);
@@ -255,8 +255,8 @@ export function GeographyGlobe({
 
       scaleRef.current = clamp(
         pinchStartRef.current.scale * ratio,
-        mobile ? 1.08 : 0.78,
-        mobile ? 1.7 : 1.32,
+        mobile ? 0.98 : 0.78,
+        mobile ? 1.54 : 1.32,
       );
     }
   };
@@ -284,14 +284,31 @@ export function GeographyGlobe({
     }
   };
 
+  const labels = activeCities.map((city) => (
+    <div
+      key={city.id}
+      className="geography-globe-label pointer-events-none"
+      style={{
+        positionAnchor: `--cobe-${city.id}` as React.CSSProperties['positionAnchor'],
+        opacity: `var(--cobe-visible-${city.id}, 0)`,
+      }}
+    >
+      {city.label}
+    </div>
+  ));
+
   return (
     <div
-      className={mobile ? 'relative z-10 h-full w-full' : 'relative z-10 flex h-full flex-col items-center justify-start'}
+      className={
+        mobile
+          ? 'relative z-10 h-full w-full'
+          : 'relative z-10 flex h-full flex-col items-center justify-start'
+      }
       style={mobile ? { touchAction: 'none' } : undefined}
     >
       {mobile ? (
-        <div className="relative h-full w-full overflow-hidden" style={{ touchAction: 'none' }}>
-          <div className="absolute inset-y-0 right-[-28%] w-[128vw]">
+        <div className="relative h-full w-full overflow-visible" style={{ touchAction: 'none' }}>
+          <div className="absolute inset-y-0 right-[-30%] w-[132vw]">
             <canvas
               ref={canvasRef}
               className="h-full w-full cursor-grab"
@@ -301,6 +318,7 @@ export function GeographyGlobe({
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
             />
+            {labels}
           </div>
         </div>
       ) : (
@@ -315,10 +333,10 @@ export function GeographyGlobe({
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
             />
+            {labels}
           </div>
         </div>
       )}
     </div>
   );
 }
-
