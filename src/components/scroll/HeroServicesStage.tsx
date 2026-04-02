@@ -321,7 +321,7 @@ function MobileHeroServicesStage() {
 
             <div
               className={cn(
-                'absolute inset-x-0 top-[36px] bottom-0 z-20',
+                'absolute inset-x-0 top-[26px] bottom-0 z-20',
                 transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
               )}
               style={{
