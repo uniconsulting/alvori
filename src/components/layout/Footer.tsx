@@ -5,6 +5,7 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
+import { legalLinks } from '@/content/legal';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -51,8 +52,15 @@ export function Footer() {
       };
 
   const assets = {
-    footerLogo: `${sitePath}/brand/footer/logo.png`,
-    footerLogoFallback: `${sitePath}/brand/footer/logo.png`,
+    footerLogoDesktop: isLightTheme
+      ? `${sitePath}/brand/footer/light/logo.svg`
+      : `${sitePath}/brand/footer/dark/logo.svg`,
+    footerLogoDesktopFallback: isLightTheme
+      ? `${sitePath}/brand/footer/dark/logo.svg`
+      : `${sitePath}/brand/footer/light/logo.svg`,
+
+    footerLogoMobile: `${sitePath}/brand/footer/logo.png`,
+    footerLogoMobileFallback: `${sitePath}/brand/footer/logo.png`,
 
     developerLogo:
       theme === 'dark'
@@ -109,8 +117,8 @@ export function Footer() {
             <div className="w-full max-w-[430px] justify-self-start space-y-8">
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
-                  src={assets.footerLogo}
-                  fallbackSrc={assets.footerLogoFallback}
+                  src={assets.footerLogoDesktop}
+                  fallbackSrc={assets.footerLogoDesktopFallback}
                   alt="Алвори"
                   className="h-full w-full object-contain object-left"
                 />
@@ -125,7 +133,23 @@ export function Footer() {
               </div>
             </div>
 
-            <div />
+            <div className="justify-self-center space-y-8 lg:-translate-x-10">
+              <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
+                инфо-блок
+              </h3>
+
+              <div className="flex flex-col gap-5">
+                {legalLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             <div className="w-full max-w-[460px] justify-self-end space-y-8">
               <div className="space-y-5">
@@ -165,8 +189,8 @@ export function Footer() {
             <div className="flex flex-col gap-6">
               <div className="h-[58px] w-[220px] max-w-full">
                 <AssetImage
-                  src={assets.footerLogo}
-                  fallbackSrc={assets.footerLogoFallback}
+                  src={assets.footerLogoMobile}
+                  fallbackSrc={assets.footerLogoMobileFallback}
                   alt="Алвори"
                   className="h-full w-full object-contain object-left"
                 />
@@ -190,30 +214,28 @@ export function Footer() {
                 />
               </div>
 
-<div className="grid grid-cols-2 gap-3">
-  <MessengerButton
-    href={contacts.maxHref}
-    label="написать в max"
-    logoSrc={assets.maxLogo}
-    logoFallbackSrc={assets.maxLogoFallback}
-    mobile
-  />
+              <div className="grid grid-cols-2 gap-3">
+                <MessengerButton
+                  href={contacts.maxHref}
+                  label="написать в max"
+                  logoSrc={assets.maxLogo}
+                  logoFallbackSrc={assets.maxLogoFallback}
+                  mobile
+                />
 
-  <MessengerButton
-    href={contacts.telegramHref}
-    label="написать в tg"
-    logoSrc={assets.telegramLogo}
-    logoFallbackSrc={assets.telegramLogoFallback}
-    mobile
-  />
-</div>
+                <MessengerButton
+                  href={contacts.telegramHref}
+                  label="написать в tg"
+                  logoSrc={assets.telegramLogo}
+                  logoFallbackSrc={assets.telegramLogoFallback}
+                  mobile
+                />
+              </div>
 
               <div className="h-[1px] w-full bg-[var(--footer-line)] opacity-40" />
 
               <div className="space-y-2 text-left text-[15px] leading-[1.24] tracking-[-0.01em] text-[var(--footer-text)]">
-                <div>
-                  ООО «АЛВОРИ» | ИНН: 7300045728
-                </div>
+                <div>ООО «АЛВОРИ» | ИНН: 7300045728</div>
                 <div>все права защищены</div>
                 <div>© 2021 – 2026</div>
               </div>
@@ -244,7 +266,7 @@ export function Footer() {
                 </span>
 
                 <span className="whitespace-nowrap opacity-40 text-[var(--footer-muted)]">
-                  MAX: +7(995)518-69-42
+                  MAX: +7 (902) 123-44-88
                 </span>
               </div>
             </div>
