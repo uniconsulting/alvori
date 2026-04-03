@@ -1149,11 +1149,11 @@ const cards = [
                       'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
-<h3 className="font-heading text-[17px] leading-[1] tracking-[-0.022em] text-[var(--text)]">
+<h3 className="font-heading text-[14px] leading-[1] tracking-[-0.02em] text-[var(--text)]">
   {card.title}
 </h3>
 <p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
-  {card.text}
+  {card.mobileText}
 </p>
                 </div>
               </div>
