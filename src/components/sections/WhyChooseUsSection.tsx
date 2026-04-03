@@ -8,7 +8,7 @@ import {
   SlidersHorizontal,
   Truck,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { sitePath } from '@/lib/site-path';
 
@@ -19,9 +19,99 @@ type TiltView = {
   scale: number;
 };
 
+type WhyCardItem = {
+  id: string;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+  title: string;
+  description: React.ReactNode;
+  imageSrc: string;
+  kind: 'compact' | 'medium' | 'tall';
+  showArrow?: boolean;
+};
+
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
+
+const WHY_CARDS: WhyCardItem[] = [
+  {
+    id: 'control',
+    icon: Clock3,
+    title: 'Контроль сроков',
+    description: (
+      <>
+        Следим за движением
+        <br />
+        и соблюдением сроков.
+      </>
+    ),
+    imageSrc: `${sitePath}/why-choose-us/control-card-bg.webp`,
+    kind: 'compact',
+  },
+  {
+    id: 'docs',
+    icon: FileText,
+    title: 'Документы',
+    description: (
+      <>
+        Закрывающий контур
+        <br />
+        и комплект документов.
+      </>
+    ),
+    imageSrc: `${sitePath}/why-choose-us/docs-card-bg.webp`,
+    kind: 'compact',
+  },
+  {
+    id: 'client',
+    icon: SlidersHorizontal,
+    title: 'Под задачу клиента',
+    description: (
+      <>
+        Собираем маршрут
+        <br />
+        и формат работы под задачу,
+        <br />
+        сопровождая индивидуальным подходом.
+      </>
+    ),
+    imageSrc: `${sitePath}/why-choose-us/client-card-bg.webp`,
+    kind: 'medium',
+  },
+  {
+    id: 'terms',
+    icon: ShieldCheck,
+    title: 'Прозрачные условия',
+    description: (
+      <>
+        Понятная логика взаимодействия,
+        <br />
+        согласованные условия
+        <br />
+        и без лишней сложности.
+      </>
+    ),
+    imageSrc: `${sitePath}/why-choose-us/terms-card-bg.webp`,
+    kind: 'medium',
+  },
+  {
+    id: 'fleet',
+    icon: Truck,
+    title: 'Собственный автопарк',
+    description: (
+      <>
+        позволяет держать качество
+        <br />
+        исполнения под контролем и обеспечивать
+        <br />
+        предсказуемость работы
+      </>
+    ),
+    imageSrc: `${sitePath}/why-choose-us/fleet-card-bg.webp`,
+    kind: 'tall',
+    showArrow: true,
+  },
+];
 
 export function WhyChooseUsSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -83,94 +173,7 @@ export function WhyChooseUsSection() {
             </div>
 
             <div className="xl:hidden">
-              <div className="flex flex-col gap-3">
-                <RevealCard isActive={isActive} delayMs={140} className="h-[148px]">
-                  <WhyCardCompactImage
-                    icon={Clock3}
-                    title="Контроль сроков"
-                    description={
-                      <>
-                        Следим за движением
-                        <br />
-                        и соблюдением сроков.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/control-card-bg.webp`}
-                    mobile
-                  />
-                </RevealCard>
-
-                <RevealCard isActive={isActive} delayMs={220} className="h-[148px]">
-                  <WhyCardCompactImage
-                    icon={FileText}
-                    title="Документы"
-                    description={
-                      <>
-                        Закрывающий контур
-                        <br />
-                        и комплект документов.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/docs-card-bg.webp`}
-                    mobile
-                  />
-                </RevealCard>
-
-                <RevealCard isActive={isActive} delayMs={300} className="h-[236px]">
-                  <WhyCardMediumImage
-                    icon={SlidersHorizontal}
-                    title="Под задачу клиента"
-                    description={
-                      <>
-                        Собираем маршрут
-                        <br />
-                        и формат работы под задачу,
-                        <br />
-                        сопровождая индивидуальным подходом.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/client-card-bg.webp`}
-                    mobile
-                  />
-                </RevealCard>
-
-                <RevealCard isActive={isActive} delayMs={380} className="h-[236px]">
-                  <WhyCardMediumImage
-                    icon={ShieldCheck}
-                    title="Прозрачные условия"
-                    description={
-                      <>
-                        Понятная логика взаимодействия,
-                        <br />
-                        согласованные условия
-                        <br />
-                        и без лишней сложности.
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/terms-card-bg.webp`}
-                    mobile
-                  />
-                </RevealCard>
-
-                <RevealCard isActive={isActive} delayMs={460} className="h-[286px]">
-                  <WhyCardTallImage
-                    icon={Truck}
-                    title="Собственный автопарк"
-                    description={
-                      <>
-                        позволяет держать качество
-                        <br />
-                        исполнения под контролем и обеспечивать
-                        <br />
-                        предсказуемость работы
-                      </>
-                    }
-                    imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
-                    mobile
-                    showArrow={false}
-                  />
-                </RevealCard>
-              </div>
+              <WhyChooseUsMobileStack cards={WHY_CARDS} />
             </div>
 
             <div className="hidden grid-cols-[1fr_1fr_1fr] grid-rows-[156px_364px] gap-5 xl:grid">
@@ -267,6 +270,135 @@ export function WhyChooseUsSection() {
   );
 }
 
+function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+
+    const handleScroll = () => {
+      if (raf) return;
+
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+
+        const root = rootRef.current;
+        if (!root) return;
+
+        const rect = root.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const total = Math.max(root.offsetHeight - viewportHeight, 1);
+        const passed = Math.min(Math.max(-rect.top, 0), total);
+        const nextProgress = passed / total;
+
+        setProgress(nextProgress);
+      });
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const activeFloat = progress * (cards.length - 1);
+
+  return (
+    <section ref={rootRef} className="relative h-[320vh]">
+      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
+        <div className="relative flex h-full items-start pt-2">
+          <div className="relative h-[286px] w-full">
+            {cards.map((card, index) => {
+              const distance = index - activeFloat;
+              const absDistance = Math.abs(distance);
+
+              const translateY =
+                distance < 0
+                  ? -18 - Math.min(Math.abs(distance), 1) * 20
+                  : distance * 58;
+
+              const scale =
+                distance < 0
+                  ? 0.94 - Math.min(Math.abs(distance), 1) * 0.02
+                  : 1 - Math.min(distance, 1.2) * 0.06;
+
+              const rotateX =
+                distance < 0
+                  ? 7
+                  : -Math.min(distance, 1.25) * 8;
+
+              const opacity =
+                distance < 0
+                  ? Math.max(0, 0.22 - Math.min(Math.abs(distance), 1) * 0.22)
+                  : Math.max(0, 1 - absDistance * 0.28);
+
+              const zIndex = 100 - index;
+
+              return (
+                <div
+                  key={card.id}
+                  className="absolute inset-0 will-change-transform will-change-opacity"
+                  style={{
+                    transform: `translate3d(0, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`,
+                    opacity,
+                    zIndex,
+                    transformOrigin: 'center center',
+                    transition:
+                      'transform 120ms linear, opacity 120ms linear',
+                    pointerEvents: absDistance < 0.6 ? 'auto' : 'none',
+                  }}
+                >
+                  <WhyMobileUnifiedCard card={card} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
+  return (
+    <div className="relative h-full overflow-hidden rounded-[24px] bg-[#26292e]">
+      <img
+        src={card.imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <CardImageMask />
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
+
+      <div className="relative flex h-full flex-col justify-end px-5 py-5">
+        <div className="flex items-start gap-[10px]">
+          <card.icon
+            size={17}
+            strokeWidth={2.05}
+            className="mt-[1px] shrink-0 text-white"
+          />
+          <h3 className="font-heading text-[19px] leading-[1.08] tracking-[-0.024em] text-white">
+            {card.title}
+          </h3>
+        </div>
+
+        <div
+          className="mt-5 text-[15px] font-normal leading-[1.28] tracking-[-0.014em] text-white/88"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          {card.description}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function WhyChooseUsBreadcrumb() {
   return (
     <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
@@ -348,7 +480,6 @@ function TiltCardShell({ children }: { children: React.ReactNode }) {
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
-
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
@@ -389,63 +520,30 @@ function WhyCardTallImage({
   description,
   imageSrc,
   showArrow = false,
-  mobile = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   imageSrc: string;
   showArrow?: boolean;
-  mobile?: boolean;
 }) {
   return (
     <div className="relative h-full overflow-visible">
-      <div
-        className={cn(
-          'relative h-full overflow-hidden bg-[#26292e]',
-          mobile ? 'rounded-[24px]' : 'rounded-[32px]',
-        )}
-      >
-        <img
-          src={imageSrc}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
+      <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e]">
+        <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
         <CardImageMask />
-        <div
-          className={cn(
-            'pointer-events-none absolute inset-0 border border-white/12',
-            mobile ? 'rounded-[24px]' : 'rounded-[32px]',
-          )}
-        />
+        <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
 
-        <div
-          className={cn(
-            'relative flex h-full flex-col justify-end',
-            mobile ? 'px-5 py-5' : 'px-8 py-8',
-          )}
-        >
+        <div className="relative flex h-full flex-col justify-end px-8 py-8">
           <div className="flex items-start gap-[10px]">
-            <Icon
-              size={mobile ? 17 : 18}
-              strokeWidth={2.05}
-              className="mt-[1px] shrink-0 text-white"
-            />
-            <h3
-              className={cn(
-                'font-heading tracking-[-0.024em] text-white',
-                mobile ? 'text-[19px] leading-[1.08]' : 'text-[21px] leading-[1.08]',
-              )}
-            >
+            <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+            <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
               {title}
             </h3>
           </div>
 
           <div
-            className={cn(
-              'font-normal tracking-[-0.014em] text-white/88',
-              mobile ? 'mt-5 text-[15px] leading-[1.28]' : 'mt-7 text-[15px] leading-[1.3]',
-            )}
+            className="mt-7 text-[15px] font-normal leading-[1.3] tracking-[-0.014em] text-white/88"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -457,13 +555,7 @@ function WhyCardTallImage({
         <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
           <svg width="28" height="86" viewBox="0 0 28 86" fill="none" aria-hidden="true">
             <path d="M14 0V62" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-            <path
-              d="M6 54L14 62L22 54"
-              stroke="currentColor"
-              strokeWidth="5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M6 54L14 62L22 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       ) : null}
@@ -476,56 +568,28 @@ function WhyCardCompactImage({
   title,
   description,
   imageSrc,
-  mobile = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   imageSrc: string;
-  mobile?: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        'relative h-full overflow-hidden bg-[var(--surface)]',
-        mobile ? 'rounded-[22px] px-5 py-5' : 'rounded-[28px] px-6 py-6',
-      )}
-    >
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
+    <div className="relative h-full overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
+      <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <CardImageMask compact />
-      <div
-        className={cn(
-          'pointer-events-none absolute inset-0 border border-white/12',
-          mobile ? 'rounded-[22px]' : 'rounded-[28px]',
-        )}
-      />
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
       <div className="relative flex h-full flex-col justify-end">
         <div className="flex items-start gap-[10px]">
-          <Icon
-            size={mobile ? 17 : 18}
-            strokeWidth={2.05}
-            className="mt-[1px] shrink-0 text-white"
-          />
-          <h3
-            className={cn(
-              'font-heading tracking-[-0.024em] text-white',
-              mobile ? 'text-[19px] leading-[1.08]' : 'text-[21px] leading-[1.08]',
-            )}
-          >
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
             {title}
           </h3>
         </div>
 
         <div
-          className={cn(
-            'font-normal tracking-[-0.014em] text-white/88',
-            mobile ? 'mt-4 text-[15px] leading-[1.28]' : 'mt-7 text-[16px] leading-[1.34]',
-          )}
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
@@ -540,56 +604,28 @@ function WhyCardMediumImage({
   title,
   description,
   imageSrc,
-  mobile = false,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   imageSrc: string;
-  mobile?: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        'relative h-full overflow-hidden bg-[var(--surface)]',
-        mobile ? 'rounded-[22px] px-5 py-5' : 'rounded-[28px] px-7 py-7',
-      )}
-    >
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
+    <div className="relative h-full overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7">
+      <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <CardImageMask />
-      <div
-        className={cn(
-          'pointer-events-none absolute inset-0 border border-white/12',
-          mobile ? 'rounded-[22px]' : 'rounded-[28px]',
-        )}
-      />
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
       <div className="relative flex h-full flex-col justify-end">
         <div className="flex items-start gap-[10px]">
-          <Icon
-            size={mobile ? 17 : 18}
-            strokeWidth={2.05}
-            className="mt-[1px] shrink-0 text-white"
-          />
-          <h3
-            className={cn(
-              'font-heading tracking-[-0.024em] text-white',
-              mobile ? 'text-[19px] leading-[1.08]' : 'text-[21px] leading-[1.08]',
-            )}
-          >
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
             {title}
           </h3>
         </div>
 
         <div
-          className={cn(
-            'font-normal tracking-[-0.014em] text-white/88',
-            mobile ? 'mt-5 text-[15px] leading-[1.28]' : 'mt-7 text-[16px] leading-[1.34]',
-          )}
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
