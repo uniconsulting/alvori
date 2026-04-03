@@ -164,6 +164,8 @@ function MobileHeroServicesStage() {
 
   const [progress, setProgress] = useState(0);
 
+  const showMobileGeography = progress > 0.985;
+
   useEffect(() => {
     const handleScroll = () => {
       const root = sceneRef.current;
@@ -367,7 +369,7 @@ function MobileHeroServicesStage() {
       </div>
 
 <div className="relative -mt-[26vh] pt-8">
-  <GeographySection />
+   {showMobileGeography ? <GeographySection mobileOnly /> : null}
 </div>
     </section>
   );
