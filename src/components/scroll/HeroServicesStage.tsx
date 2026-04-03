@@ -164,7 +164,7 @@ function MobileHeroServicesStage() {
 
   const [progress, setProgress] = useState(0);
 
-  const showMobileGeography = progress > 0.985;
+  const showMobileGeography = progress > 0.995;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -323,7 +323,7 @@ function MobileHeroServicesStage() {
 
             <div
               className={cn(
-                'absolute inset-x-0 top-[8px] bottom-0 z-20',
+                'absolute inset-x-0 top-[36px] bottom-0 z-20',
                 transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
               )}
               style={{
@@ -368,9 +368,9 @@ function MobileHeroServicesStage() {
         </div>
       </div>
 
-<div className="relative -mt-[26vh] pt-8">
-   {showMobileGeography ? <GeographySection mobileOnly /> : null}
-</div>
+      <div className="relative -mt-[26vh] pt-8">
+        {showMobileGeography ? <GeographySection /> : null}
+      </div>
     </section>
   );
 }
