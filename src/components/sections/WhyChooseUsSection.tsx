@@ -273,6 +273,22 @@ export function WhyChooseUsSection() {
 function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(0);
+  const [displayedIndex, setDisplayedIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const preloaders = cards.map((card) => {
+      const img = new Image();
+      img.src = card.imageSrc;
+      return img;
+    });
+
+    return () => {
+      preloaders.forEach((img) => {
+        img.src = '';
+      });
+    };
+  }, [cards]);
 
   useEffect(() => {
     let raf = 0;
@@ -307,12 +323,24 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   }, []);
 
   const floatIndex = progress * (cards.length - 1);
-  const currentIndex = Math.floor(floatIndex);
-  const nextIndex = Math.min(currentIndex + 1, cards.length - 1);
-  const localProgress = floatIndex - currentIndex;
+  const targetIndex = Math.round(floatIndex);
 
-  const currentCard = cards[currentIndex];
-  const nextCard = cards[nextIndex];
+  useEffect(() => {
+    if (targetIndex === displayedIndex) return;
+
+    setIsVisible(false);
+
+    const swapTimer = window.setTimeout(() => {
+      setDisplayedIndex(targetIndex);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true);
+        });
+      });
+    }, 110);
+
+    return () => window.clearTimeout(swapTimer);
+  }, [targetIndex, displayedIndex]);
 
   return (
     <section ref={rootRef} className="relative h-[250vh]">
@@ -320,26 +348,17 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
         <div className="pt-6">
           <div className="relative h-[286px] w-full overflow-hidden rounded-[24px]">
             <div
-              className="absolute inset-0 will-change-opacity"
+              className="absolute inset-0 will-change-transform will-change-opacity"
               style={{
-                opacity: nextIndex === currentIndex ? 1 : 1 - localProgress,
-                transition: 'opacity 120ms linear',
+                opacity: isVisible ? 1 : 0,
+                transform: `translateZ(0) scale(${isVisible ? 1 : 0.988})`,
+                transition:
+                  'opacity 220ms cubic-bezier(0.22,1,0.36,1), transform 220ms cubic-bezier(0.22,1,0.36,1)',
+                backfaceVisibility: 'hidden',
               }}
             >
-              <WhyMobileUnifiedCard card={currentCard} />
+              <WhyMobileUnifiedCard card={cards[displayedIndex]} />
             </div>
-
-            {nextIndex !== currentIndex ? (
-              <div
-                className="absolute inset-0 will-change-opacity"
-                style={{
-                  opacity: localProgress,
-                  transition: 'opacity 120ms linear',
-                }}
-              >
-                <WhyMobileUnifiedCard card={nextCard} />
-              </div>
-            ) : null}
 
             <WhyChooseUsMobileRail cards={cards} floatIndex={floatIndex} />
           </div>
@@ -383,12 +402,25 @@ function WhyChooseUsMobileRail({
 
 function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
   return (
-    <div className="relative h-full overflow-hidden rounded-[24px] bg-[#26292e]">
-      <img
-        src={card.imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
+    <div
+      className="relative h-full overflow-hidden rounded-[24px] bg-[#26292e]"
+      style={{
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
+      }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(${card.imageSrc})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+        }}
       />
+
       <CardImageMask />
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
