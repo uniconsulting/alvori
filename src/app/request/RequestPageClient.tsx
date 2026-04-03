@@ -121,12 +121,13 @@ export default function RequestPageClient() {
                 </div>
               </div>
 
-<p
-  className="mt-10 max-w-[1120px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
-  style={{ fontFamily: 'var(--font-body-text)' }}
->
-  Выберите нужный сценарий: запросить коммерческое предложение или отправить свое КП.
-</p>
+              <p
+                className="mt-10 max-w-[1120px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                Выберите нужный сценарий: запросить коммерческое предложение или
+                отправить свое КП.
+              </p>
             </div>
 
             <div className="xl:hidden">
@@ -193,7 +194,7 @@ export default function RequestPageClient() {
               </button>
             </div>
 
-            <div className="hidden rounded-[34px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:block">
+            <div className="hidden rounded-[36px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:block">
               <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
                 <div className="flex h-full flex-col">
                   <div className="flex items-center gap-3">
@@ -262,7 +263,7 @@ export default function RequestPageClient() {
                   </div>
                 </div>
 
-                <div className="flex h-full flex-col rounded-[34px] bg-white/6 px-5 py-5">
+                <div className="flex h-full flex-col rounded-[28px] bg-white/6 px-5 py-5">
                   {mode === 'request' ? (
                     <div className="flex h-full flex-col">
                       <div className="flex items-center gap-2">
@@ -483,11 +484,14 @@ export default function RequestPageClient() {
                     </p>
                   </div>
 
-<div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
-  <Bullet text={'Выберите сценарий: запросить\nили отправить КП.'} mobile />
-  <Bullet text={'Заполните основные контактные\nданные и комментарий'} mobile />
-  <Bullet text={'Отправьте запрос для\nполучения обратной связи'} mobile />
-</div>
+                  <div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
+                    <Bullet text={'Выберите сценарий: запросить\nили отправить КП.'} mobile />
+                    <Bullet
+                      text={'Заполните основные контактные\nданные и комментарий'}
+                      mobile
+                    />
+                    <Bullet text={'Отправьте запрос для\nполучения обратной связи'} mobile />
+                  </div>
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <button
@@ -604,15 +608,19 @@ export default function RequestPageClient() {
       <section className="pb-12 pt-0 md:pb-14 xl:pb-16">
         <Container>
           <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-            <div className="rounded-[36px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[40px] xl:px-8 xl:py-8">
+            <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[36px] xl:px-8 xl:py-8">
               <div className="flex items-center gap-3">
-                <Calculator size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
+                <Calculator
+                  size={18}
+                  strokeWidth={2}
+                  className="text-[var(--accent-1)] xl:size-[19px]"
+                />
                 <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[30px]">
                   Данные из калькулятора
                 </h2>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4 xl:gap-4 xl:mt-6">
+              <div className="mt-5 grid grid-cols-2 gap-3 xl:mt-6 xl:grid-cols-4 xl:gap-4">
                 <InfoCard label="Маршрут" value={routeLabel} mobile />
                 <InfoCard label="Расстояние" value={initialData.distance || '—'} mobile />
                 <InfoCard label="Кузов" value={initialData.body || '—'} mobile />
@@ -679,8 +687,8 @@ function InfoCard({
     <div
       className={
         mobile
-          ? 'rounded-[18px] bg-[var(--bg)] px-4 py-4'
-          : 'rounded-[20px] bg-[var(--bg)] px-5 py-5'
+          ? 'rounded-[18px] bg-[var(--bg)] px-4 py-4 xl:rounded-[24px]'
+          : 'rounded-[24px] bg-[var(--bg)] px-5 py-5'
       }
     >
       <div
