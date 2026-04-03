@@ -335,14 +335,14 @@ function PageHeader() {
   return (
     <>
       <div className="hidden xl:block">
-        <Link
-          href="/"
-          className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
-          <ArrowLeft size={15} className="mr-2" />
-          вернуться
-        </Link>
+<Link
+  href="/"
+  className="inline-flex h-[42px] items-center px-0 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
+  <ArrowLeft size={15} className="mr-2" />
+  вернуться
+</Link>
 
         <div className="mt-5 flex items-center justify-between gap-6">
           <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
@@ -465,10 +465,10 @@ function ControlBar({
         </h2>
       </div>
 
-      <div
-        className="mt-4 rounded-[16px] bg-[var(--bg)] px-4 py-3 text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)] xl:mt-0 xl:ml-auto xl:mr-[8px] xl:rounded-none xl:bg-transparent xl:px-0 xl:py-0 xl:text-right"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
+<div
+  className="mt-4 px-0 py-0 text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)] xl:mt-0 xl:ml-auto xl:mr-[8px] xl:text-right"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
         маршрут:{' '}
         <span className="text-[var(--text)]">
           {routeFrom} → {routeTo}
@@ -541,7 +541,7 @@ function ControlBar({
 
         <div className="mt-3 grid grid-cols-3 gap-3">
           <SelectSegment
-            label="тип кузова"
+            label="кузов"
             value={bodyType}
             onChange={onChangeBody}
             options={Object.entries(BODY_CONFIG).map(([value, cfg]) => ({
@@ -558,17 +558,18 @@ function ControlBar({
             mobile
           />
 
-          <button
-            type="button"
-            onClick={onOpenFilters}
-            className="flex h-[76px] flex-col items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-3 text-center text-[13px] font-semibold lowercase leading-[1.12] tracking-[-0.016em] text-[var(--accent-1-text)]"
-            style={{ fontFamily: 'var(--font-body-text)' }}
-          >
-            <SlidersHorizontal size={16} strokeWidth={2} className="mb-2" />
-            все
-            <br />
-            фильтры
-          </button>
+<button
+  type="button"
+  onClick={onOpenFilters}
+  className="flex h-[76px] items-center justify-center rounded-[16px] bg-[var(--accent-1)]"
+  aria-label="все фильтры"
+>
+  <SlidersHorizontal
+    size={22}
+    strokeWidth={2.15}
+    className="text-[var(--accent-1-text)]"
+  />
+</button>
         </div>
       </div>
     </div>
@@ -638,13 +639,13 @@ function CitySegment({
       {open ? (
         <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[18px] bg-[var(--surface)] shadow-[0_20px_44px_rgba(38,41,46,0.12)]">
           <div className="p-3">
-            <input
-              autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Поиск города"
-              className="input-shell h-[46px] rounded-[14px] px-4 py-0"
-            />
+<input
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  placeholder="Поиск города"
+  className="input-shell h-[46px] rounded-[14px] px-4 py-0 text-[14px] placeholder:text-[12px]"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+/>
           </div>
           <div className="max-h-[280px] overflow-y-auto pb-2">
             {filtered.length ? (
@@ -1077,10 +1078,10 @@ function ExplainBlock() {
       title: '2. Поправка на кузов',
       text: 'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
     },
-    {
-      title: '3. Поправка на условия',
-      text: 'Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог.',
-    },
+{
+  title: '3. Поправка на условия',
+  text: 'Срочность, температура,\nтип загрузки, страхование и доп-\nточки корректирует итог.',
+},
     {
       title: '4. Рабочая вилка',
       text: 'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
@@ -1096,17 +1097,17 @@ function ExplainBlock() {
         </h2>
       </div>
 
-      <div className="mt-5 xl:hidden">
-        <div
-          ref={scrollerRef}
-          className="relative left-1/2 flex w-screen -translate-x-1/2 snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          style={{
-            paddingLeft: '10px',
-            paddingRight: 0,
-            scrollPaddingLeft: '10px',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
+<div className="mt-5 overflow-hidden xl:hidden">
+  <div
+    ref={scrollerRef}
+    className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+    style={{
+      paddingLeft: '0px',
+      paddingRight: '0px',
+      scrollPaddingLeft: '0px',
+      WebkitOverflowScrolling: 'touch',
+    }}
+  >
           <div className="h-px shrink-0" style={{ width: 0 }} aria-hidden="true" />
 
           {cards.map((card, index) => {
@@ -1124,10 +1125,10 @@ function ExplainBlock() {
                 ref={(node) => {
                   itemRefs.current[index] = node;
                 }}
-                className="w-[284px] shrink-0 snap-start"
+                className="w-[272px] shrink-0 snap-start"
               >
                 <div
-                  className="rounded-[18px] bg-[var(--bg)] px-5 py-5"
+                  className="min-h-[164px] rounded-[18px] bg-[var(--bg)] px-5 py-5"
                   style={{
                     transform: `translateX(${transform.translateX}px) rotateY(${transform.rotateY}deg) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`,
                     transformOrigin: transform.rotateY > 0 ? 'left center' : 'right center',
@@ -1136,12 +1137,12 @@ function ExplainBlock() {
                       'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
-                  <h3 className="font-heading text-[20px] leading-[1] tracking-[-0.024em] text-[var(--text)]">
+                  <h3 className="font-heading text-[17px] leading-[1] tracking-[-0.022em] text-[var(--text)]">
                     {card.title}
                   </h3>
-                  <p className="mt-4 text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
-                    {card.text}
-                  </p>
+    <p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
+  {card.text}
+</p>
                 </div>
               </div>
             );
