@@ -266,7 +266,7 @@ export function Footer() {
                 </span>
 
                 <span className="whitespace-nowrap opacity-40 text-[var(--footer-muted)]">
-                  MAX: +7 (902) 123-44-88
+                  MAX: +7 (995) 518-69-42
                 </span>
               </div>
             </div>
