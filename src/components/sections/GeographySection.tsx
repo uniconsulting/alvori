@@ -132,7 +132,7 @@ export function GeographySection({
               </div>
 
               <div className="relative z-30 pt-5">
-                <div className="pointer-events-none absolute right-0 top-[464px] z-50">
+                <div className="pointer-events-none absolute right-0 top-[460px] z-50">
                   <div className="pointer-events-auto inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
                     <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                       активное направление
