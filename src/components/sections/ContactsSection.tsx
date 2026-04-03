@@ -132,7 +132,7 @@ function RequestProposalButton({ mobile = false }: { mobile?: boolean }) {
       className={cn(
         'header-utility-button inline-flex items-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]',
         mobile
-          ? 'min-h-[64px] w-full gap-3 px-4 py-[10px]'
+          ? 'min-h-[64px] w-full gap-3 px-[10px] py-[10px]'
           : 'h-[42px] gap-3 px-[12px] pr-[16px]',
       )}
       style={{ fontFamily: 'var(--font-body-text)' }}
