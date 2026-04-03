@@ -290,6 +290,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
         const viewportHeight = window.innerHeight;
         const total = Math.max(root.offsetHeight - viewportHeight, 1);
         const passed = Math.min(Math.max(-rect.top, 0), total);
+
         setProgress(passed / total);
       });
     };
@@ -316,13 +317,14 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   return (
     <section ref={rootRef} className="relative h-[260vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="flex h-full flex-col">
-          <div className="relative mt-2 h-[286px] w-full overflow-hidden">
+        <div className="flex h-full items-start pt-2">
+          <div className="relative h-[286px] w-full overflow-hidden rounded-[24px]">
             <div
               className="absolute inset-0 will-change-transform will-change-opacity"
               style={{
                 transform: `translate3d(0, ${-28 * localProgress}px, 0) scale(${1 - 0.04 * localProgress})`,
                 opacity: 1 - localProgress,
+                transition: 'transform 100ms linear, opacity 100ms linear',
               }}
             >
               <WhyMobileUnifiedCard card={currentCard} />
@@ -334,30 +336,52 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
                 style={{
                   transform: `translate3d(0, ${48 * (1 - localProgress)}px, 0) scale(${0.96 + 0.04 * localProgress})`,
                   opacity: localProgress,
+                  transition: 'transform 100ms linear, opacity 100ms linear',
                 }}
               >
                 <WhyMobileUnifiedCard card={nextCard} />
               </div>
             ) : null}
-          </div>
 
-          <div className="mt-4 flex justify-center gap-2">
-            {cards.map((card, index) => {
-              const isActive = index === Math.round(floatIndex);
-              return (
-                <span
-                  key={card.id}
-                  className={cn(
-                    'block rounded-full transition-all duration-200',
-                    isActive ? 'h-[3px] w-[28px] bg-[var(--accent-1)]' : 'h-[3px] w-[14px] bg-[var(--accent-2)]',
-                  )}
-                />
-              );
-            })}
+            <WhyChooseUsMobileRail cards={cards} floatIndex={floatIndex} />
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function WhyChooseUsMobileRail({
+  cards,
+  floatIndex,
+}: {
+  cards: WhyCardItem[];
+  floatIndex: number;
+}) {
+  return (
+    <div className="pointer-events-none absolute right-[14px] top-1/2 z-30 -translate-y-1/2">
+      <div className="flex h-[148px] flex-col items-center justify-between">
+        {cards.map((card, index) => {
+          const distance = Math.abs(index - floatIndex);
+          const isActive = distance < 0.5;
+
+          const height = isActive ? 28 : 14;
+          const opacity = isActive ? 1 : 0.92;
+
+          return (
+            <span
+              key={card.id}
+              className="block w-[3px] rounded-full transition-all duration-200"
+              style={{
+                height: `${height}px`,
+                opacity,
+                background: isActive ? 'var(--accent-1)' : 'var(--accent-2)',
+              }}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -372,7 +396,7 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
       <CardImageMask />
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
-      <div className="relative flex h-full flex-col justify-end px-5 py-5">
+      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[34px]">
         <div className="flex items-start gap-[10px]">
           <card.icon
             size={17}
