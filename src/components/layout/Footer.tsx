@@ -190,23 +190,23 @@ export function Footer() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-3">
-                <MessengerButton
-                  href={contacts.maxHref}
-                  label="написать в max"
-                  logoSrc={assets.maxLogo}
-                  logoFallbackSrc={assets.maxLogoFallback}
-                  mobile
-                />
+<div className="grid grid-cols-2 gap-3">
+  <MessengerButton
+    href={contacts.maxHref}
+    label="написать в max"
+    logoSrc={assets.maxLogo}
+    logoFallbackSrc={assets.maxLogoFallback}
+    mobile
+  />
 
-                <MessengerButton
-                  href={contacts.telegramHref}
-                  label="написать в tg"
-                  logoSrc={assets.telegramLogo}
-                  logoFallbackSrc={assets.telegramLogoFallback}
-                  mobile
-                />
-              </div>
+  <MessengerButton
+    href={contacts.telegramHref}
+    label="написать в tg"
+    logoSrc={assets.telegramLogo}
+    logoFallbackSrc={assets.telegramLogoFallback}
+    mobile
+  />
+</div>
 
               <div className="h-[1px] w-full bg-[var(--footer-line)] opacity-40" />
 
@@ -409,7 +409,7 @@ function MessengerButton({
       href={href}
       className={cn(
         'header-utility-button inline-flex w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] text-[var(--footer-button-text)]',
-        mobile ? 'h-[54px] px-5' : 'h-[56px] px-5',
+        mobile ? 'h-[54px] px-3.5' : 'h-[56px] px-5',
       )}
     >
       <div className="flex h-[28px] w-[28px] items-center justify-center">
@@ -424,7 +424,7 @@ function MessengerButton({
       <span
         className={cn(
           'whitespace-nowrap tracking-[-0.01em] text-[var(--footer-button-text)]',
-          mobile ? 'text-[16px] leading-none' : 'text-[17px] leading-none',
+          mobile ? 'text-[15px] leading-none' : 'text-[17px] leading-none',
         )}
       >
         {label}
