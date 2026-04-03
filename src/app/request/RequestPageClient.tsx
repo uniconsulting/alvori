@@ -125,11 +125,8 @@ export default function RequestPageClient() {
                 className="mt-10 max-w-[860px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
-                Выберите нужный сценарий: запросить коммерческое предложение
-                <br />
-                или отправить своё КП. Основные параметры можно заполнить сразу,
-                <br />
-                а дополнительные — открыть в расширенной панели.
+                Выберите нужный сценарий: запросить коммерческое предложение или
+                отправить свое КП.
               </p>
             </div>
 
@@ -163,12 +160,14 @@ export default function RequestPageClient() {
               </h1>
 
               <p
-                className="mt-5 max-w-[680px] text-[16px] font-normal leading-[1.3] tracking-[-0.018em] text-[var(--muted)] md:text-[17px]"
+                className="mt-5 max-w-[640px] text-[16px] font-normal leading-[1.3] tracking-[-0.018em] text-[var(--muted)] md:text-[17px]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
-                Выберите нужный сценарий: запросить коммерческое предложение
-                или отправить своё КП. Основные параметры можно заполнить сразу,
-                а дополнительные — открыть в расширенной панели.
+                Выберите нужный сценарий: запросить
+                <br />
+                коммерческое предложение
+                <br />
+                или отправить свое КП.
               </p>
             </div>
           </div>
@@ -178,7 +177,7 @@ export default function RequestPageClient() {
       <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
         <Container>
           <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-            <div className="grid max-w-[430px] grid-cols-2 gap-3">
+            <div className="mb-5 grid w-full max-w-[430px] grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setMode('request')}
@@ -195,8 +194,8 @@ export default function RequestPageClient() {
               </button>
             </div>
 
-            <div className="mt-5 rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:rounded-[32px] xl:px-8 xl:py-8">
-              <div className="hidden xl:grid xl:grid-cols-[0.98fr_0.72fr] xl:gap-6">
+            <div className="hidden rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:block">
+              <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
                 <div className="flex h-full flex-col">
                   <div className="flex items-center gap-3">
                     <SendHorizonal
@@ -334,8 +333,13 @@ export default function RequestPageClient() {
                                 Загрузить файлы
                               </span>
                               <span className="mt-2 text-[13px] text-white/58">
-                                PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
+                                PDF, DOCX, XLSX, PPTX, TXT · до 3 файлов
                               </span>
+
+                              <div className="pointer-events-none absolute inset-x-5 bottom-5 z-10 rounded-[14px] bg-[#3a3d43] px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 shadow-[0_12px_28px_rgba(0,0,0,0.28)] transition duration-300 group-hover:text-white/78 group-hover:opacity-100">
+                                Прикрепите до 3 файлов с коммерческим предложением в
+                                допустимых форматах.
+                              </div>
                             </div>
                           ) : (
                             <div className="flex h-full flex-col">
@@ -399,204 +403,200 @@ export default function RequestPageClient() {
                   )}
                 </div>
               </div>
+            </div>
 
-              <div className="xl:hidden">
-                <div className="flex items-center gap-3">
-                  <SendHorizonal
-                    size={18}
-                    strokeWidth={2}
-                    className="text-[var(--accent-1)]"
-                  />
-                  <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em]">
-                    {mode === 'request' ? 'Форма запроса КП' : 'Форма отправки КП'}
-                  </h2>
-                </div>
-
-                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <FieldDark label="Компания">
-                    <input
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                      placeholder="Название компании"
-                      className={darkInputClassMobile}
-                    />
-                  </FieldDark>
-
-                  <FieldDark label="Контактное лицо">
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Ваше имя"
-                      className={darkInputClassMobile}
-                    />
-                  </FieldDark>
-
-                  <FieldDark label="Телефон / Telegram">
-                    <input
-                      value={contact}
-                      onChange={(e) => setContact(e.target.value)}
-                      placeholder="+7 (...) ... или @telegram"
-                      className={darkInputClassMobile}
-                    />
-                  </FieldDark>
-
-                  <FieldDark label="Тип груза">
-                    <input
-                      value={cargoType}
-                      onChange={(e) => setCargoType(e.target.value)}
-                      placeholder="Например, оборудование"
-                      className={darkInputClassMobile}
-                    />
-                  </FieldDark>
-                </div>
-
-                <div className="mt-3">
-                  <FieldDark label="Комментарий">
-                    <textarea
-                      rows={4}
-                      value={shortComment}
-                      onChange={(e) => setShortComment(e.target.value)}
-                      placeholder={
-                        mode === 'request'
-                          ? 'Кратко опишите задачу и ожидания по запросу'
-                          : 'Кратко опишите, что вы направляете в качестве коммерческого предложения'
-                      }
-                      className={`${darkInputClassMobile} min-h-[116px] resize-none py-4`}
-                    />
-                  </FieldDark>
-                </div>
-
-                {mode === 'request' ? (
-                  <div className="mt-4 rounded-[18px] bg-white/6 px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <CircleAlert
-                        size={15}
-                        strokeWidth={2}
-                        className="text-[var(--accent-1)]"
-                      />
-                      <p className="text-[14px] font-semibold tracking-[-0.016em]">
-                        Что дальше
-                      </p>
-                    </div>
-
-                    <div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
-                      <Bullet text="Выберите сценарий: запросить или отправить КП" />
-                      <Bullet text="Заполните основные контактные данные и комментарий" />
-                      <Bullet text="Отправьте запрос для получения обратной связи" />
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-                      >
-                        отправить запрос
-                      </button>
-
-                      <Link
-                        href="/calculator"
-                        className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-4 text-[14px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-                      >
-                        к калькулятору
-                      </Link>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-4 rounded-[18px] bg-white/6 px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <Paperclip
-                        size={15}
-                        strokeWidth={2}
-                        className="text-[var(--accent-1)]"
-                      />
-                      <p className="text-[14px] font-semibold tracking-[-0.016em]">
-                        Вложения
-                      </p>
-                    </div>
-
-                    <label className="relative mt-4 flex min-h-[164px] cursor-pointer flex-col overflow-hidden rounded-[16px] bg-white/8 px-4 py-4 transition hover:bg-white/10">
-                      <input
-                        type="file"
-                        multiple
-                        className="hidden"
-                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-                        onChange={(e) => handleFileSelect(e.target.files)}
-                      />
-
-                      {files.length === 0 ? (
-                        <div className="flex h-full flex-col items-center justify-center text-center">
-                          <Upload
-                            size={20}
-                            strokeWidth={2}
-                            className="text-[var(--accent-1)]"
-                          />
-                          <span className="mt-3 text-[14px] font-semibold">
-                            Загрузить файлы
-                          </span>
-                          <span className="mt-2 text-[12px] text-white/58">
-                            PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex h-full flex-col">
-                          <div className="mb-3 flex items-center justify-between">
-                            <span className="text-[12px] font-semibold text-white/72">
-                              Загруженные файлы
-                            </span>
-                            <span className="text-[12px] text-white/52">
-                              {files.length}/5
-                            </span>
-                          </div>
-
-                          <div className="flex-1 space-y-2 overflow-y-auto pr-1">
-                            {files.map((file, index) => (
-                              <div
-                                key={`${file.name}-${index}`}
-                                className="flex items-center justify-between rounded-[12px] bg-white/8 px-3 py-3"
-                              >
-                                <span className="truncate pr-3 text-[13px] text-white/84">
-                                  {file.name}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    removeFile(index);
-                                  }}
-                                  className="ml-2 inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[8px] bg-white/10 text-white"
-                                >
-                                  <X size={13} />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="mt-3 rounded-[12px] bg-white/8 px-3 py-3 text-[12px] leading-[1.35] text-white/60">
-                            Нажмите в область, чтобы добавить ещё файлы.
-                          </div>
-                        </div>
-                      )}
-                    </label>
-
-                    <div className="mt-4 grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-                      >
-                        отправить КП
-                      </button>
-
-                      <Link
-                        href="/calculator"
-                        className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-4 text-[14px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-                      >
-                        к калькулятору
-                      </Link>
-                    </div>
-                  </div>
-                )}
+            <div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:hidden">
+              <div className="flex items-center gap-3">
+                <SendHorizonal
+                  size={18}
+                  strokeWidth={2}
+                  className="text-[var(--accent-1)]"
+                />
+                <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em]">
+                  {mode === 'request' ? 'Форма запроса КП' : 'Форма отправки КП'}
+                </h2>
               </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <FieldDark label="Компания">
+                  <input
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="Название компании"
+                    className={darkInputClassMobile}
+                  />
+                </FieldDark>
+
+                <FieldDark label="Контактное лицо">
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ваше имя"
+                    className={darkInputClassMobile}
+                  />
+                </FieldDark>
+
+                <FieldDark label="Телефон / Telegram">
+                  <input
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="+7 (...) ... или @telegram"
+                    className={darkInputClassMobile}
+                  />
+                </FieldDark>
+
+                <FieldDark label="Тип груза">
+                  <input
+                    value={cargoType}
+                    onChange={(e) => setCargoType(e.target.value)}
+                    placeholder="Например, оборудование"
+                    className={darkInputClassMobile}
+                  />
+                </FieldDark>
+              </div>
+
+              <div className="mt-4">
+                <FieldDark label="Комментарий">
+                  <textarea
+                    rows={4}
+                    value={shortComment}
+                    onChange={(e) => setShortComment(e.target.value)}
+                    placeholder={
+                      mode === 'request'
+                        ? 'Кратко опишите задачу и ожидания по запросу'
+                        : 'Кратко опишите, что вы направляете в качестве коммерческого предложения'
+                    }
+                    className={`${darkInputClassMobile} min-h-[112px] resize-none py-4`}
+                  />
+                </FieldDark>
+              </div>
+
+              {mode === 'request' ? (
+                <div className="mt-4 rounded-[18px] bg-white/6 px-4 py-4">
+                  <div className="flex items-center gap-2">
+                    <CircleAlert
+                      size={15}
+                      strokeWidth={2}
+                      className="text-[var(--accent-1)]"
+                    />
+                    <p className="text-[14px] font-semibold tracking-[-0.016em]">
+                      Что дальше
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
+                    <Bullet text="Выберите сценарий: запросить или отправить КП" />
+                    <Bullet text="Заполните основные контактные данные и комментарий" />
+                    <Bullet text="Отправьте запрос для получения обратной связи" />
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                    >
+                      отправить запрос
+                    </button>
+
+                    <Link
+                      href="/calculator"
+                      className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-4 text-[14px] font-semibold lowercase tracking-[-0.016em] text-white"
+                    >
+                      к калькулятору
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 rounded-[18px] bg-white/6 px-4 py-4">
+                  <div className="flex items-center gap-2">
+                    <Paperclip
+                      size={15}
+                      strokeWidth={2}
+                      className="text-[var(--accent-1)]"
+                    />
+                    <p className="text-[14px] font-semibold tracking-[-0.016em]">
+                      Вложения
+                    </p>
+                  </div>
+
+                  <label className="relative mt-4 flex min-h-[152px] cursor-pointer flex-col overflow-hidden rounded-[16px] bg-white/6 px-4 py-4 transition">
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                      onChange={(e) => handleFileSelect(e.target.files)}
+                    />
+
+                    {files.length === 0 ? (
+                      <div className="flex h-full flex-col items-center justify-center text-center">
+                        <Upload
+                          size={20}
+                          strokeWidth={2}
+                          className="text-[var(--accent-1)]"
+                        />
+                        <span className="mt-3 text-[14px] font-semibold">
+                          Загрузить файлы
+                        </span>
+                        <span className="mt-2 text-[12px] text-white/58">
+                          PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex h-full flex-col">
+                        <div className="mb-3 flex items-center justify-between">
+                          <span className="text-[12px] font-semibold text-white/72">
+                            Загруженные файлы
+                          </span>
+                          <span className="text-[12px] text-white/52">
+                            {files.length}/5
+                          </span>
+                        </div>
+
+                        <div className="flex-1 space-y-2 overflow-y-auto pr-1">
+                          {files.map((file, index) => (
+                            <div
+                              key={`${file.name}-${index}`}
+                              className="flex items-center justify-between rounded-[12px] bg-white/8 px-3 py-3"
+                            >
+                              <span className="truncate pr-3 text-[13px] text-white/84">
+                                {file.name}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  removeFile(index);
+                                }}
+                                className="ml-2 inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[9px] bg-white/10 text-white"
+                              >
+                                <X size={13} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </label>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                    >
+                      отправить КП
+                    </button>
+
+                    <Link
+                      href="/calculator"
+                      className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-white/10 px-4 text-[14px] font-semibold lowercase tracking-[-0.016em] text-white"
+                    >
+                      к калькулятору
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </Container>
@@ -613,7 +613,7 @@ export default function RequestPageClient() {
                 </h2>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3 xl:mt-6 xl:grid-cols-4 xl:gap-4">
+              <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4 xl:gap-4 xl:mt-6">
                 <InfoCard label="Маршрут" value={routeLabel} mobile />
                 <InfoCard label="Расстояние" value={initialData.distance || '—'} mobile />
                 <InfoCard label="Кузов" value={initialData.body || '—'} mobile />
@@ -654,8 +654,8 @@ function FieldDark({
 
 function Bullet({ text }: { text: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <span className="mt-[6px] h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--accent-1)]" />
+    <div className="flex items-center gap-3">
+      <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--accent-1)]" />
       <span>{text}</span>
     </div>
   );
@@ -690,7 +690,7 @@ function InfoCard({
       <div
         className={
           mobile
-            ? 'mt-3 text-[14px] font-semibold leading-[1.24] text-[var(--text)]'
+            ? 'mt-3 text-[14px] font-semibold leading-[1.26] text-[var(--text)]'
             : 'mt-3 text-[16px] font-semibold leading-[1.28] text-[var(--text)]'
         }
       >
@@ -704,7 +704,7 @@ const darkInputClass =
   'h-[56px] w-full rounded-[12px] border-0 bg-white/8 px-5 text-[15px] font-normal tracking-[-0.014em] text-white outline-none transition duration-200 placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-white/48 hover:bg-white/10 focus:bg-white/12';
 
 const darkInputClassMobile =
-  'h-[54px] w-full rounded-[12px] border-0 bg-white/8 px-4 text-[14px] font-normal tracking-[-0.014em] text-white outline-none transition duration-200 placeholder:text-[12px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-white/48 hover:bg-white/10 focus:bg-white/12';
+  'h-[52px] w-full rounded-[12px] border-0 bg-white/8 px-4 text-[14px] font-normal tracking-[-0.014em] text-white outline-none transition duration-200 placeholder:text-[12px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-white/48 focus:bg-white/12';
 
 function modeButtonClass(active: boolean) {
   return `inline-flex h-[48px] items-center justify-center rounded-[14px] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] transition ${
