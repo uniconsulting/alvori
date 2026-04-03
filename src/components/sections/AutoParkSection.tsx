@@ -32,14 +32,14 @@ type FleetMode = 'trucks' | 'trailers';
 export function AutoParkSection() {
   const [mobileMode, setMobileMode] = useState<FleetMode>('trucks');
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setMobileMode((prev) => (prev === 'trucks' ? 'trailers' : 'trucks'));
-    }, 4200);
+useEffect(() => {
+  const interval = window.setInterval(() => {
+    setMobileMode((prev) => (prev === 'trucks' ? 'trailers' : 'trucks'));
+  }, 5600);
 
-    return () => window.clearInterval(interval);
-  }, []);
-
+  return () => window.clearInterval(interval);
+}, []);
+  
   const mobileTitle = mobileMode === 'trucks' ? 'тягачей' : 'и полуприцепов';
   const mobileBrands = mobileMode === 'trucks' ? TRUCK_BRANDS : TRAILER_BRANDS;
   const mobilePoints = mobileMode === 'trucks' ? TRUCK_POINTS : TRAILER_POINTS;
@@ -223,13 +223,13 @@ function MobileTitleSwitcher({
           : 'border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent',
       )}
     >
-      <div
-        key={mode}
-        className="flex h-full items-center justify-center px-5"
-        style={{
-          animation: 'autoparkMobileFadeIn 320ms cubic-bezier(0.22,1,0.36,1)',
-        }}
-      >
+<div
+  key={mode}
+  className="flex h-full items-center justify-center px-5"
+  style={{
+    animation: 'autoparkMobileFadeIn 520ms cubic-bezier(0.22,1,0.36,1)',
+  }}
+>
         <span
           className={cn(
             'font-heading text-[24px] leading-none tracking-[-0.03em]',
@@ -283,23 +283,23 @@ function MobileInfoSwitcher({
   mode: FleetMode;
 }) {
   return (
-    <div className="relative min-h-[244px] overflow-hidden rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <div
-        key={mode}
-        style={{
-          animation: 'autoparkMobileFadeIn 340ms cubic-bezier(0.22,1,0.36,1)',
-        }}
-      >
+<div className="relative min-h-[224px] overflow-hidden rounded-[22px] bg-[var(--surface)] px-5 py-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+  <div
+    key={mode}
+    style={{
+      animation: 'autoparkMobileFadeIn 560ms cubic-bezier(0.22,1,0.36,1)',
+    }}
+  >
         <div className="flex flex-wrap gap-2.5">
           {brands.map((brand) => (
             <MobileBrandPill key={brand} label={brand} />
           ))}
         </div>
 
-        <div
-          className="mt-6 flex flex-col gap-3.5 text-[15px] font-normal leading-[1.26] tracking-[-0.015em] text-[var(--text)]"
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
+<div
+  className="mt-5 flex flex-col gap-3 text-[15px] font-normal leading-[1.24] tracking-[-0.015em] text-[var(--text)]"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
           {points.map((point) => (
             <div key={point} className="flex items-center gap-3">
               <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--text)]" />
@@ -310,16 +310,20 @@ function MobileInfoSwitcher({
       </div>
 
       <style jsx>{`
-        @keyframes autoparkMobileFadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(8px) scale(0.992);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
+@keyframes autoparkMobileFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.988);
+  }
+  60% {
+    opacity: 0.82;
+    transform: translateY(2px) scale(0.996);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
       `}</style>
     </div>
   );
