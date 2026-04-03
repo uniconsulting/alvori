@@ -12,6 +12,15 @@ type GalleryItem = {
   delayMs: number;
 };
 
+type MobileCardTransform = {
+  rotateY: number;
+  translateX: number;
+  scaleX: number;
+  scaleY: number;
+  opacity: number;
+  shadowOpacity: number;
+};
+
 const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'main',
@@ -47,10 +56,46 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
-export function AutoParkGallery() {
+function clamp(value: number, min = 0, max = 1) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function getMobileCardTransform(
+  cardRect: DOMRect,
+  containerRect: DOMRect,
+): MobileCardTransform {
+  const containerCenter = containerRect.left + containerRect.width / 2;
+  const cardCenter = cardRect.left + cardRect.width / 2;
+
+  const distance = cardCenter - containerCenter;
+  const normalized = clamp(distance / (containerRect.width * 0.52), -1, 1);
+  const absN = Math.abs(normalized);
+
+  return {
+    rotateY: -normalized * 16,
+    translateX: -normalized * 8,
+    scaleX: 1 - absN * 0.1,
+    scaleY: 1 - absN * 0.03,
+    opacity: 1 - absN * 0.18,
+    shadowOpacity: 0.1 + (1 - absN) * 0.08,
+  };
+}
+
+export function AutoParkGallery({ mobile = false }: { mobile?: boolean }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
+
+  const mobileScrollerRef = useRef<HTMLDivElement | null>(null);
+  const mobileItemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const frameRef = useRef<number | null>(null);
+
+  const [mobileTransforms, setMobileTransforms] = useState<MobileCardTransform[]>([
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
+  ]);
 
   const items = useMemo(() => GALLERY_ITEMS, []);
 
@@ -74,9 +119,125 @@ export function AutoParkGallery() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!mobile) return;
+
+    const scroller = mobileScrollerRef.current;
+    if (!scroller) return;
+
+    const updateTransforms = () => {
+      const containerRect = scroller.getBoundingClientRect();
+
+      const next = mobileItemRefs.current.map((node) => {
+        if (!node) {
+          return {
+            rotateY: 0,
+            translateX: 0,
+            scaleX: 1,
+            scaleY: 1,
+            opacity: 1,
+            shadowOpacity: 0.18,
+          };
+        }
+
+        return getMobileCardTransform(node.getBoundingClientRect(), containerRect);
+      });
+
+      setMobileTransforms(next);
+      frameRef.current = null;
+    };
+
+    const requestUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateTransforms);
+    };
+
+    updateTransforms();
+
+    scroller.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      scroller.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [mobile]);
+
   const handleMouseLeave = () => {
     setActiveId(null);
   };
+
+  if (mobile) {
+    const mobileLeftOpticalSpacer = 16;
+    const mobileCardWidth = 264;
+
+    return (
+      <div className="relative left-1/2 w-screen -translate-x-1/2">
+        <div
+          ref={mobileScrollerRef}
+          className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          style={{
+            paddingLeft: `${mobileLeftOpticalSpacer}px`,
+            paddingRight: 0,
+            scrollPaddingLeft: `${mobileLeftOpticalSpacer}px`,
+            scrollPaddingRight: 0,
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          <div className="h-px shrink-0" style={{ width: 0 }} aria-hidden="true" />
+
+          {items.map((item, index) => {
+            const transform = mobileTransforms[index] ?? {
+              rotateY: 0,
+              translateX: 0,
+              scaleX: 1,
+              scaleY: 1,
+              opacity: 1,
+              shadowOpacity: 0.18,
+            };
+
+            return (
+              <div
+                key={item.id}
+                ref={(node) => {
+                  mobileItemRefs.current[index] = node;
+                }}
+                className="shrink-0 snap-start"
+                style={{ width: `${mobileCardWidth}px` }}
+              >
+                <div
+                  className="relative h-[286px] overflow-hidden rounded-[24px] bg-[#26292e]"
+                  style={{
+                    transform: `translateX(${transform.translateX}px) rotateY(${transform.rotateY}deg) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`,
+                    transformOrigin:
+                      transform.rotateY > 0 ? 'left center' : 'right center',
+                    opacity: transform.opacity,
+                    boxShadow: `0 12px 28px rgba(38,41,46,${transform.shadowOpacity})`,
+                    transition:
+                      'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1)',
+                  }}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className="h-full w-full object-cover object-center"
+                    loading="lazy"
+                  />
+
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.06)_0%,rgba(38,41,46,0.14)_52%,rgba(38,41,46,0.30)_100%)]" />
+                  <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/16" />
+                  <div className="pointer-events-none absolute inset-0 rounded-[24px] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
