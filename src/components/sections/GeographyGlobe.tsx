@@ -3,6 +3,7 @@
 import createGlobe from 'cobe';
 import { Minus, Plus } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/cn';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
 function rgb(hex: string): [number, number, number] {
