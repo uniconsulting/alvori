@@ -62,26 +62,35 @@ export function Footer() {
     footerLogoMobile: `${sitePath}/brand/footer/logo.png`,
     footerLogoMobileFallback: `${sitePath}/brand/footer/logo.png`,
 
-    developerLogo:
+    developerLogoDesktop:
       theme === 'dark'
         ? `${sitePath}/brand/developer/dark/logo.svg`
         : `${sitePath}/brand/developer/light/logo.svg`,
 
-    maxLogo: isLightTheme
+    developerLogoMobile: `${sitePath}/brand/developer/logo.png`,
+    developerLogoMobileFallback: `${sitePath}/brand/developer/logo.png`,
+
+    maxLogoDesktop: isLightTheme
       ? `${sitePath}/brand/messengers/max/light.svg`
       : `${sitePath}/brand/messengers/max/dark.svg`,
-    maxLogoFallback: isLightTheme
+    maxLogoDesktopFallback: isLightTheme
       ? `${sitePath}/brand/messengers/max/dark.svg`
       : `${sitePath}/brand/messengers/max/light.svg`,
 
-    telegramLogo: isLightTheme
+    maxLogoMobile: `${sitePath}/brand/messengers/max/logo.png`,
+    maxLogoMobileFallback: `${sitePath}/brand/messengers/max/logo.png`,
+
+    telegramLogoDesktop: isLightTheme
       ? `${sitePath}/brand/messengers/telegram/light.svg`
       : `${sitePath}/brand/messengers/telegram/dark.svg`,
-    telegramLogoFallback: isLightTheme
+    telegramLogoDesktopFallback: isLightTheme
       ? `${sitePath}/brand/messengers/telegram/dark.svg`
       : `${sitePath}/brand/messengers/telegram/light.svg`,
 
-    trucks: [
+    telegramLogoMobile: `${sitePath}/brand/messengers/telegram/logo.png`,
+    telegramLogoMobileFallback: `${sitePath}/brand/messengers/telegram/logo.png`,
+
+    trucksDesktop: [
       isLightTheme
         ? `${sitePath}/brand/trucks/footer/light/truck-1.svg`
         : `${sitePath}/brand/trucks/footer/dark/truck-1.svg`,
@@ -92,11 +101,17 @@ export function Footer() {
         ? `${sitePath}/brand/trucks/footer/light/truck-3.svg`
         : `${sitePath}/brand/trucks/footer/dark/truck-3.svg`,
     ],
+
+    trucksMobile: [
+      `${sitePath}/brand/trucks/footer/track-1.png`,
+      `${sitePath}/brand/trucks/footer/track-2.png`,
+      `${sitePath}/brand/trucks/footer/track-3.png`,
+    ],
   };
 
   return (
     <footer
-      className="relative mt-10 md:mt-14"
+      className="relative mt-10 bg-[var(--footer-bg)] md:mt-14"
       style={
         {
           ['--footer-bg' as string]: palette.bg,
@@ -110,8 +125,14 @@ export function Footer() {
       }
     >
       <div className="bg-[var(--footer-bg)] text-[var(--footer-text)]">
-        <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
-          <Road trucks={assets.trucks} />
+        <Container className="flex min-h-[500px] flex-col pt-10 pb-8 md:pt-10 md:pb-5">
+          <div className="hidden lg:block">
+            <Road trucks={assets.trucksDesktop} />
+          </div>
+
+          <div className="lg:hidden">
+            <Road trucks={assets.trucksMobile} />
+          </div>
 
           <div className="mt-10 hidden gap-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-start">
             <div className="w-full max-w-[430px] justify-self-start space-y-8">
@@ -171,15 +192,15 @@ export function Footer() {
                 <MessengerButton
                   href={contacts.maxHref}
                   label="написать в max"
-                  logoSrc={assets.maxLogo}
-                  logoFallbackSrc={assets.maxLogoFallback}
+                  logoSrc={assets.maxLogoDesktop}
+                  logoFallbackSrc={assets.maxLogoDesktopFallback}
                 />
 
                 <MessengerButton
                   href={contacts.telegramHref}
                   label="написать в tg"
-                  logoSrc={assets.telegramLogo}
-                  logoFallbackSrc={assets.telegramLogoFallback}
+                  logoSrc={assets.telegramLogoDesktop}
+                  logoFallbackSrc={assets.telegramLogoDesktopFallback}
                 />
               </div>
             </div>
@@ -193,6 +214,7 @@ export function Footer() {
                   fallbackSrc={assets.footerLogoMobileFallback}
                   alt="Алвори"
                   className="h-full w-full object-contain object-left"
+                  preferContainBox
                 />
               </div>
 
@@ -218,17 +240,19 @@ export function Footer() {
                 <MessengerButton
                   href={contacts.maxHref}
                   label="написать в max"
-                  logoSrc={assets.maxLogo}
-                  logoFallbackSrc={assets.maxLogoFallback}
+                  logoSrc={assets.maxLogoMobile}
+                  logoFallbackSrc={assets.maxLogoMobileFallback}
                   mobile
+                  imageIsPng
                 />
 
                 <MessengerButton
                   href={contacts.telegramHref}
                   label="написать в tg"
-                  logoSrc={assets.telegramLogo}
-                  logoFallbackSrc={assets.telegramLogoFallback}
+                  logoSrc={assets.telegramLogoMobile}
+                  logoFallbackSrc={assets.telegramLogoMobileFallback}
                   mobile
+                  imageIsPng
                 />
               </div>
 
@@ -250,7 +274,7 @@ export function Footer() {
                 <div className="flex items-center gap-4 whitespace-nowrap">
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
                     <AssetImage
-                      src={assets.developerLogo}
+                      src={assets.developerLogoDesktop}
                       alt="Юни"
                       className="h-[20px] w-auto object-contain"
                     />
@@ -272,15 +296,17 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-8 overflow-hidden lg:hidden">
+          <div className="mt-8 overflow-hidden pb-[max(env(safe-area-inset-bottom),8px)] lg:hidden">
             <div className="relative h-[26px]">
               <div className="footer-marquee absolute left-0 top-0 flex min-w-max items-center gap-4 whitespace-nowrap text-[14px] leading-none tracking-[-0.01em] text-[var(--footer-muted)]">
                 <div className="flex items-center gap-3">
                   <div className="flex h-[18px] w-[24px] items-center justify-center">
                     <AssetImage
-                      src={assets.developerLogo}
+                      src={assets.developerLogoMobile}
+                      fallbackSrc={assets.developerLogoMobileFallback}
                       alt="Юни"
                       className="h-[14px] w-auto object-contain"
+                      imageIsPng
                     />
                   </div>
                   <span>Сайт разработан командой ЮНИ.ai</span>
@@ -296,9 +322,11 @@ export function Footer() {
                 <div className="flex items-center gap-3">
                   <div className="flex h-[18px] w-[24px] items-center justify-center">
                     <AssetImage
-                      src={assets.developerLogo}
+                      src={assets.developerLogoMobile}
+                      fallbackSrc={assets.developerLogoMobileFallback}
                       alt="Юни"
                       className="h-[14px] w-auto object-contain"
+                      imageIsPng
                     />
                   </div>
                   <span>Сайт разработан командой ЮНИ.ai</span>
@@ -419,12 +447,14 @@ function MessengerButton({
   logoSrc,
   logoFallbackSrc,
   mobile = false,
+  imageIsPng = false,
 }: {
   href: string;
   label: string;
   logoSrc: string;
   logoFallbackSrc?: string;
   mobile?: boolean;
+  imageIsPng?: boolean;
 }) {
   return (
     <Link
@@ -440,6 +470,8 @@ function MessengerButton({
           fallbackSrc={logoFallbackSrc}
           alt=""
           className="h-[22px] w-auto object-contain"
+          imageIsPng={imageIsPng}
+          preferContainBox={imageIsPng}
         />
       </div>
 
@@ -460,11 +492,15 @@ function AssetImage({
   fallbackSrc,
   alt,
   className,
+  imageIsPng = false,
+  preferContainBox = false,
 }: {
   src: string;
   fallbackSrc?: string;
   alt: string;
   className?: string;
+  imageIsPng?: boolean;
+  preferContainBox?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
@@ -499,7 +535,13 @@ function AssetImage({
 
         setBroken(true);
       }}
-      className={cn(broken ? 'hidden' : '', className)}
+      className={cn(
+        broken ? 'hidden' : '',
+        imageIsPng ? 'block' : '',
+        preferContainBox ? 'max-w-full max-h-full' : '',
+        className,
+      )}
+      draggable={false}
     />
   );
 }
