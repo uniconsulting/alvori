@@ -290,9 +290,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
         const viewportHeight = window.innerHeight;
         const total = Math.max(root.offsetHeight - viewportHeight, 1);
         const passed = Math.min(Math.max(-rect.top, 0), total);
-        const nextProgress = passed / total;
-
-        setProgress(nextProgress);
+        setProgress(passed / total);
       });
     };
 
@@ -307,55 +305,53 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
     };
   }, []);
 
-  const activeFloat = progress * (cards.length - 1);
+  const floatIndex = progress * (cards.length - 1);
+  const currentIndex = Math.floor(floatIndex);
+  const nextIndex = Math.min(currentIndex + 1, cards.length - 1);
+  const localProgress = floatIndex - currentIndex;
+
+  const currentCard = cards[currentIndex];
+  const nextCard = cards[nextIndex];
 
   return (
-    <section ref={rootRef} className="relative h-[320vh]">
+    <section ref={rootRef} className="relative h-[260vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="relative flex h-full items-start pt-2">
-          <div className="relative h-[286px] w-full">
+        <div className="flex h-full flex-col">
+          <div className="relative mt-2 h-[286px] w-full overflow-hidden">
+            <div
+              className="absolute inset-0 will-change-transform will-change-opacity"
+              style={{
+                transform: `translate3d(0, ${-28 * localProgress}px, 0) scale(${1 - 0.04 * localProgress})`,
+                opacity: 1 - localProgress,
+              }}
+            >
+              <WhyMobileUnifiedCard card={currentCard} />
+            </div>
+
+            {nextIndex !== currentIndex ? (
+              <div
+                className="absolute inset-0 will-change-transform will-change-opacity"
+                style={{
+                  transform: `translate3d(0, ${48 * (1 - localProgress)}px, 0) scale(${0.96 + 0.04 * localProgress})`,
+                  opacity: localProgress,
+                }}
+              >
+                <WhyMobileUnifiedCard card={nextCard} />
+              </div>
+            ) : null}
+          </div>
+
+          <div className="mt-4 flex justify-center gap-2">
             {cards.map((card, index) => {
-              const distance = index - activeFloat;
-              const absDistance = Math.abs(distance);
-
-              const translateY =
-                distance < 0
-                  ? -18 - Math.min(Math.abs(distance), 1) * 20
-                  : distance * 58;
-
-              const scale =
-                distance < 0
-                  ? 0.94 - Math.min(Math.abs(distance), 1) * 0.02
-                  : 1 - Math.min(distance, 1.2) * 0.06;
-
-              const rotateX =
-                distance < 0
-                  ? 7
-                  : -Math.min(distance, 1.25) * 8;
-
-              const opacity =
-                distance < 0
-                  ? Math.max(0, 0.22 - Math.min(Math.abs(distance), 1) * 0.22)
-                  : Math.max(0, 1 - absDistance * 0.28);
-
-              const zIndex = 100 - index;
-
+              const isActive = index === Math.round(floatIndex);
               return (
-                <div
+                <span
                   key={card.id}
-                  className="absolute inset-0 will-change-transform will-change-opacity"
-                  style={{
-                    transform: `translate3d(0, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`,
-                    opacity,
-                    zIndex,
-                    transformOrigin: 'center center',
-                    transition:
-                      'transform 120ms linear, opacity 120ms linear',
-                    pointerEvents: absDistance < 0.6 ? 'auto' : 'none',
-                  }}
-                >
-                  <WhyMobileUnifiedCard card={card} />
-                </div>
+                  className={cn(
+                    'block rounded-full transition-all duration-200',
+                    isActive ? 'h-[3px] w-[28px] bg-[var(--accent-1)]' : 'h-[3px] w-[14px] bg-[var(--accent-2)]',
+                  )}
+                />
               );
             })}
           </div>
