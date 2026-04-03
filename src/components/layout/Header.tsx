@@ -78,7 +78,6 @@ export function Header() {
 
       const isDesktop = window.innerWidth >= 1280;
 
-      // На mobile/tablet хедер всегда видим
       if (!isDesktop) {
         setHidden(false);
         lastYRef.current = window.scrollY || 0;
@@ -228,7 +227,7 @@ export function Header() {
 
   return (
     <header
-      className="site-header fixed inset-x-0 top-0 z-50"
+      className="site-header fixed inset-x-0 top-0 z-30"
       style={{
         background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
         backdropFilter: 'blur(14px) saturate(1.03)',
@@ -266,7 +265,7 @@ export function Header() {
               />
             </Link>
 
-            <div className="flex h-[60px] w-[158px] shrink-0 grow-0 basis-[158px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
+            <div className="flex h-[60px] w-[159px] shrink-0 grow-0 basis-[159px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
               <CompactAction
                 href={ctaRoutes.headerCalculator}
                 variant="accent"
