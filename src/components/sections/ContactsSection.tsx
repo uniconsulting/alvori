@@ -132,7 +132,7 @@ function RequestProposalButton({ mobile = false }: { mobile?: boolean }) {
       className={cn(
         'header-utility-button inline-flex items-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]',
         mobile
-          ? 'min-h-[58px] w-full gap-3 px-4 py-3'
+          ? 'min-h-[64px] w-full gap-3 px-4 py-[10px]'
           : 'h-[42px] gap-3 px-[12px] pr-[16px]',
       )}
       style={{ fontFamily: 'var(--font-body-text)' }}
@@ -140,16 +140,16 @@ function RequestProposalButton({ mobile = false }: { mobile?: boolean }) {
       <span
         className={cn(
           'inline-flex shrink-0 items-center justify-center bg-[#26292e] text-white',
-          mobile ? 'h-[34px] w-[34px] rounded-[10px]' : 'h-[28px] w-[28px] rounded-[8px]',
+          mobile ? 'h-[44px] w-[44px] rounded-[13px]' : 'h-[28px] w-[28px] rounded-[8px]',
         )}
       >
-        <FileText size={mobile ? 16 : 14} strokeWidth={2.05} />
+        <FileText size={mobile ? 18 : 14} strokeWidth={2.05} />
       </span>
 
       <span
         className={cn(
-          'text-left font-semibold lowercase tracking-[-0.02em]',
-          mobile ? 'text-[15px] leading-[1.18]' : 'text-[14px] leading-none',
+          'text-left lowercase tracking-[-0.02em]',
+          mobile ? 'text-[15px] font-medium leading-[1.18]' : 'text-[14px] font-semibold leading-none',
         )}
       >
         запросить или отправить
