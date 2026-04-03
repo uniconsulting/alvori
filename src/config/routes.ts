@@ -22,7 +22,7 @@ export const appRoutes = {
 } as const;
 
 export const externalRoutes = {
-  ati: 'https://ati.su/',
+  ati: 'https://ati.su/firms/1005/rating',
 } as const;
 
 export const ctaRoutes = {
