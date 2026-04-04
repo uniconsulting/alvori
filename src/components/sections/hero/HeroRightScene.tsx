@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 import { appRoutes } from '@/config/routes';
-import { homeAnchorHrefs } from '@/config/anchors';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -230,7 +229,7 @@ export function HeroRightScene() {
                       с нашими принципами
                     </>
                   }
-                  href={homeAnchorHrefs.about}
+                  href="/#why-choose-us"
                   imageSrc={assets.principles}
                   theme={theme}
                   variant="dark"
@@ -251,7 +250,7 @@ export function HeroRightScene() {
                       с нашими принципами
                     </>
                   }
-                  href={homeAnchorHrefs.about}
+                  href="/#why-choose-us"
                   imageSrc={assets.principles}
                   theme={theme}
                   variant="dark"
@@ -342,7 +341,7 @@ export function HeroRightScene() {
               с нашими принципами
             </>
           }
-          href={homeAnchorHrefs.about}
+          href="/#why-choose-us"
           imageSrc={assets.principles}
           theme={theme}
           variant="dark"
@@ -697,4 +696,3 @@ function BentoCard({
     </div>
   );
 }
-
