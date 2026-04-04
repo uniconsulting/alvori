@@ -154,56 +154,50 @@ function CookieConsentCard({
   const buttonRadius = innerRadius - innerPadding;
 
   return (
+<div
+  className="relative mt-8 w-full max-w-[332px]"
+  style={{
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.985)',
+    filter: visible ? 'blur(0px)' : 'blur(12px)',
+    transition:
+      'opacity 850ms cubic-bezier(0.22,1,0.36,1), transform 950ms cubic-bezier(0.22,1,0.36,1), filter 950ms cubic-bezier(0.22,1,0.36,1)',
+    pointerEvents: visible ? 'auto' : 'none',
+  }}
+>
+  <div className="intro-cookie-border-shell rounded-[24px] p-[1px]">
     <div
-      className="relative mt-8 w-full max-w-[332px]"
+      className="relative bg-[var(--accent-2)] text-[var(--accent-2-text)] rounded-[23px]"
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.985)',
-        filter: visible ? 'blur(0px)' : 'blur(12px)',
-        transition:
-          'opacity 850ms cubic-bezier(0.22,1,0.36,1), transform 950ms cubic-bezier(0.22,1,0.36,1), filter 950ms cubic-bezier(0.22,1,0.36,1)',
-        pointerEvents: visible ? 'auto' : 'none',
+        padding: '18px',
       }}
     >
-      <div
-        className="intro-cookie-border-mask absolute inset-0"
-        style={{ borderRadius: `${outerRadius}px` }}
-      />
+      <div className="flex items-start gap-4">
+        <Cookie
+          size={36}
+          strokeWidth={2}
+          className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
+        />
 
-      <div
-        className="relative bg-[var(--accent-2)] text-[var(--accent-2-text)]"
-        style={{
-          borderRadius: `${innerRadius}px`,
-          padding: `${innerPadding}px`,
-        }}
-      >
-        <div className="flex items-start gap-4">
-          <Cookie
-            size={36}
-            strokeWidth={2}
-            className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
-          />
-
-          <p className="text-[14px] leading-[1.36] tracking-[-0.016em] text-[var(--accent-2-text)]">
-            Продолжая, вы подтверждаете
-            <br />
-            использование файлов cookie.
-          </p>
-        </div>
-
-<button
-  type="button"
-  onClick={onAccept}
-  disabled={!canAccept}
-  className="mt-5 inline-flex h-[52px] w-full items-center justify-center bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(38,41,46,0.16)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:hover:shadow-none"
-  style={{ borderRadius: `${buttonRadius}px` }}
->
-  Понятно
-</button>
+        <p className="text-[14px] leading-[1.36] tracking-[-0.016em] text-[var(--accent-2-text)]">
+          Продолжая, вы подтверждаете
+          <br />
+          использование файлов cookie.
+        </p>
       </div>
+
+      <button
+        type="button"
+        onClick={onAccept}
+        disabled={!canAccept}
+        className="mt-5 inline-flex h-[52px] w-full items-center justify-center rounded-[5px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(38,41,46,0.16)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+        style={{ borderRadius: '5px' }}
+      >
+        Понятно
+      </button>
     </div>
-  );
-}
+  </div>
+</div>
 
 export function WelcomeLoader({
   progress,
