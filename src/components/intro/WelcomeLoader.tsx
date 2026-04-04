@@ -179,7 +179,7 @@ function CookieConsentCard({
       >
         <div className="flex items-start gap-4">
           <Cookie
-            size={34}
+            size={36}
             strokeWidth={2}
             className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
           />
