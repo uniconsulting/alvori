@@ -831,15 +831,15 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     linear-gradient(
       120deg,
       rgba(250, 176, 33, 0.18) 0%,
-      rgba(250, 176, 33, 0.9) 18%,
+      rgba(250, 176, 33, 0.92) 18%,
       rgba(255, 225, 146, 0.98) 28%,
       rgba(250, 176, 33, 0.16) 42%,
       rgba(250, 176, 33, 0.14) 58%,
-      rgba(250, 176, 33, 0.88) 74%,
+      rgba(250, 176, 33, 0.9) 74%,
       rgba(255, 225, 146, 0.98) 84%,
       rgba(250, 176, 33, 0.18) 100%
     );
-  background-size: 220% 220%;
+  background-size: 220% 100%;
   background-position: 0% 50%;
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -850,7 +850,6 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     linear-gradient(#fff 0 0);
   mask-composite: exclude;
   animation: introCookieBorderFlow 4.8s linear infinite;
-  filter: drop-shadow(0 0 12px rgba(250, 176, 33, 0.12));
   pointer-events: none;
 }
 
