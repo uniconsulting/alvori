@@ -825,35 +825,26 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   }
 }
 
-.intro-cookie-border-mask {
-  padding: 1px;
+.intro-cookie-border-shell {
+  position: relative;
   background:
     linear-gradient(
       120deg,
-      rgba(250, 176, 33, 0.52) 0%,
-      rgba(250, 176, 33, 1) 16%,
-      rgba(255, 227, 153, 1) 28%,
-      rgba(250, 176, 33, 0.56) 44%,
-      rgba(250, 176, 33, 0.46) 58%,
+      rgba(250, 176, 33, 0.35) 0%,
+      rgba(250, 176, 33, 1) 18%,
+      rgba(255, 228, 158, 1) 30%,
+      rgba(250, 176, 33, 0.4) 46%,
+      rgba(250, 176, 33, 0.32) 58%,
       rgba(250, 176, 33, 1) 76%,
-      rgba(255, 227, 153, 1) 88%,
-      rgba(250, 176, 33, 0.52) 100%
+      rgba(255, 228, 158, 1) 88%,
+      rgba(250, 176, 33, 0.35) 100%
     );
   background-size: 220% 100%;
-  background-position: 0% 50%;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  animation: introCookieBorderFlow 4.8s linear infinite;
-  filter:
-    drop-shadow(0 0 12px rgba(250, 176, 33, 0.22))
-    drop-shadow(0 0 24px rgba(250, 176, 33, 0.12));
-  pointer-events: none;
+  animation: introCookieBorderFlow 4.6s linear infinite;
+  box-shadow:
+    0 0 0 1px rgba(250, 176, 33, 0.08),
+    0 0 14px rgba(250, 176, 33, 0.18),
+    0 0 28px rgba(250, 176, 33, 0.08);
 }
 
 @keyframes introCookieBorderFlow {
