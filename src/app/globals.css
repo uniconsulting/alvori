@@ -855,3 +855,23 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     background-position: 220% 50%;
   }
 }
+
+.intro-progress-segment {
+  transition:
+    background-color 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: background-color, box-shadow, transform;
+}
+
+.intro-progress-segment.is-active {
+  background-color: var(--accent-1);
+  box-shadow: 0 0 10px rgba(250, 176, 33, 0.16);
+  transform: translateZ(0);
+}
+
+.intro-progress-segment.is-idle {
+  background-color: var(--accent-2);
+  box-shadow: none;
+  transform: translateZ(0);
+}
